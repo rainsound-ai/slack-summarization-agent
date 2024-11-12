@@ -6,6 +6,7 @@ from datetime import datetime, timedelta
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+# Do this on the frontend of the process
 def is_substantive_summary(summary: str) -> bool:
     """Check if the summary is substantive."""
     # Define keywords or phrases that indicate a non-substantive summary
@@ -13,7 +14,8 @@ def is_substantive_summary(summary: str) -> bool:
         "only indicates that a user",
         "no further information or context",
         "does not contain a conversation",
-        "only a notification that a user"
+        "only a notification that a user",
+        "no substantive topics were discussed"
     ]
     
     # Check if any non-substantive phrase is in the summary

@@ -1,4 +1,4 @@
-import openai
+from openai import OpenAI
 from typing import List, Dict
 import logging
 from config import OPENAI_API_KEY, MAX_CHUNK_SIZE
@@ -6,26 +6,28 @@ from config import OPENAI_API_KEY, MAX_CHUNK_SIZE
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-openai.api_key = OPENAI_API_KEY
+client = OpenAI(api_key=OPENAI_API_KEY)
 
 class ConversationSummarizer:
     def __init__(self):
-        self.model = "gpt-4-1106-preview"
+        self.model = "o1-mini"
 
     def _prepare_conversation(self, messages: List[Dict]) -> str:
         """Format conversation for the AI model."""
         formatted_msgs = []
         for msg in messages:
+            user = msg.get("user", "Unknown User")
             text = msg.get("text", "")
             thread_replies = msg.get("thread_replies", [])
             
             if text:
-                formatted_msgs.append(f"Message: {text}")
+                formatted_msgs.append(f"{user}: {text}")
             
             for reply in thread_replies:
+                reply_user = reply.get("user", "Unknown User")
                 reply_text = reply.get("text", "")
                 if reply_text:
-                    formatted_msgs.append(f"Reply: {reply_text}")
+                    formatted_msgs.append(f"{reply_user} (reply): {reply_text}")
             
             for file in msg.get("files", []):
                 formatted_msgs.append(
@@ -42,8 +44,8 @@ class ConversationSummarizer:
     def summarize_conversation(self, conversation: str, channel_name: str) -> str:
         """Summarize a single conversation."""
         try:
-            client = openai.OpenAI()
             prompt = f"""
+            You are a professional business analyst creating concise summaries of Slack conversations.
             Analyze this Slack conversation from the channel #{channel_name} and provide a concise summary.
             Include:
             1. Main topic(s) discussed
@@ -59,18 +61,27 @@ class ConversationSummarizer:
             {conversation}
             """
 
+            # Use the new API interface
             response = client.chat.completions.create(
-                model=self.model,
-                messages=[
-                    {"role": "system", "content": "You are a professional business analyst creating concise summaries of Slack conversations."},
-                    {"role": "user", "content": prompt}
-               ]
+                model="o1-mini",  # Use the correct model name
+                messages=[{"role": "user", "content": prompt}]
             )
 
-            return response.choices[0].message.content.strip()
+            # Format the response for Slack
+            summary = response.choices[0].message.content.strip()
+            formatted_summary = self.format_for_slack(summary)
+            return formatted_summary
         except Exception as e:
             logger.error(f"Error in summarization: {e}")
             return f"Error summarizing conversation: {str(e)}"
+
+    def format_for_slack(self, summary: str) -> str:
+        """Format the summary for better readability in Slack."""
+        # Replace markdown with Slack-friendly formatting
+        summary = summary.replace("**", "*")  # Convert bold markdown to Slack bold
+        summary = summary.replace("__", "_")  # Convert italic markdown to Slack italics
+        # Add more formatting adjustments as needed
+        return summary
 
     def chunk_summary(self, summary: str) -> List[str]:
         """Split summary into chunks of maximum size."""
