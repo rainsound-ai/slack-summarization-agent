@@ -15,7 +15,7 @@ START_DATE = (CURRENT_DATE - timedelta(days=WEEK_DELTA)).replace(hour=0, minute=
 END_DATE = CURRENT_DATE.replace(hour=23, minute=59, second=59, microsecond=999999)
 
 # Formatting
-MAX_CHUNK_SIZE = 2000
+MAX_CHUNK_SIZE = 3999
 
 # Channel configurations
 EXCLUDE_ARCHIVED = True

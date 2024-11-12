@@ -2,6 +2,7 @@ from openai import OpenAI
 from typing import List, Dict
 import logging
 from config import OPENAI_API_KEY, MAX_CHUNK_SIZE
+from prompt import get_prompt
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -44,23 +45,23 @@ class ConversationSummarizer:
     def summarize_conversation(self, conversation: str, channel_name: str) -> str:
         """Summarize a single conversation."""
         try:
-            prompt = f"""
-            You are a professional business analyst creating concise summaries of Slack conversations.
-            Analyze this Slack conversation from the channel #{channel_name} and provide a concise summary.
-            Include:
-            1. Main topic(s) discussed
-            2. Key decisions made (if any)
-            3. Action items (if any)
-            4. Important quotes (if relevant)
-            5. Relevant files and links shared (include the URLs if they seem important)
+            # prompt = f"""
+            # You are a professional business analyst creating concise summaries of Slack conversations.
+            # Analyze this Slack conversation from the channel #{channel_name} and provide a concise summary.
+            # Include:
+            # 1. Main topic(s) discussed
+            # 2. Key decisions made (if any)
+            # 3. Action items (if any)
+            # 4. Important quotes (if relevant)
+            # 5. Relevant files and links shared (include the URLs if they seem important)
             
-            Keep the summary brief and focused on the most important points.
-            If files or links were shared, include them only if they're relevant to the main discussion.
+            # Keep the summary brief and focused on the most important points.
+            # If files or links were shared, include them only if they're relevant to the main discussion.
             
-            Conversation:
-            {conversation}
-            """
-
+            # Conversation:
+            # {conversation}
+            # """
+            prompt = get_prompt(channel_name, conversation)
             # Use the new API interface
             response = client.chat.completions.create(
                 model="o1-mini",  # Use the correct model name
@@ -79,7 +80,7 @@ class ConversationSummarizer:
         """Format the summary for better readability in Slack."""
         # Replace markdown with Slack-friendly formatting
         summary = summary.replace("**", "*")  # Convert bold markdown to Slack bold
-        summary = summary.replace("__", "_")  # Convert italic markdown to Slack italics
+        summary = summary.replace("__", "_")  # Convert italic markdown to Slack italic
         # Add more formatting adjustments as needed
         return summary
 
