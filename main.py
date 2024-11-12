@@ -35,33 +35,32 @@ def main():
         logger.info("Fetching conversations from Slack...")
         conversations = slack_fetcher.organize_conversations()
 
-        # Process and summarize conversations
-        logger.info("Summarizing conversations...")
-        final_summary = []
-        
+        # First pass: Generate individual channel summaries
+        channel_summaries = []
         for channel_name, messages in conversations.items():
             if not messages:
                 continue
                 
-            channel_summary = f"\n## Channel: #{channel_name}\n"
             formatted_conversation = summarizer._prepare_conversation(messages)
             summary = summarizer.summarize_conversation(formatted_conversation, channel_name)
             
             # Only add substantive summaries
             if is_substantive_summary(summary):
-                final_summary.append(channel_summary + summary)
+                channel_summaries.append(summary)
 
-        # Combine all summaries
-        complete_summary = "\n\n".join(final_summary)
+        # Second pass: Create ultra-concise final summary
+        start_date = (datetime.now() - timedelta(days=7)).strftime("%m/%d")
+        end_date = datetime.now().strftime("%m/%d")
+        
+        final_summary = summarizer.create_final_summary(
+            channel_summaries=channel_summaries,
+            start_date=start_date,
+            end_date=end_date
+        )
         
         # Send to Slack
         logger.info("Sending summary to Slack...")
-        start_date = (datetime.now() - timedelta(days=7)).strftime("%m/%d")
-        end_date = datetime.now().strftime("%m/%d")
-        title = f"Weekly Slack Summary ({start_date} - {end_date})"
-        
-        message = f"*{title}*\n\n{complete_summary}"
-        slack_fetcher.send_message_to_channel('slack-summarization-agent', message)
+        slack_fetcher.send_message_to_channel('slack-summarization-agent', final_summary)
         
         logger.info("Weekly summary successfully sent!")
         

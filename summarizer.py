@@ -2,7 +2,7 @@ from openai import OpenAI
 from typing import List, Dict
 import logging
 from config import OPENAI_API_KEY, MAX_CHUNK_SIZE
-from prompt import get_prompt
+from prompt import get_channel_prompt, get_final_summary_prompt
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -11,7 +11,7 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 
 class ConversationSummarizer:
     def __init__(self):
-        self.model = "o1-mini"
+        self.model = "o1-preview"
 
     def _prepare_conversation(self, messages: List[Dict]) -> str:
         """Format conversation for the AI model."""
@@ -45,30 +45,12 @@ class ConversationSummarizer:
     def summarize_conversation(self, conversation: str, channel_name: str) -> str:
         """Summarize a single conversation."""
         try:
-            # prompt = f"""
-            # You are a professional business analyst creating concise summaries of Slack conversations.
-            # Analyze this Slack conversation from the channel #{channel_name} and provide a concise summary.
-            # Include:
-            # 1. Main topic(s) discussed
-            # 2. Key decisions made (if any)
-            # 3. Action items (if any)
-            # 4. Important quotes (if relevant)
-            # 5. Relevant files and links shared (include the URLs if they seem important)
-            
-            # Keep the summary brief and focused on the most important points.
-            # If files or links were shared, include them only if they're relevant to the main discussion.
-            
-            # Conversation:
-            # {conversation}
-            # """
-            prompt = get_prompt(channel_name, conversation)
-            # Use the new API interface
+            prompt = get_channel_prompt(channel_name, conversation)
             response = client.chat.completions.create(
-                model="o1-mini",  # Use the correct model name
+                model="o1-mini",
                 messages=[{"role": "user", "content": prompt}]
             )
 
-            # Format the response for Slack
             summary = response.choices[0].message.content.strip()
             formatted_summary = self.format_for_slack(summary)
             return formatted_summary
@@ -100,3 +82,21 @@ class ConversationSummarizer:
             chunks.append(current_chunk.strip())
             
         return chunks 
+
+    def create_final_summary(self, channel_summaries: List[str], start_date: str, end_date: str) -> str:
+        """Create an ultra-concise final summary from all channel summaries."""
+        try:
+            all_summaries = "\n\n".join(channel_summaries)
+            prompt = get_final_summary_prompt(all_summaries, start_date, end_date)
+            
+            response = client.chat.completions.create(
+                model="o1-mini",
+                messages=[{"role": "user", "content": prompt}]
+            )
+
+            summary = response.choices[0].message.content.strip()
+            formatted_summary = self.format_for_slack(summary)
+            return formatted_summary
+        except Exception as e:
+            logger.error(f"Error in final summarization: {e}")
+            return f"Error creating final summary: {str(e)}"

@@ -1,79 +1,42 @@
-def get_prompt(channel_name, conversation):
+def get_channel_prompt(channel_name, conversation):
+    """Prompt for individual channel summaries."""
     return f"""
-### **Prompt for Generating an Ultra-Concise Weekly Slack Summary**
+    Analyze this Slack conversation from the channel #{channel_name} and provide a concise summary.
+    Include:
+    1. Main topic(s) discussed
+    2. Key decisions made (if any)
+    3. Action items (if any)
+    4. Important quotes (if relevant)
+    5. Relevant files and links shared (include the URLs if they seem important)
+    
+    Keep the summary brief and focused on the most important points.
+    If files or links were shared, include them only if they're relevant to the main discussion.
+    
+    Conversation:
+    {conversation}
+    """
 
-**You are an AI assistant tasked with summarizing a week's worth of Slack messages for a business leader who has been away for a week. The summary should be ultra-concise, focusing only on the most critical updates that the leader needs to catch up on quickly. The summary should be understandable in under 1 minute and should follow the specific format provided below.**
+def get_final_summary_prompt(channel_summaries, start_date, end_date):
+    """Prompt for creating the final ultra-concise summary."""
+    return f"""You are creating an executive summary of Slack conversations for busy business leaders.
+    Be extremely selective - only include information that would be valuable at the executive level.
+    
+    Create a brief, scannable summary that can be read in under 1 minute.
+    
+    Format the response exactly like this:
+    📅 *Weekly Slack Summary ({start_date} - {end_date})*
+    ---
 
----
+    🔹 *Executive Summary:*
+    • [3-5 most critical updates or decisions that affect the business]
 
-#### **Formatting Instructions:**
+    [Only include channels with significant updates]
+    📌 *CHANNEL: #channel-name*
+    • [1-2 bullet points max per channel, focus on decisions and actions]
 
-1. **Overall Structure:**
-   - **Date Range Heading:**
-     - Begin with a date range heading formatted as:
+    🔗 *Key Links:*
+    • [Only include links that executives must review]
 
-       ```
-       📅 *Weekly Slack Summary (MM/DD - MM/DD)*
-       ---
-       ```
-   - **Sections:**
-     - **Executive Summary:**
-       - Use the heading:
-
-         ```
-         ### 🔹 *Executive Summary:*
-         ```
-       - Include 5-7 bullet points summarizing the most critical updates.
-     - **Channel Summaries:**
-       - For key channels, include summaries under headings formatted as:
-
-         ```
-         ### 📌 **CHANNEL: #channel-name**
-         ```
-       - Under each channel, provide bullet points with important updates, action items, and links.
-   - **Key Links:**
-     - At the end, include a section for important links:
-
-       ```
-       ### 🔗 *Key Links:*
-       ```
-
-2. **Formatting Details:**
-   - **Emojis:**
-     - Use specific emojis consistently:
-       - 📅 for the date range heading.
-       - 🔹 for the Executive Summary.
-       - 📌 for channel summaries.
-       - 🔗 for key links.
-     - Use additional emojis where appropriate to enhance readability.
-   - **Text Formatting:**
-     - Use bold text (`**bold text**`) to highlight important actions or decisions.
-     - Use italics (`*italic text*`) sparingly for emphasis.
-     - Use bullet points for concise information delivery.
-
-3. **Content Guidelines:**
-   - **Conciseness:**
-     - Be extremely concise; bullet points should be one or two lines maximum.
-   - **Priority of Information:**
-     - Include only updates that significantly affect business operations, strategic goals, or require immediate attention.
-     - Highlight urgent tasks or deadlines.
-   - **Clarity:**
-     - Use clear and straightforward language without jargon.
-     - Ensure the summary is easily scannable and understandable on the first read.
-
-4. **Exclusions:**
-   - **Omit Low-Impact Information:**
-     - Do not include routine updates, minor issues, or detailed procedural information.
-   - **No Additional Sections:**
-     - Exclude sections like benefits, tips, or repetitive content.
-
----
-
-**Here are the Slack messages from the last week:**
-
-{conversation}
-
----
-
-**Generate the ultra-concise weekly summary based on the above guidelines, ensuring it matches the format and style of the provided example.**
+    Channel Summaries to Process:
+    {channel_summaries}
     """
