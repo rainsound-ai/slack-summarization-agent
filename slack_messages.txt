@@ -1,0 +1,360 @@
+
+=== Channel: sales-team ===
+
+[12/04/2024 17:05] **Miles**: we've known about the slack ai for awhile btw. it's just so much more robust to build off our own solutions when possible and we hadn't yet committed in this direction
+
+that being said, probably time to go ahead and press go on setting up our acct to use it so we know what we're trying to beat
+
+ would you mind setting that up for everyone when you get a chance please?
+
+[Thread started]
+
+    [12/04/2024 17:07] **Brent** (reply): Insert “the more you know” graphic here
+
+    [12/04/2024 17:10] **Miles** (reply): when i saw it last, it primarily summarized individual channels. the daily recap bit is fresh i think, maybe as new or newer than our thing
+
+[End of thread]
+
+[12/04/2024 16:04] **Busch**: Makes sense - im sure slack is going to roll out something similar soon that’s native
+
+[Thread started]
+
+    [12/04/2024 16:05] **Brent** (reply): Sounds like it’s just summary type stuff
+
+    [12/04/2024 16:23] **Luca** (reply): They already have :relaxed:
+
+<https://slack.com/features/ai>
+
+    [12/04/2024 16:27] **Brent** (reply): Marketing brain engaged: why is ours uniquely better? So slack did a thing, cool. But ours is better and here is why. And that why is worth $25-$100/month/user … etc.
+
+    [12/04/2024 16:28] **Brent** (reply): Value proposition is this… etc.
+
+    [12/04/2024 16:28] **Luca** (reply): Yup, that’s the question for sure
+
+    [12/04/2024 16:29] **Luca** (reply): The obvious answer is “we look beyond just Slack at things like meeting recordings”. But there are other value propositions too.
+
+    [12/04/2024 16:29] **Brent** (reply): We have the opportunity to create value in amazing ways that surpasses slacks summary 
+
+We also may be able to leverage their summary concept to a degree to gather opportunity notes ?
+
+    [12/04/2024 16:30] **Brent** (reply): Next steps recommendation 
+Calendar integration 
+Context citations 
+
+All of these are value adds that put our slack (and future productivity engagements) uniquely better
+
+[End of thread]
+
+[12/04/2024 16:03] **Brent**: Slack AI the same thing as far as our summary data? They just said something about it in this Salesforce convo
+
+[Thread started]
+
+    [12/04/2024 16:04] **Brent** (reply): Agentforce info as well
+
+    [12/04/2024 16:23] **Luca** (reply): Definitely some overlap:
+
+<https://slack.com/features/ai>
+
+    [12/04/2024 16:31] **Brent** (reply): Strategically positioning ourselves and value adds will eliminate any comparison I think
+
+    [12/04/2024 16:32] **Luca** (reply): We can also address those questions head-on. “Here’s how we compare to Slack AI and why we’re a better option.”
+
+    [12/04/2024 16:33] **Brent** (reply): Great point 
+
+Side by side offerings slide/graphic comes to mind for website or information packet/sales decks
+
+    [12/04/2024 16:38] **Ben Ortega** (reply): I wouldn’t stand behind the Slack AI, especially seeing that they are here encouraging folks to use Amazon Q to do summaries and access knowledge. Also, I tried to find the Slack AI summation option in our instance and couldn’t find it. Maybe an admin setting or enabling a marketplace tool to the instance.
+
+    [12/04/2024 16:39] **Brent** (reply): Totally agree with you, Ben, I just don’t want us to get out there and pretend or not acknowledge of this exist.
+
+    [12/04/2024 16:39] **Miles** (reply): let's take inspiration from it and then beat it
+
+[End of thread]
+
+[12/04/2024 15:55] **Busch**: Slack Summary / Calendar Invite Demo
+
+[File shared] Slack Summary : Calendar Event Demo.mov - [Link](https://files.slack.com/files-tmb/T067TJ1EE15-F083Q28HPM0-b745b4c95b/slack_summary___calendar_event_demo.mp4)
+
+[12/04/2024 15:44] **Miles**: building this now
+
+<https://github.com/aws-samples/bedrock-multi-agents-collaboration-workshop>
+
+[File shared] Screenshot 2024-12-04 at 12.45.03 PM.png - [Link](https://files.slack.com/files-pri/T067TJ1EE15-F084CQ3HHCY/screenshot_2024-12-04_at_12.45.03_pm.png)
+
+[Thread started]
+
+[End of thread]
+
+[12/04/2024 13:52] **Miles**: <https://us-east-1.quicksight.aws.amazon.com/sn/stories/4d6c9cc1-ff69-4b37-9f81-e7c1d2874572/view> can you guys view this?
+
+edit: doesn't look like it
+
+[Thread started]
+
+    [12/04/2024 13:53] **Miles** (reply): i think this format rocks
+
+data story might be a good thing to copy for next step agent
+
+    [12/04/2024 13:55] **Miles** (reply): 'quicksight for slack' (with auto-populating calendar features) isn't too far off in a lot of ways
+
+    [12/04/2024 13:58] **Miles** (reply): here it is in screenshot form:
+
+    [12/04/2024 13:59] **Miles** (reply): you can also turn it into a slide deck
+
+    [12/04/2024 13:59] **Brent** (reply): Screenshots came through. Couldn’t get to the link view
+
+    [12/04/2024 14:09] **Miles** (reply): what do you think of that data story format?
+
+    [12/04/2024 14:10] **Miles** (reply): our slack agent could link to something like this if you want additional detail on the next step that's going on your calendar
+
+    [12/04/2024 14:11] **Busch** (reply): Super cool
+
+    [12/04/2024 14:15] **Miles** (reply): going to put it in the tool auditing queue  , but just to say it here: i think we should start using/harvesting quicksight asap. it's both useful to our data-driven decision making as well as for inspiring our approach to the next step agent
+
+    [12/04/2024 14:23] **Brent** (reply): Could the above data be done by opt in? Like curated but prompted if you wanted a deeper dive? 
+
+Which reminds me: also woke up in the middle of the night thinking about our exec summary doing some “works cited” slots for easy links/access to exact thread content? If we haven’t already, that is. I just remembered this :joy:  
+
+Yes. Yes. I’m dreaming about it now.
+
+    [12/04/2024 14:31] **Busch** (reply): great idea!
+
+    [12/04/2024 14:35] **Miles** (reply): similar to this, but links to the context and resources from which the insights/actionables are derived?
+
+    [12/04/2024 14:56] **Brent** (reply): Yeah. Would be great to have a little 1, 2, 3 works cited that are able to be linked to content and context especially if it takes within context. 
+
+In smaller context it’s not as necessary, but some large executives (primarily using teams platform) may have a lot of context to explore and to be able to be taken to that data quickly could be huge efficiency value add for the exec
+
+    [12/04/2024 14:57] **Brent** (reply): So in this where it says in progress, a quick link that says “go to thread” that’s able to be linked to the exact thread this was summarized from?
+
+    [12/04/2024 15:36] **Ben Ortega** (reply): Would the quick insight be used to output what we tested or for clients?? Not sure what you’re thinking with it? For the task item itself? 
+
+It is pretty. If for a task, that might be long form but that’s a guess. We won’t know if it’s good until a client sees it and give info about it
+
+    [12/04/2024 15:57] **Busch** (reply): I can try to add support for message links on bullet points and we can figure that out
+
+    [12/04/2024 15:57] **Busch** (reply): If that sounds like a good way to go
+
+    [12/04/2024 16:45] **Miles** (reply): i think quicksight has a really nice generative BI dashboard UI and output formats for executive summaries. if we're compressing our slack summary into various links for length, data stories, for example, can be a nice way of presenting all of the relevant context for any given next step. happy to add more color and clarity to that in person later if helpful :relaxed:
+
+[End of thread]
+
+[12/04/2024 12:33] **Brent**: A thought. Not sure it’s a novel idea:
+
+High value on our UX to be as clear and concise as possible for our target market. If target is executive and business leaders, the technicality has to be on the backend not on the client/end-user. Keeping it as simple as possible to deploy, use, and engage with is prime opportunity in the UX.
+
+[12/04/2024 12:11] **Busch**: Dope stuff!
+
+[Thread started]
+
+    [12/04/2024 12:13] **Busch** (reply): Not that you can use AWS services using natural language I’m no longer scared of using them -
+Historically the DX has been nightmarish - sound like from the talk last night you can just tell it generally what you want now.
+I bet those new tools like Q and Bedrock have a fantastic DX too
+
+    [12/04/2024 12:14] **Miles** (reply): they do, i was frankly impressed. already built some stuff with them. i think we should harvest their approach, ui, and feature set for our own proprietary tools
+
+    [12/04/2024 12:25] **Miles** (reply): creating an iteration proposal our tool auditing pipeline. an SOP like 'harvesting tools for inspiration' for when we don't necessarily want to full on adopt a tool
+
+    [12/04/2024 12:26] **Miles** (reply): 'scenarios' and 'topics'. cool concepts imo
+
+    [12/04/2024 12:29] **Miles** (reply): <https://docs.aws.amazon.com/quicksight/latest/user/gen-bi-author-q-and-a.html>
+
+    [12/04/2024 12:32] **Miles** (reply): this app actually rocks
+
+    [12/04/2024 12:42] **Busch** (reply): you wouldnt know from looking at it! I see they still havnt done anything to improve the shitty ui
+
+    [12/04/2024 12:43] **Busch** (reply): cool
+
+    [12/04/2024 12:55] **Miles** (reply): just built this dashboard
+
+    [12/04/2024 13:20] **Busch** (reply): dope
+
+    [12/04/2024 13:45] **Miles** (reply): this is sick. highly relevant to what we're doing since we're creating executive summaries based off slack and other context
+
+    [12/04/2024 13:49] **Miles** (reply): another example
+
+[End of thread]
+
+[File shared] IMG_1890.jpg - [Link](https://files.slack.com/files-pri/T067TJ1EE15-F083KV7PD0D/img_1890.jpg)
+
+[File shared] IMG_1883.jpg - [Link](https://files.slack.com/files-pri/T067TJ1EE15-F083RA538NQ/img_1883.jpg)
+
+[File shared] IMG_1884.jpg - [Link](https://files.slack.com/files-pri/T067TJ1EE15-F08388RN35M/img_1884.jpg)
+
+[File shared] IMG_1885.jpg - [Link](https://files.slack.com/files-pri/T067TJ1EE15-F08388RNCCF/img_1885.jpg)
+
+[File shared] IMG_1887.jpg - [Link](https://files.slack.com/files-pri/T067TJ1EE15-F083G6A85FG/img_1887.jpg)
+
+[File shared] IMG_1888.jpg - [Link](https://files.slack.com/files-pri/T067TJ1EE15-F083KV0J005/img_1888.jpg)
+
+[File shared] IMG_1889.jpg - [Link](https://files.slack.com/files-pri/T067TJ1EE15-F083KV0J6QM/img_1889.jpg)
+
+[12/04/2024 12:10] **Miles**: this is great. i think we should copy this
+
+[Thread started]
+
+    [12/04/2024 11:45] **Miles** (reply): cool, ben was just saying that's the magic line to cross. as soon as it does the automatic pop onto calendar thing, we can show people and blow their minds. 
+
+was curious if possible to have that today or tomorrow for some meetings we'll be having (one is with Noah from tribe actually). but no sweat if not :relaxed:
+
+    [12/04/2024 11:57] **Busch** (reply): i can pivot to that if its higher priority than slack summary agent being unbroken
+
+    [12/04/2024 11:57] **Busch** (reply): im pivoting to that
+
+    [12/04/2024 11:58] **Busch** (reply): will debug slack summary later
+
+    [12/04/2024 11:58] **Miles** (reply): ok cool def whatever you think is highest priority, just wanted to throw that idea your way
+
+[End of thread]
+
+[12/04/2024 11:25] **Busch**: Anyone’s have a sec to check that out?
+
+[Thread started]
+
+    [12/04/2024 11:42] **Miles** (reply): got 15 min, in a huddle now
+
+    [12/04/2024 11:49] **Miles** (reply): 10 min left if you need immediate feedback. walking into this
+
+    [12/04/2024 11:51] **Miles** (reply): i'll probably have some time between 2:30-3:30 as well if you want to touch base then
+
+    [12/04/2024 12:16] **Busch** (reply): Feedback on slack summary would be great
+Current prompt:
+
+```def get_channel_prompt(channel_name, conversation):
+    """Prompt for individual channel summaries."""
+    return f"""
+    Analyze this Slack conversation from the sales team channel. The participants are primarily Miles, Ben, and Brent, 
+    who are discussing sales activities for an AI company. Provide a structured summary focused on sales insights.
+
+    Include:
+    1. Deal Pipeline Updates:
+        • New opportunities identified
+        • Deal stages and changes
+        • Potential deal values (if mentioned)
+    
+    2. Customer Interactions:
+        • Key meetings and outcomes
+        • Customer feedback or concerns
+        • Success stories or testimonials
+    
+    3. Sales Strategy:
+        • Confirmed decisions ("Decision: [item]")
+        • Active initiatives ("Action: [item] - Owner: [name]")
+        • Ideas being explored ("Strategy Discussion: [items]")
+    
+    4. Product/Market Insights:
+        • Competitive intelligence
+        • Market feedback
+        • Feature requests or product gaps
+    
+    5. Resources &amp; Support:
+        • Important files/links shared
+        • Sales collateral needs
+        • Cross-team support requests
+
+    Keep the summary focused on actionable insights and clear distinctions between confirmed plans vs. discussions.
+    
+    Conversation:
+    {conversation}
+    """
+
+def get_final_summary_prompt(channel_summaries, start_date, end_date):
+    """Prompt for creating the final ultra-concise summary."""
+    return f"""You are creating an executive sales summary for an AI company's leadership team.
+    Focus on insights valuable to the CEO, Sales Manager, and Account Executives.
+    
+    Create a scannable summary that highlights key business impacts and action items.
+    
+    Format the response exactly like this:
+    📅 *Sales Team Summary ({start_date} - {end_date})*
+    ---
+
+    💰 *Pipeline &amp; Deals:*
+    • [Key updates on deals, conversions, and revenue impact]
+
+    👥 *Customer &amp; Market Insights:*
+    • [Critical feedback, patterns, or market intelligence]
+
+    📈 *Strategic Initiatives:*
+    • [Confirmed] [List confirmed decisions and actions]
+    • [In Progress] [List active initiatives]
+    • [Exploring] [List strategies under discussion]
+
+    ⚠️ *Needs Attention:*
+    • [Blockers, support needs, or immediate actions required]
+
+    🔗 *Key Resources:*
+    • [Only critical documents/links]
+
+    Channel Summaries to Process:
+    {channel_summaries}
+    """```
+
+[End of thread]
+
+[12/04/2024 11:25] **Busch**: Not sure haven’t looked into Google calendar api and I’m current working on slack summary agent
+
+[Thread started]
+
+    [12/04/2024 11:45] **Miles** (reply): cool, ben was just saying that's the magic line to cross. as soon as it does the automatic pop onto calendar thing, we can show people and blow their minds. 
+
+was curious if possible to have that today or tomorrow for some meetings we'll be having (one is with Noah from tribe actually). but no sweat if not :relaxed:
+
+    [12/04/2024 11:57] **Busch** (reply): i can pivot to that if its higher priority than slack summary agent being unbroken
+
+    [12/04/2024 11:57] **Busch** (reply): im pivoting to that
+
+    [12/04/2024 11:58] **Busch** (reply): will debug slack summary later
+
+    [12/04/2024 11:58] **Miles** (reply): ok cool def whatever you think is highest priority, just wanted to throw that idea your way
+
+[End of thread]
+
+[12/04/2024 11:14] **Miles**: (not caring about accuracy)
+
+[12/04/2024 11:14] **Miles**: how fast do you think we could get something to automatically pop onto the calendar?
+
+[12/04/2024 01:20] **Brent**: Brent's Schedule
+
+Time               Session            Location
+8:30 AM	        CMP 314	Caesar's Forum
+10:30 AM	TLC 302	        MGM
+1:00 PM	        AIM 281	        Wynn
+3:30 PM	        AIM 323	        Caesar's Forum
+5:30 PM	        AIM 251	        Venetian
+
+[12/04/2024 01:18] **Brent**: your schedule tomorrow
+
+Time               Session           Location
+9:00 AM	        NTA 404	        MGM
+11:30 AM	WPS 311	Wynn - Not recommended
+12:30 PM	AIM 316	        MGM
+1:30 PM	        INO 104	        MGM
+4:00 PM	        ANT 308	        MGM
+5:30 PM	        ANT 405	        MGM
+
+[12/04/2024 01:15] **Brent**: your schedule tomorrow
+
+Time	         Session	    Location
+11:30 AM	AIM 258	     Venetian
+12:30 PM	ACT 280	     Venetian
+1:00 PM	        AIM 306	     Wynn
+3:00 PM	        AIM 274	     Venetian
+5:30 PM	        MAM 319   Wynn
+
+[Thread started]
+
+    [12/04/2024 02:01] **Miles** (reply): small note, ACT280 at 12:30 was just an idea, but you'll likely want to skip that so you have some breathing room to get to AIM306
+
+[End of thread]
+
+[12/03/2024 20:04] **Busch**: That was incredibly inspiring and energizing
+
+[12/03/2024 19:02] **Busch**: I’m doing this livestream 
+ARC203-INT | Architectural methods &amp; breakthroughs for innovative apps in the cloud
+
+[12/03/2024 18:29] **Brent**: Potential Partnership Motions
+
+1. Conferences (including remaining time at AWS)
+2. Personal network and network connections (Warm leads) 
+3. Cold engagement / LinkedIn motions (Probably won't need this)

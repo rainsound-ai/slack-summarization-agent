@@ -1,121 +1,30 @@
+from datetime import datetime, timedelta
+import pytz
+import logging
 from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
-from datetime import datetime
-import logging
-from typing import List, Dict, Any
-from config import SLACK_BOT_TOKEN, START_DATE, END_DATE
+from typing import List, Dict
+from config import SLACK_BOT_TOKEN, EST, START_DATE, END_DATE
 
-logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 class SlackDataFetcher:
     def __init__(self):
         self.client = WebClient(token=SLACK_BOT_TOKEN)
-        
-    def get_all_channels(self) -> List[Dict]:
-        """Fetch all public channels."""
+        self.user_map = self._get_user_info()
+
+    def _get_user_info(self) -> Dict[str, str]:
+        """Fetch and cache user ID to username mapping."""
+        user_map = {}
         try:
-            channels = []
-            cursor = None
-            while True:
-                response = self.client.conversations_list(
-                    types="public_channel",
-                    cursor=cursor
-                )
-                channels.extend(response["channels"])
-                cursor = response.get("response_metadata", {}).get("next_cursor")
-                if not cursor:
-                    break
-            return channels
+            response = self.client.users_list()
+            for user in response["members"]:
+                name = user.get("profile", {}).get("display_name") or user.get("profile", {}).get("real_name", "Unknown User")
+                user_map[user["id"]] = name
+            return user_map
         except SlackApiError as e:
-            logger.error(f"Error fetching channels: {e}")
-            return []
-
-    def _process_message_content(self, message: Dict) -> Dict:
-        """Process a message to extract text, files, and links."""
-        processed = {
-            "text": message.get("text", ""),
-            "files": [],
-            "links": [],
-            "timestamp": message.get("ts", ""),
-            "user": message.get("user", "")
-        }
-
-        # Process files
-        if "files" in message:
-            for file in message["files"]:
-                file_info = {
-                    "name": file.get("name", "Unnamed file"),
-                    "type": file.get("filetype", ""),
-                    "title": file.get("title", ""),
-                    "url": file.get("url_private", ""),
-                }
-                processed["files"].append(file_info)
-
-        # Process links from message text
-        if message.get("blocks"):
-            for block in message["blocks"]:
-                if block["type"] == "rich_text":
-                    for element in block.get("elements", []):
-                        for item in element.get("elements", []):
-                            if item["type"] == "link":
-                                link_info = {
-                                    "url": item.get("url", ""),
-                                    "text": item.get("text", "")
-                                }
-                                processed["links"].append(link_info)
-
-        return processed
-
-    def get_channel_messages(self, channel_id: str) -> List[Dict]:
-        """Fetch messages from a channel within the date range."""
-        try:
-            messages = []
-            cursor = None
-            while True:
-                response = self.client.conversations_history(
-                    channel=channel_id,
-                    oldest=START_DATE.timestamp(),
-                    latest=END_DATE.timestamp(),
-                    cursor=cursor
-                )
-                
-                channel_messages = response["messages"]
-                for msg in channel_messages:
-                    processed_msg = self._process_message_content(msg)
-                    
-                    # Fetch thread replies if they exist
-                    if msg.get("thread_ts"):
-                        thread_replies = self.get_thread_replies(channel_id, msg["thread_ts"])
-                        processed_msg["thread_replies"] = [
-                            self._process_message_content(reply) 
-                            for reply in thread_replies
-                        ]
-                    
-                    messages.append(processed_msg)
-                
-                cursor = response.get("response_metadata", {}).get("next_cursor")
-                if not cursor:
-                    break
-            
-            return messages
-        except SlackApiError as e:
-            logger.error(f"Error fetching messages for channel {channel_id}: {e}")
-            return []
-
-    def get_thread_replies(self, channel_id: str, thread_ts: str) -> List[Dict]:
-        """Fetch replies in a thread."""
-        try:
-            response = self.client.conversations_replies(
-                channel=channel_id,
-                ts=thread_ts,
-                oldest=START_DATE.timestamp(),
-                latest=END_DATE.timestamp()
-            )
-            return response["messages"][1:]  # Exclude the parent message
-        except SlackApiError as e:
-            logger.error(f"Error fetching thread replies: {e}")
-            return []
+            logger.error(f"Error fetching user info: {e}")
+            return {}
 
     def organize_conversations(self) -> Dict[str, List[Dict]]:
         """Fetch and organize conversations from sales-team channel only."""
@@ -143,57 +52,122 @@ class SlackDataFetcher:
                         if messages:
                             conversations["sales-team"] = messages
                     except SlackApiError as e:
-                        logger.error(f"Error fetching messages for sales-team channel: {e.response['error']}")
+                        logger.error(f"Error fetching messages for sales-team channel: {e}")
                     break
-                
+            
         except SlackApiError as e:
-            logger.error(f"Error fetching channels: {e.response['error']}")
+            logger.error(f"Error fetching channels: {e}")
 
         return conversations
 
-    def join_all_public_channels(self):
-        """Join all public channels that the bot isn't already a member of and aren't archived."""
+    def get_channel_messages(self, channel_id: str) -> List[Dict]:
+        """Fetch messages from a channel with proper time window."""
+        messages = []
         try:
-            # Get list of all public channels
-            result = self.client.conversations_list(
-                types="public_channel",
-                exclude_archived=True  # Skip archived channels
+            now = datetime.now(EST)
+            start_time = now - timedelta(hours=24)
+            
+            logger.info(f"=== Time Window ===")
+            logger.info(f"Start: {start_time.strftime('%Y-%m-%d %H:%M:%S %Z')}")
+            logger.info(f"End: {now.strftime('%Y-%m-%d %H:%M:%S %Z')}")
+            
+            start_ts = start_time.timestamp()
+            end_ts = now.timestamp()
+            
+            response = self.client.conversations_history(
+                channel=channel_id,
+                oldest=str(start_ts),
+                latest=str(end_ts),
+                limit=1000
             )
             
+            if response["ok"]:
+                raw_messages = response["messages"]
+                logger.info(f"Retrieved {len(raw_messages)} messages from channel")
+                
+                for msg in raw_messages:
+                    processed_msg = self._process_message_content(msg)
+                    
+                    if msg.get("thread_ts"):
+                        thread_replies = self.get_thread_replies(channel_id, msg["thread_ts"], start_ts, end_ts)
+                        if thread_replies:
+                            processed_msg["thread_replies"] = thread_replies
+                            logger.info(f"Found {len(thread_replies)} replies in thread {msg['thread_ts']}")
+                    
+                    messages.append(processed_msg)
+            
+            return messages
+            
+        except SlackApiError as e:
+            logger.error(f"Error fetching channel messages: {e}")
+            return []
+
+    def get_thread_replies(self, channel_id: str, thread_ts: str, start_ts: float, end_ts: float) -> List[Dict]:
+        """Fetch replies in a thread within the time window."""
+        try:
+            response = self.client.conversations_replies(
+                channel=channel_id,
+                ts=thread_ts,
+                oldest=str(start_ts),
+                latest=str(end_ts),
+                limit=1000
+            )
+            
+            if response["ok"]:
+                thread_messages = response["messages"][1:]  # Exclude parent message
+                logger.info(f"Retrieved {len(thread_messages)} replies from thread {thread_ts}")
+                return [self._process_message_content(msg) for msg in thread_messages]
+            
+            return []
+            
+        except SlackApiError as e:
+            logger.error(f"Error fetching thread replies: {e}")
+            return []
+
+    def _process_message_content(self, message: Dict) -> Dict:
+        """Process a message to extract text, files, and links."""
+        user_id = message.get("user", "")
+        username = self.user_map.get(user_id, "Unknown User")
+        
+        processed = {
+            "text": message.get("text", ""),
+            "files": message.get("files", []),
+            "links": [],
+            "timestamp": message.get("ts", ""),
+            "user": username,
+            "user_id": user_id,
+            "thread_ts": message.get("thread_ts", "")
+        }
+        
+        return processed
+
+    def send_message_to_channel(self, channel_name: str, message: str) -> None:
+        """Send a message to a specific channel."""
+        try:
+            # First, find the channel ID
+            result = self.client.conversations_list(types="public_channel")
             if not result["ok"]:
                 logger.error(f"Error fetching channel list: {result['error']}")
                 return
 
-            channels = result.get("channels", [])
-            
-            for channel in channels:
-                channel_id = channel["id"]
-                channel_name = channel["name"]
-                
-                # Skip if bot is already a member
-                if channel.get("is_member", False):
-                    logger.debug(f"Already a member of #{channel_name}, skipping...")
-                    continue
-                    
-                try:
-                    logger.info(f"Joining channel #{channel_name}...")
-                    self.client.conversations_join(channel=channel_id)
-                except SlackApiError as e:
-                    logger.error(f"Error joining channel #{channel_name}: {e.response['error']}")
-                    
-        except SlackApiError as e:
-            logger.error(f"Error fetching channels: {e.response['error']}")
+            channel_id = None
+            for channel in result["channels"]:
+                if channel["name"] == channel_name:
+                    channel_id = channel["id"]
+                    break
 
-    def send_message_to_channel(self, channel_name: str, message: str):
-        """Send a message to a specific channel."""
-        try:
+            if not channel_id:
+                logger.error(f"Channel {channel_name} not found")
+                return
+
+            # Send the message
             response = self.client.chat_postMessage(
-                channel=channel_name,
-                text=message,
-                parse='mrkdwn'
+                channel=channel_id,
+                text=message
             )
-            logger.info(f"Message sent successfully to #{channel_name}")
-            return response
+            
+            if not response["ok"]:
+                logger.error(f"Error sending message: {response['error']}")
+            
         except SlackApiError as e:
             logger.error(f"Error sending message to channel: {e}")
-            raise
