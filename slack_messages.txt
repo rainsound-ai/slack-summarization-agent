@@ -1,6 +1,9 @@
 
 === Channel: sales-team ===
 
+[12/04/2024 17:39] **Busch**: Demo of linking to source messages/conversations from which a bullet point in our summary was drawn
+<https://www.loom.com/share/d31deb8d3fb247c3878c103390770efe> [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733351986457209
+
 [12/04/2024 17:05] **Miles**: we've known about the slack ai for awhile btw. it's just so much more robust to build off our own solutions when possible and we hadn't yet committed in this direction
 
 that being said, probably time to go ahead and press go on setting up our acct to use it so we know what we're trying to beat
@@ -14,6 +17,8 @@ that being said, probably time to go ahead and press go on setting up our acct t
     [12/04/2024 17:10] **Miles** (reply): when i saw it last, it primarily summarized individual channels. the daily recap bit is fresh i think, maybe as new or newer than our thing [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733350251760849
 
     [12/04/2024 17:12] **Miles** (reply): we might try to get on their <https://slack.com/marketplace/category/At07HZAKCSAC-agents-assistants|marketplace> [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733350339317769
+
+    [12/04/2024 17:44] **Miles** (reply): @Aubrey ^ [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733352294968099
 
 [End of thread]
 
@@ -70,6 +75,10 @@ Side by side offerings slide/graphic comes to mind for website or information pa
     [12/04/2024 16:39] **Brent** (reply): Totally agree with you, Ben, I just don’t want us to get out there and pretend or not acknowledge of this exist. [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733348346996439
 
     [12/04/2024 16:39] **Miles** (reply): let's take inspiration from it and then beat it [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733348397533619
+
+    [12/04/2024 17:52] **Miles** (reply): the daily recap doesn't seem even close to our executive summary at first blush. you can see a gif of it in the link luca posted above. will have to try it to be sure, but i genuinely don't think there's anything to be concerned about here
+
+our thing is way different than theirs [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733352727662919
 
 [End of thread]
 

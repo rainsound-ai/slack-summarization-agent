@@ -1,34 +1,39 @@
 def get_sales_summary_prompt(conversation, start_date, end_date):
     """Prompt for creating an executive summary from the conversation."""
     return f"""
-You are analyzing a Slack conversation from the sales team channel. The participants are primarily Miles, Ben, Brent, and Busch, discussing sales activities for an AI company.
+You are analyzing a Slack conversation from the sales team channel. Your task is to provide an executive summary focused on identifying important strategic initiatives, next steps, and brainstormed ideas.
 
-Your task is to provide an **executive summary** focused on identifying important **strategic initiatives** and any proposed **next steps**.
+Create a summary in exactly this format:
 
-Create a summary in the following format exactly:
-
-📅 *Executive Summary ({start_date} - {end_date})*
+Executive Summary ({start_date} - {end_date})
 ---
 
-**Strategic Initiatives:**
-- *Name of Initiative 1* (Involved: [Names], Context: [Brief context]) ([Link to message])
-- *Name of Initiative 2* (Involved: [Names], Context: [Brief context]) ([Link to message])
+Strategic Initiatives:
+- [Initiative] (Owner: @[Name], Context: [Brief context]) <message_url|View Thread>
+- [Initiative] (Owner: @[Name], Context: [Brief context]) <message_url|View Thread>
 
-**Next Steps:**
-- *Name of Next Step 1* (Involved: [Names], Related to: [Strategic Initiative]) ([Link to message])
-- *Name of Next Step 2* (Involved: [Names], Related to: [Strategic Initiative]) ([Link to message])
+Next Steps:
+- [Action Item] (Assigned to: @[Name], Related to: [Strategic Initiative]) <message_url|View Thread>
+- [Action Item] (Assigned to: @[Name], Related to: [Strategic Initiative]) <message_url|View Thread>
 
-**Key Links:**
-- [List of important links shared]
+Brainstorm Ideas:
+- [Idea] (Proposed by: @[Name], Context: [Brief context]) <message_url|View Thread>
+- [Idea] (Proposed by: @[Name], Context: [Brief context]) <message_url|View Thread>
 
-**Instructions:**
-- Focus on important things happening in the sales channel.
-- Identify any next steps proposed for those important things.
-- Include **who is involved** and brief **context**.
-- **Hyperlink** to the specific message(s) or thread(s) you are drawing your content from.
-- Format hyperlinks in Slack markdown as `<URL|Display Text>`.
-- Ensure the summary is clear, concise, and actionable.
+Key Links:
+- [Description] <url>
+- [Description] <url>
 
-**Conversation:**
+Instructions:
+1. Always use @ when mentioning team members (e.g., @Miles, @Busch)
+2. Include hyperlinks to source messages using Slack's format: <url|View Thread>
+3. Distinguish between:
+   - Strategic Initiatives: Confirmed projects or major decisions
+   - Next Steps: Specific action items assigned to team members
+   - Brainstorm Ideas: Proposed concepts not yet actioned
+4. Only include substantive items that provide value to leadership
+5. If you list the wrong person who is repsonsible for something, or link the wrong message to a bullet point it could cost our business millions if dollars and will be very bad.
+
+Conversation:
 {conversation}
 """
