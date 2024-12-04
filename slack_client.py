@@ -118,16 +118,13 @@ class SlackDataFetcher:
             return []
 
     def organize_conversations(self) -> Dict[str, List[Dict]]:
-        """Fetch and organize conversations from all accessible channels."""
+        """Fetch and organize conversations from sales-team channel only."""
         conversations = {}
-        
-        # Define channels to ignore
-        IGNORED_CHANNELS = {'phone-recordings', 'slack-summarization-agent', 'open-phone'}
         
         try:
             result = self.client.conversations_list(
                 types="public_channel",
-                exclude_archived=True  # Skip archived channels
+                exclude_archived=True
             )
             
             if not result["ok"]:
@@ -136,30 +133,22 @@ class SlackDataFetcher:
 
             channels = result.get("channels", [])
             
+            # Find sales-team channel
             for channel in channels:
-                channel_id = channel["id"]
-                channel_name = channel["name"]
-                
-                # Skip ignored channels
-                if channel_name in IGNORED_CHANNELS:
-                    logger.debug(f"Skipping ignored channel #{channel_name}")
-                    continue
-                
-                # Skip channels where bot is not a member
-                if not channel.get("is_member", False):
-                    logger.debug(f"Not a member of #{channel_name}, skipping...")
-                    continue
+                if channel["name"] == "sales-team":
+                    channel_id = channel["id"]
                     
-                try:
-                    messages = self.get_channel_messages(channel_id)
-                    if messages:
-                        conversations[channel_name] = messages
-                except SlackApiError as e:
-                    logger.error(f"Error fetching messages for channel {channel_name}: {e.response['error']}")
-                    
+                    try:
+                        messages = self.get_channel_messages(channel_id)
+                        if messages:
+                            conversations["sales-team"] = messages
+                    except SlackApiError as e:
+                        logger.error(f"Error fetching messages for sales-team channel: {e.response['error']}")
+                    break
+                
         except SlackApiError as e:
             logger.error(f"Error fetching channels: {e.response['error']}")
-            
+
         return conversations
 
     def join_all_public_channels(self):

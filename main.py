@@ -23,47 +23,40 @@ def is_substantive_summary(summary: str) -> bool:
 
 def main():
     try:
-        # Initialize our components
+        # Initialize components
         slack_fetcher = SlackDataFetcher()
         summarizer = ConversationSummarizer()
 
-        # Join all public channels first
-        logger.info("Joining public channels...")
-        slack_fetcher.join_all_public_channels()
-
-        # Fetch all conversations from Slack
-        logger.info("Fetching conversations from Slack...")
+        # Get messages only from sales-team channel
+        logger.info("Fetching sales team conversations...")
         conversations = slack_fetcher.organize_conversations()
-
-        # First pass: Generate individual channel summaries
-        channel_summaries = []
-        for channel_name, messages in conversations.items():
-            if not messages:
-                continue
-                
-            formatted_conversation = summarizer._prepare_conversation(messages)
-            summary = summarizer.summarize_conversation(formatted_conversation, channel_name)
+        
+        if 'sales-team' not in conversations:
+            logger.error("Sales-team channel not found or no messages available")
+            return
             
-            # Only add substantive summaries
-            if is_substantive_summary(summary):
-                channel_summaries.append(summary)
+        # Process sales-team messages
+        formatted_conversation = summarizer._prepare_conversation(conversations['sales-team'])
+        channel_summary = summarizer.summarize_conversation(formatted_conversation, 'sales-team')
+        
+        if is_substantive_summary(channel_summary):
+            # Create final summary
+            start_date = (datetime.now() - timedelta(days=7)).strftime("%m/%d")
+            end_date = datetime.now().strftime("%m/%d")
+            
+            final_summary = summarizer.create_final_summary(
+                channel_summaries=[channel_summary],
+                start_date=start_date,
+                end_date=end_date
+            )
+            
+            # Send to Slack
+            logger.info("Sending sales summary to Slack...")
+            slack_fetcher.send_message_to_channel('slack-summarization-agent', final_summary)
+            logger.info("Sales team summary successfully sent!")
+        else:
+            logger.info("No substantive sales updates found this week")
 
-        # Second pass: Create ultra-concise final summary
-        start_date = (datetime.now() - timedelta(days=7)).strftime("%m/%d")
-        end_date = datetime.now().strftime("%m/%d")
-        
-        final_summary = summarizer.create_final_summary(
-            channel_summaries=channel_summaries,
-            start_date=start_date,
-            end_date=end_date
-        )
-        
-        # Send to Slack
-        logger.info("Sending summary to Slack...")
-        slack_fetcher.send_message_to_channel('slack-summarization-agent', final_summary)
-        
-        logger.info("Weekly summary successfully sent!")
-        
     except Exception as e:
         logger.error(f"Error in main process: {e}")
         raise

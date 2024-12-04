@@ -1,16 +1,36 @@
 def get_channel_prompt(channel_name, conversation):
     """Prompt for individual channel summaries."""
     return f"""
-    Analyze this Slack conversation from the channel #{channel_name} and provide a concise summary.
+    Analyze this Slack conversation from the sales team channel. The participants are primarily Miles, Ben, and Brent, 
+    who are discussing sales activities for an AI company. Provide a structured summary focused on sales insights.
+
     Include:
-    1. Main topic(s) discussed
-    2. Key decisions made (if any)
-    3. Action items (if any)
-    4. Important quotes (if relevant)
-    5. Relevant files and links shared (include the URLs if they seem important)
+    1. Deal Pipeline Updates:
+        • New opportunities identified
+        • Deal stages and changes
+        • Potential deal values (if mentioned)
     
-    Keep the summary brief and focused on the most important points.
-    If files or links were shared, include them only if they're relevant to the main discussion.
+    2. Customer Interactions:
+        • Key meetings and outcomes
+        • Customer feedback or concerns
+        • Success stories or testimonials
+    
+    3. Sales Strategy:
+        • Confirmed decisions ("Decision: [item]")
+        • Active initiatives ("Action: [item] - Owner: [name]")
+        • Ideas being explored ("Strategy Discussion: [items]")
+    
+    4. Product/Market Insights:
+        • Competitive intelligence
+        • Market feedback
+        • Feature requests or product gaps
+    
+    5. Resources & Support:
+        • Important files/links shared
+        • Sales collateral needs
+        • Cross-team support requests
+
+    Keep the summary focused on actionable insights and clear distinctions between confirmed plans vs. discussions.
     
     Conversation:
     {conversation}
@@ -18,24 +38,31 @@ def get_channel_prompt(channel_name, conversation):
 
 def get_final_summary_prompt(channel_summaries, start_date, end_date):
     """Prompt for creating the final ultra-concise summary."""
-    return f"""You are creating an executive summary of Slack conversations for busy business leaders.
-    Be extremely selective - only include information that would be valuable at the executive level.
+    return f"""You are creating an executive sales summary for an AI company's leadership team.
+    Focus on insights valuable to the CEO, Sales Manager, and Account Executives.
     
-    Create a brief, scannable summary that can be read in under 1 minute.
+    Create a scannable summary that highlights key business impacts and action items.
     
     Format the response exactly like this:
-    📅 *Weekly Slack Summary ({start_date} - {end_date})*
+    📅 *Sales Team Summary ({start_date} - {end_date})*
     ---
 
-    🔹 *Executive Summary:*
-    • [3-5 most critical updates or decisions that affect the business]
+    💰 *Pipeline & Deals:*
+    • [Key updates on deals, conversions, and revenue impact]
 
-    [Only include channels with significant updates]
-    📌 *CHANNEL: #channel-name*
-    • [1-2 bullet points max per channel, focus on decisions and actions]
+    👥 *Customer & Market Insights:*
+    • [Critical feedback, patterns, or market intelligence]
 
-    🔗 *Key Links:*
-    • [Only include links that executives must review]
+    📈 *Strategic Initiatives:*
+    • [Confirmed] [List confirmed decisions and actions]
+    • [In Progress] [List active initiatives]
+    • [Exploring] [List strategies under discussion]
+
+    ⚠️ *Needs Attention:*
+    • [Blockers, support needs, or immediate actions required]
+
+    🔗 *Key Resources:*
+    • [Only critical documents/links]
 
     Channel Summaries to Process:
     {channel_summaries}
