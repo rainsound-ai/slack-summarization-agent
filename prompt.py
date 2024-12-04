@@ -1,47 +1,34 @@
 def get_sales_summary_prompt(conversation, start_date, end_date):
-    """Prompt for creating a concise sales summary from the conversation."""
+    """Prompt for creating an executive summary from the conversation."""
     return f"""
-You are analyzing a Slack conversation from the sales team channel. The participants are primarily Miles, Ben, and Brent, who are discussing sales activities for an AI company.
+You are analyzing a Slack conversation from the sales team channel. The participants are primarily Miles, Ben, Brent, and Busch, discussing sales activities for an AI company.
 
-Your task is to provide an executive sales summary focused on actionable insights valuable to the CEO, Sales Manager, and Account Executives.
+Your task is to provide an **executive summary** focused on identifying important **strategic initiatives** and any proposed **next steps**.
 
-Create a scannable summary that highlights key business impacts and action items.
+Create a summary in the following format exactly:
 
-Format the response exactly like this:
-📅 *Sales Team Summary ({start_date} - {end_date})*
+📅 *Executive Summary ({start_date} - {end_date})*
 ---
 
-👥 *Customer & Market Insights:*
-• [Critical feedback, patterns, or market intelligence]
+**Strategic Initiatives:**
+- *Name of Initiative 1* (Involved: [Names], Context: [Brief context]) ([Link to message])
+- *Name of Initiative 2* (Involved: [Names], Context: [Brief context]) ([Link to message])
 
-📈 *Strategic Initiatives:*
-• [Confirmed] [List confirmed decisions and actions]
-• [In Progress] [List active initiatives, blockers, support needs, or immediate actions required]
+**Next Steps:**
+- *Name of Next Step 1* (Involved: [Names], Related to: [Strategic Initiative]) ([Link to message])
+- *Name of Next Step 2* (Involved: [Names], Related to: [Strategic Initiative]) ([Link to message])
 
-🔗 *Key Resources:*
-• [Only critical documents/links]
+**Key Links:**
+- [List of important links shared]
 
-Include:
+**Instructions:**
+- Focus on important things happening in the sales channel.
+- Identify any next steps proposed for those important things.
+- Include **who is involved** and brief **context**.
+- **Hyperlink** to the specific message(s) or thread(s) you are drawing your content from.
+- Format hyperlinks in Slack markdown as `<URL|Display Text>`.
+- Ensure the summary is clear, concise, and actionable.
 
-1. **Customer Interactions & Market Insights**:
-    • Key meetings and outcomes
-    • Customer feedback or concerns
-    • Success stories or testimonials
-    • Competitive intelligence
-    • Market feedback
-    • Feature requests or product gaps
-
-2. **Strategic Initiatives**:
-    • Confirmed decisions ("Decision: [item]")
-    • Active initiatives ("Action: [item] - Owner: [name]")
-
-3. **Resources & Support**:
-    • Important files/links shared
-    • Sales collateral needs
-    • Cross-team support requests
-
-Keep the summary focused on actionable insights and clear distinctions between confirmed plans and discussions.
-
-Conversation:
+**Conversation:**
 {conversation}
 """

@@ -12,17 +12,26 @@ logger = logging.getLogger(__name__)
 client = OpenAI(api_key=OPENAI_API_KEY)
 
 class ConversationSummarizer:
-    def __init__(self):
+    def __init__(self, user_map: Dict[str, str]):
         self.model = "o1-preview"
+        self.user_map = user_map
 
     def _clean_text(self, text: str) -> str:
-        """Remove user tags like <@U12345> from the text."""
-        # Remove user tags
-        text = re.sub(r'<@U[A-Z0-9]+>', '', text)
-        # Remove channel tags like <#C12345>
-        text = re.sub(r'<#C[A-Z0-9]+>', '', text)
-        # Remove special tokens like <!here>, <!channel>
+        """Clean text while preserving @mentions."""
+        # Replace <@U12345> format with just the @ mention
+        text = re.sub(r'<@(U[A-Z0-9]+)>', r'@\1', text)
+        
+        # Remove channel tags
+        text = re.sub(r'<#C[A-Z0-9]+\|([^>]+)>', r'#\1', text)
+        
+        # Remove special tokens
         text = re.sub(r'<![a-zA-Z]+>', '', text)
+        
+        # Replace user IDs with usernames using the user_map
+        for user_id in re.findall(r'@(U[A-Z0-9]+)', text):
+            if user_id in self.user_map:
+                text = text.replace(f'@{user_id}', f'@{self.user_map[user_id]}')
+        
         return text.strip()
 
     def _prepare_conversation(self, messages: List[Dict]) -> str:
@@ -30,25 +39,21 @@ class ConversationSummarizer:
         formatted_msgs = []
         for msg in messages:
             user = msg.get("user", "Unknown User")
-            text = msg.get("text", "")
+            text = self._clean_text(msg.get("text", ""))
             timestamp = msg.get("timestamp", "")
+            timestamp_dt = datetime.fromtimestamp(float(timestamp), EST)
+            timestamp_str = timestamp_dt.strftime("%m/%d/%Y %H:%M")
+            message_url = msg.get("message_url", "")
             thread_replies = msg.get("thread_replies", [])
             files = msg.get("files", [])
             links = msg.get("links", [])
 
-            # Clean the text to remove user tags
-            text = self._clean_text(text)
-
-            # Convert timestamp to datetime string
-            if timestamp:
-                timestamp_dt = datetime.fromtimestamp(float(timestamp), EST)
-                timestamp_str = timestamp_dt.strftime("%m/%d/%Y %H:%M")
-            else:
-                timestamp_str = "Unknown Time"
-
             # Format main message
             if text:
-                formatted_msgs.append(f"[{timestamp_str}] **{user}**: {text}")
+                formatted_msg = f"[{timestamp_str}] **{user}**: {text}"
+                if message_url:
+                    formatted_msg += f" [Message URL]: {message_url}"
+                formatted_msgs.append(formatted_msg)
 
             # Include shared files
             for file in files:
@@ -68,21 +73,17 @@ class ConversationSummarizer:
                 formatted_msgs.append("[Thread started]")
                 for reply in thread_replies:
                     reply_user = reply.get("user", "Unknown User")
-                    reply_text = reply.get("text", "")
+                    reply_text = self._clean_text(reply.get("text", ""))
                     reply_timestamp = reply.get("timestamp", "")
-
-                    # Clean the reply text
-                    reply_text = self._clean_text(reply_text)
-
-                    # Convert reply timestamp to datetime string
-                    if reply_timestamp:
-                        reply_timestamp_dt = datetime.fromtimestamp(float(reply_timestamp), EST)
-                        reply_timestamp_str = reply_timestamp_dt.strftime("%m/%d/%Y %H:%M")
-                    else:
-                        reply_timestamp_str = "Unknown Time"
+                    reply_timestamp_dt = datetime.fromtimestamp(float(reply_timestamp), EST)
+                    reply_timestamp_str = reply_timestamp_dt.strftime("%m/%d/%Y %H:%M")
+                    reply_message_url = reply.get("message_url", "")
 
                     if reply_text:
-                        formatted_msgs.append(f"    [{reply_timestamp_str}] **{reply_user}** (reply): {reply_text}")
+                        formatted_reply = f"    [{reply_timestamp_str}] **{reply_user}** (reply): {reply_text}"
+                        if reply_message_url:
+                            formatted_reply += f" [Message URL]: {reply_message_url}"
+                        formatted_msgs.append(formatted_reply)
                 formatted_msgs.append("[End of thread]")
         
         return "\n\n".join(formatted_msgs)

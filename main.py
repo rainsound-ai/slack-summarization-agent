@@ -10,7 +10,7 @@ def main():
     try:
         # Initialize components
         slack_fetcher = SlackDataFetcher()
-        summarizer = ConversationSummarizer()
+        summarizer = ConversationSummarizer(slack_fetcher.user_map)
 
         # Get messages from the sales-team channel
         logger.info("Fetching sales team conversations...")

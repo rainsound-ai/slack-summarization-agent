@@ -5,6 +5,7 @@ from slack_sdk import WebClient
 from slack_sdk.errors import SlackApiError
 from typing import List, Dict
 from config import SLACK_BOT_TOKEN, EST, START_DATE, END_DATE
+import urllib.parse
 
 logger = logging.getLogger(__name__)
 
@@ -26,6 +27,15 @@ class SlackDataFetcher:
             logger.error(f"Error fetching user info: {e}")
             return {}
 
+    def _generate_message_url(self, channel_id: str, timestamp: str) -> str:
+        """Generate a direct URL to a Slack message."""
+        base_url = "https://yourworkspace.slack.com/archives"
+        # Replace 'yourworkspace' with your actual Slack workspace domain
+        
+        ts_formatted = timestamp.replace('.', '')
+        message_url = f"{base_url}/{channel_id}/p{ts_formatted}"
+        return message_url
+    
     def organize_conversations(self) -> Dict[str, List[Dict]]:
         """Fetch and organize conversations from sales-team channel only."""
         conversations = {}
@@ -86,7 +96,7 @@ class SlackDataFetcher:
                 logger.info(f"Retrieved {len(raw_messages)} messages from channel")
                 
                 for msg in raw_messages:
-                    processed_msg = self._process_message_content(msg)
+                    processed_msg = self._process_message_content(msg, channel_id)
                     
                     if msg.get("thread_ts"):
                         thread_replies = self.get_thread_replies(channel_id, msg["thread_ts"], start_ts, end_ts)
@@ -116,7 +126,7 @@ class SlackDataFetcher:
             if response["ok"]:
                 thread_messages = response["messages"][1:]  # Exclude parent message
                 logger.info(f"Retrieved {len(thread_messages)} replies from thread {thread_ts}")
-                return [self._process_message_content(msg) for msg in thread_messages]
+                return [self._process_message_content(msg, channel_id) for msg in thread_messages]
             
             return []
             
@@ -124,22 +134,34 @@ class SlackDataFetcher:
             logger.error(f"Error fetching thread replies: {e}")
             return []
 
-    def _process_message_content(self, message: Dict) -> Dict:
-        """Process a message to extract text, files, and links."""
+    def _process_message_content(self, message: Dict, channel_id: str) -> Dict:
+        """Process a message to extract text, files, links, and generate message URLs."""
         user_id = message.get("user", "")
         username = self.user_map.get(user_id, "Unknown User")
-        
+        timestamp = message.get("ts", "")
+        message_url = self._generate_message_url(channel_id, timestamp)
+
         processed = {
             "text": message.get("text", ""),
             "files": message.get("files", []),
             "links": [],
-            "timestamp": message.get("ts", ""),
+            "timestamp": timestamp,
             "user": username,
             "user_id": user_id,
-            "thread_ts": message.get("thread_ts", "")
+            "thread_ts": message.get("thread_ts", ""),
+            "message_url": message_url
         }
         
         return processed
+
+    def _generate_message_url(self, channel_id: str, timestamp: str) -> str:
+        """Generate a direct URL to a Slack message."""
+        base_url = "https://yourworkspace.slack.com/archives"
+        # Replace 'yourworkspace' with your actual Slack workspace domain
+        
+        ts_formatted = timestamp.replace('.', '')
+        message_url = f"{base_url}/{channel_id}/p{ts_formatted}"
+        return message_url
 
     def send_message_to_channel(self, channel_name: str, message: str) -> None:
         """Send a message to a specific channel."""
