@@ -1,0 +1,776 @@
+==================================================
+=== Process ===
+Name: Attend Conferences
+Body: Input / Output:
+A conference prep form → Qualified Leads
+ 
+Step
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Conduct Event Delivery
+Step URL: https://notion.so/144bada54a4d81e4aecbd13ac128b452
+Step Body: 
+
+SOPs for this step:
+SOP Name: How To Conduct Event Delivery
+SOP Body: Booth setup
+Lead Capture and Engagement
+Daily reporting and inter-day communications
+SOP Name: How to Filter qualified leads
+SOP Body: Regular qualified leads get a follow-up phone call in a week
+Super qualified leads get taken to dinner
+SOP Name: How to Collect data on qualified leads
+SOP Body: Explore the venue
+Connect with other people at the conference
+Log all information about them in a table
+
+----------------------------------------
+Step Name: 2. Conduct Event Teardown
+Step URL: https://notion.so/144bada54a4d81b58408daf203c15f72
+Step Body: 
+
+SOPs for this step:
+SOP Name: How To Conduct Event Teardown
+SOP Body: Once event is officially closed and doors are closed, onsite team to support marketing with the tear down and packaging of any remaining items from the event. 
+All packaging and event materials should be secured in a manner that makes it easy for marketing and next team to easily set up and use in any forthcoming event. DO NOT just throw things in a box. 
+Marketing to monitor packaging, place shipping labels, and ready all packaging for return to respective location(s). 
+
+----------------------------------------
+Step Name: 3. Follow-up With Leads Post Event
+Step URL: https://notion.so/144bada54a4d8154885ddc92335c4632
+Step Body: 
+
+SOPs for this step:
+SOP Name: How To Follow-Up On An Event
+SOP Body: Within 2 days post event, Marketing and Sales to organize an event retrospective, gather any additional details from company participants (leads, off hand meetings, lessons learned, kudos, etc) to include in overall follow up plan.
+Marketing to aggregate generated lead lists, score each contact based on ICP details
+Marketing to share with Sales the qualified lead lists of contacts that met ICP scoring threshold
+Measure ROI of event
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Propose A Process Iteration
+Body: Input / Output:
+An unoptimized process → An Entry in the Process Iteration Queue
+ 
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Fill out the Process Iteration Request Form
+Step URL: https://notion.so/96e8de1bd9614cbda0dd33189ef4cee8
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to fill out any form
+SOP Body: Visit the   
+Filter by the process you are currently using
+Find the form that you need to fill out
+Click the link to the Form on the Form’s page
+(Optional) It is recommended to open the Form as a full page to prevent accidentally closing the form
+Answer all of the questions
+Click submit at the bottom
+(Optional) Review your submission in the responses view
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Summarize meeting transcripts
+Body: Input / Output:
+Meeting  → A summary on the meeting page → An entry in the summary inbox
+               
+Steps
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Collect meeting transcripts
+Step URL: https://notion.so/ccd1e0c8bf7241d5a379878654383f9c
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to collect meeting transcripts
+SOP Body: Record the meeting with Jumpshare
+Fill out the recording link on the Notion meeting page
+
+----------------------------------------
+Step Name: 2. Create a summary
+Step URL: https://notion.so/1aada7692afa49de9cde9e6c90cbfb92
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to create a summary
+SOP Body: Submit a personalized prompt for your preferred style of summary
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Find new Engineering Tools
+Body: Input / Output:
+A business need or a tool → An entry in the tool consideration queue
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Research the tool
+Step URL: https://notion.so/15f001123a9c40e7a1ce0b18ba5ca595
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to Research the tool
+SOP Body: 
+
+----------------------------------------
+Step Name: 2. Fill out the Tool Proposal Form
+Step URL: https://notion.so/3980dd272e9c42fb8a366470231ed965
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to fill out the tool proposal form
+SOP Body: 
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Shape Project Runways
+Body: Input / Output:
+An Entry in Agent Queue Who is working on each agent → A System Design Document
+ 
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Fill out the System Design Document
+Step URL: https://notion.so/b21755aa638a457a92a6879e3a61cc3d
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to Create the System Design Document (Internal)
+SOP Body: If your project is:
+Day Scoped:
+Give each item a look over
+Week Scoped:
+Carefully consider each of the items, make some notes of key takeaways
+Cycle Scoped:
+Write the System Design Doc
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Create a plan for the next cycle
+Body: Input / Output:
+Metrics Report Strategy Report Agent blueprints → Who is working on what agent → Budget → Scheduled co-working sessions
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Execute the Cycle Level Upkeep Agenda
+Step URL: https://notion.so/b5c136e824284eb98a2a296038f4658e
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to Execute the Cycle Level Upkeep Agenda
+SOP Body: Do Top of mind for the upcoming cycle
+Discuss the Strategy & Metrics reports 
+Do Same or different for the cycle
+Get feedback on the checklist of action items
+For each fund, block out the money we expect to spend for the coming cycle
+Make a list of all co-working sessions and schedule them async
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Make Purchases
+Body: Input / Output:
+An entry in the purchase order queue → The thing we purchased
+ 
+ 
+Steps
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Make the purchase
+Step URL: https://notion.so/b482303df3af42ce8fdf154ca170cdd7
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to make a purchase (TBD)
+SOP Body: 
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Generate Metrics Reports for current Cycle
+Body: Input / Output:
+Company Metrics → Company Quarterly Metrics Reports
+ 
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Intake Company Metrics
+Step URL: https://notion.so/bf359ae1f08c4b01bb137c411c4c0ec7
+Step Body: 
+
+----------------------------------------
+Step Name: 2. Generate Reports
+Step URL: https://notion.so/81372614bfd7465fbbcf63349a289fb8
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to create a KPI report (TBD)
+SOP Body: 
+SOP Name: How to create a finance report (TBD)
+SOP Body: 
+
+----------------------------------------
+Step Name: 3. Chat With Metrics Report In Slack
+Step URL: https://notion.so/5e89685c724443eba5d1e2328e81b67d
+Step Body: 
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Create a purchase order
+Body: Input / Output:
+Updated Expense Funds → An entry in the purchase order queue
+ 
+ 
+Steps
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Complete a Purchase Proposal Form
+Step URL: https://notion.so/4a74eeb49d51401699805e63a9dd7dfb
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to collect feedback on the purchase-orders channel (TBD)
+SOP Body: 
+SOP Name: How to fill out any form
+SOP Body: Visit the   
+Filter by the process you are currently using
+Find the form that you need to fill out
+Click the link to the Form on the Form’s page
+(Optional) It is recommended to open the Form as a full page to prevent accidentally closing the form
+Answer all of the questions
+Click submit at the bottom
+(Optional) Review your submission in the responses view
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Create an entry in the knowledge base
+Body: Input / Output:
+Content  → An entry in the knowledge base
+Steps
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Put a link in the summary database
+Step URL: https://notion.so/a2c883c8f481478c9219e0288715a713
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to Put a link in the summary database
+SOP Body: Put the link in the link summary database   
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Propose A New Process
+Body: Input / Output:
+Business Needs/Problems → An Entry in the Process Proposal Queue
+ 
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Fill out the process proposal form
+Step URL: https://notion.so/4fd491891d7e4e05b05fc1f3560f3144
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to fill out any form
+SOP Body: Visit the   
+Filter by the process you are currently using
+Find the form that you need to fill out
+Click the link to the Form on the Form’s page
+(Optional) It is recommended to open the Form as a full page to prevent accidentally closing the form
+Answer all of the questions
+Click submit at the bottom
+(Optional) Review your submission in the responses view
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Iterate On Processes
+Body: Input / Output:
+An entry in the process iteration queue → An process iteration → An entry in the Process In Need Of Contractors Queue
+ 
+                                                                  
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Iterate on the process
+Step URL: https://notion.so/3acfad876cc94c95a0618249c6cd4f56
+Step Body:  
+
+SOPs for this step:
+SOP Name: How to collect feedback on the processes channel (TBD)
+SOP Body: 
+SOP Name: How to optimize the process
+SOP Body: Reviewed the submitted iteration proposal form
+Make the best choice for optimization
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Execute the next item in the adoption queue
+Body: Input / Output:
+An entry in the adoption queue → People using new tools and processes
+ 
+
+=== Steps ===
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Execute The External Engineering Loop
+Body: Input / Output:
+Process Proposal Form → An Entry in the Adoption Queue → An Entry in the Hire Contractors Queue → An Entry in the Build Agent Queue
+
+=== Steps ===
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Execute The Internal Agent Engineering Loop 
+Body: Input / Output:
+Process Proposal Form → An Entry in the Adoption Queue → An Entry in the Hire Contractors Queue → An Entry in the Build Agent Queue
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Crush Engineering
+Step URL: https://notion.so/f22fd3c7b496441f802442e27aba49a4
+Step Body: 
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Design and Prototype Agents
+Body: Input / Output:
+Data on which agents are most important → An entry in the Agent Queue
+ 
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Make an entry in the agent queue 
+Step URL: https://notion.so/cfe853fef271444f81a7d491ff4371ee
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to Create an entry in the agent queue
+SOP Body: An entry should have:
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Onboard Client
+Body: Input/Output:
+
+=== Steps ===
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Perform the sales loop
+Body: Steps
+A kickoff deck from Tribe. Looks like the basic goal was “help the client figure out how generative AI fits into their strategy and roadmap.”
+Send preliminary materials, including pain points worksheet
+Conversational AI: Meetings
+
+=== Steps ===
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Prepare For Conferences
+Body: Input / Output:
+An entry in the conference queue → A conference prep form
+ 
+Step
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Strategic Planning
+Step URL: https://notion.so/50c84f80a0be458aa91cf10cc13a9c32
+Step Body: 
+
+SOPs for this step:
+SOP Name: How To Conduct Strategic Planning
+SOP Body: Review Go-to-Market (GTM) strategy - Ideal client profiles, targeted market of professionals (User or Economic Buyers), annual objectives.
+Event Goals - types of meetings, number of meetings, types of brands, partnerships made, sales account targets.
+Event Budgets - cost of event, travel, booth, collateral, giveaways, contests/raffles, account dinners, social affairs.
+
+----------------------------------------
+Step Name: 2. Conference Selection
+Step URL: https://notion.so/772b1df159084cbaabf5f2d023790bff
+Step Body: 
+
+SOPs for this step:
+SOP Name: How To Select Conferences
+SOP Body: Research for industry, technology, and/or business conferences - event reputation, size of event, User/Economic Buyer accessibility, location of event, cost of event, duration, access to previous attendee lists, and access to registered attendee lists (ahead of event).
+Evaluation ROI potential of each event - based on research determine ROI of event. ROI is based on costs of delivery to the expected outcomes of event (meetings gained, qualified meetings held, qualified contacts collected, presentations delivered).
+Select conferences to attend - using research and ROI, select events that hold the most strategic value to the GTM plan and meet event budget. 
+
+----------------------------------------
+Step Name: 3. Event Preparation
+Step URL: https://notion.so/1961b2bdd07449a8919ec9380a15dd80
+Step Body: 
+
+SOPs for this step:
+SOP Name: How To Prepare For An Event
+SOP Body: Marketing: 
+Sales: 
+Events Team: 
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Create Content
+Body: Input / Output:
+Knowledge base entries Hosted agents → Slide decks → Agent Loom Videos → PDF guide → Blog article
+
+=== Steps ===
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Audit And Procure Engineering Tools
+Body: Input / Output:
+An entry in the tool consideration queue → An Entry in the Adoption Queue
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Review each tool
+Step URL: https://notion.so/0cc25744517a4602b4f464e2ad8c1c4f
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to Review each tool (TBD)
+SOP Body: 
+
+----------------------------------------
+Step Name: 2. Add any recurring costs to the automated expenses fund
+Step URL: https://notion.so/d0a43ce785394ca89b5357e27a0445a8
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to Add any recurring costs to the automated expenses fund (TBD)
+SOP Body: 
+
+----------------------------------------
+Step Name: 3. Fill out the adoption form
+Step URL: https://notion.so/3f0116380d104446ad8bfd486cd56abb
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to Make an entry in the adoption queue (TBD)
+SOP Body: 
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Execute the Website Update Queue
+Body: Input / Output:
+An entry in the Website update queue → A vehicle for content for the sales loop → A vehicle for data collection for collect data → Hosted agents for create content
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Fill out the website update form
+Step URL: https://notion.so/e601fbe6674d4801a434e7a9fec8bba9
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to collect feedback on the website-updates channel (TBD)
+SOP Body: 
+
+----------------------------------------
+Step Name: 2. Deploy website changes
+Step URL: https://notion.so/db782b3d0a3646cc9a63564f7741c45d
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to maintain deployed infrastructure (TBD)
+SOP Body: 
+SOP Name: How to Deploy changes (TBD)
+SOP Body: 
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Disburse Payroll
+Body: Input / Output:
+Money from Funds → Money in the bank
+ 
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Process internal transfers
+Step URL: https://notion.so/4d6054150f7942e3a18bcb69ac9bc773
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to process internal transfers (TBD)
+SOP Body: 
+
+----------------------------------------
+Step Name: 2. Create Wingspan disbursements
+Step URL: https://notion.so/d62c2ddab471474a9c53ff94243bac02
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to create wingspan disbursements (TBD)
+SOP Body: 
+
+----------------------------------------
+Step Name: 3. Share how much everyone is getting paid
+Step URL: https://notion.so/fb316ee9de5a4eee894107c8313fe909
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to share what the payment amount was (TBD)
+SOP Body: 
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Create and execute contracts
+Body: Input / Output:
+An Entry in the Review Contracts Queue → A Contractor to be Onboarded → A client to be Onboarded
+                    
+                                               
+Steps
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Work with the contractor or client and contract author to define the terms of the contract
+Step URL: https://notion.so/ee035952cdfd45598bac143898185e26
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to work with the contract author
+SOP Body: If this is going to be a short-term engagement, we need an SOP-style contract
+If this is going to be a long-term engagement, we need a traditional job-description-style contract
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Onboard and Orient New Hires
+Body: Input / Output:
+A Contractor to be Onboarded → An Onboarded Contractor
+ 
+Steps
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Get the contractor set up with our IT infrastructure
+Step URL: https://notion.so/bb967e9c57114276952bb02c1b161524
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to Get the contractor set up with our IT infrastructure
+SOP Body: Add the Contractor to Google Workspace
+Invite them with their @ rainsound.ai  email to Slack, Notion, and 1password
+
+----------------------------------------
+Step Name: 2. Setting up payment details
+Step URL: https://notion.so/2b24d013703f426ca86fd61ee4ced749
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to Set up new contractor in Wingspan
+SOP Body: Collect the Contractor’s bank account information and W-9
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Find and Evaluate Contractors
+Body: Input / Output:
+An Entry in the Process In Need Of Contractors Queue → An Entry in the Contractors in Need of Contracts Queue
+ 
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Use a recruiter to find a potential new hire
+Step URL: https://notion.so/92b292c83e654e42af06ac03c7085f1d
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to use a recruiter to find a contractor
+SOP Body: Research the typical job that performs this process
+Collaborate with the recruiter to define who we’re looking for
+
+----------------------------------------
+Step Name: 2. Evaluate the potential new hire
+Step URL: https://notion.so/bb7d0786a66c49c6a05c2fbb4793eb55
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to evaluate a contractor
+SOP Body: Provide information about the contractor in Slack to communicate their capabilities
+Use our all hands to ensure that the contractor is a solid culture fit and answer any questions
+
+----------------------------------------
+Step Name: 3. Make an entry in the Review Contracts Queue
+Step URL: https://notion.so/b291f6e7cf454a3792128c4e17485b2d
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to make an entry in a queue
+SOP Body: Add an entry to the associated queue.
+Make sure to include relevant forms and other information on the entry’s page
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Design A New Process
+Body: Input / Output:
+Process Proposal Form → An Entry in the Adoption Queue → An Entry in the Process In Need Of Contractors Queue → An Entry in the Build Agent Queue
+ 
+                                       
+                                       
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Fill out the process design form
+Step URL: https://notion.so/5b6b32d144384ffeaebb1ed2aeec73c3
+Step Body: 
+
+SOPs for this step:
+SOP Name: How To Format the process’ page
+SOP Body: 
+SOP Name: How to capture top of mind thoughts
+SOP Body: Talk free-form about the process at hand
+Take notes of anything that might be relevant to the process design
+Apply the results of that conversation to the process design form
+We like to think bi-directionally in regards to the process
+SOP Name: How to fill out any form
+SOP Body: Visit the   
+Filter by the process you are currently using
+Find the form that you need to fill out
+Click the link to the Form on the Form’s page
+(Optional) It is recommended to open the Form as a full page to prevent accidentally closing the form
+Answer all of the questions
+Click submit at the bottom
+(Optional) Review your submission in the responses view
+
+----------------------------------------
+Step Name: 2. Design each step
+Step URL: https://notion.so/3971db1d68ee4447aba417076bf9db54
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to write steps
+SOP Body: Conduct research on existing workflows
+Conduct research on industry standards and best practices.
+
+----------------------------------------
+Step Name: 3. Fill out the adoption form
+Step URL: https://notion.so/2f2dc89ccb0e4d3da6693b89f93ec401
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to collect feedback on the processes channel (TBD)
+SOP Body: 
+SOP Name: How to make an entry in a queue
+SOP Body: Add an entry to the associated queue.
+Make sure to include relevant forms and other information on the entry’s page
+
+
+==================================================
+
+==================================================
+=== Process ===
+Name: Generate Strategy Report for next cycle
+Body: Input / Output:
+Analyzed Data → Strategy Report
+ 
+
+=== Steps ===
+----------------------------------------
+Step Name: 1. Iterate on milestones
+Step URL: https://notion.so/1f4fe16e90cc4545a1b0fe192f45387f
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to Iterate on milestones (TBD)
+SOP Body: Decomposing systems to find milestones (next biggest thing)
+Prioritizing Milestones
+
+----------------------------------------
+Step Name: 2. Brainstorm tasks related to milestones
+Step URL: https://notion.so/c24c35b7d9344ad7894fb48422e3ff49
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to Brainstorm tasks related to milestones (TBD)
+SOP Body: Decomposing milestones to find possible layers of paint 
+Prioritize layers of paint
+4. Razor and prioritize
+
+----------------------------------------
+Step Name: 3. Turn this into a report
+Step URL: https://notion.so/ae29a76dd9ec48b2acf637c82e7910b6
+Step Body: 
+
+SOPs for this step:
+SOP Name: How to Turn this into a report (TBD)
+SOP Body: 
+
+
+==================================================
+

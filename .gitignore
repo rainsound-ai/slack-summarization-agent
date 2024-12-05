@@ -1,2 +1,3 @@
 .env
 slack_messages.txt
+.DS_Store

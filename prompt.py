@@ -1,3 +1,27 @@
+import logging
+
+logger = logging.getLogger(__name__)
+
+
+def link_next_steps_to_notion_steps_prompt(
+    channel_summary: str, notion_steps: str
+) -> str:
+    """Linking the next steps to the notion steps."""
+    return f"""
+    For each of the next steps in the channel summary, find the corresponding notion step and link them together.
+    Your response should be in the following format:
+    Next Steps:
+    - [Action Item] (Assigned to: @[Name], Related to: [Strategic Initiative]) <message_url|View Thread> <notion_step_url|[notion step name]>
+    - [Action Item] (Assigned to: @[Name], Related to: [Strategic Initiative]) <message_url|View Thread> <notion_step_url|[notion step name]>
+
+    Channel Summary:
+    {channel_summary}
+
+Notion Steps:
+{notion_steps}
+"""
+
+
 def get_sales_summary_prompt(conversation, start_date, end_date):
     """Prompt for creating an executive summary from the conversation."""
     return f"""
