@@ -1,3 +1,8 @@
 .env
 slack_messages.txt
 .DS_Store
+sales_summary_original.txt
+linked_steps.txt
+sales_summary.txt
+__pycache__
+outputs/*

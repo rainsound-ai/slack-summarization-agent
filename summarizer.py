@@ -14,7 +14,7 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 
 class ConversationSummarizer:
     def __init__(self, user_map: Dict[str, str]):
-        self.model = "o1-preview"
+        self.model = "o1-mini"
         self.user_map = user_map
 
     def _clean_text(self, text: str) -> str:
