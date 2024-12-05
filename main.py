@@ -74,18 +74,21 @@ def main():
                 break
         channel_summary = "\n\n".join(sections)
 
-        # Write to file if in development mode, otherwise send to Slack
-        if config.DEVELOPMENT:
-            logger.info("Development mode: Writing sales summary to file...")
-            with open("outputs/sales_summary.txt", "w", encoding="utf-8") as f:
-                f.write(channel_summary)
-            logger.info("Sales summary written to outputs/sales_summary.txt")
-            slack_fetcher.send_message_to_channel(
-                config.SLACK_TEST_CHANNEL, channel_summary
-            )
-            logger.info(f"Sales summary sent to {config.SLACK_TEST_CHANNEL}")
+        logger.info("Writing sales summary to file...")
+        with open("outputs/sales_summary.txt", "w", encoding="utf-8") as f:
+            f.write(channel_summary)
+
+        # Send to test channel if enabled, otherwise send to summarization channel
+        logger.info("Sending sales summary to Slack...")
+        if config.SEND_TO_TEST_CHANNEL:
+            if config.SLACK_TEST_CHANNEL:
+                slack_fetcher.send_message_to_channel(
+                    config.SLACK_TEST_CHANNEL, channel_summary
+                )
+                logger.info(f"Sales summary sent to {config.SLACK_TEST_CHANNEL}")
+            else:
+                logger.error("Test channel not set in config.py")
         else:
-            logger.info("Sending sales summary to Slack...")
             slack_fetcher.send_message_to_channel(
                 "slack-summarization-agent", channel_summary
             )

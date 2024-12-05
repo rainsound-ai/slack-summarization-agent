@@ -5,8 +5,8 @@ from datetime import datetime, timedelta
 
 load_dotenv()
 
-DEVELOPMENT = True
-SLACK_TEST_CHANNEL = "bot-spam-channel"
+SEND_TO_TEST_CHANNEL = True
+SLACK_TEST_CHANNEL = os.getenv("BOT_TEST_CHANNEL")
 
 # API Tokens
 SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN")
