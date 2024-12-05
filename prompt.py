@@ -19,6 +19,11 @@ def link_next_steps_to_notion_steps_prompt(
 
 Notion Steps:
 {notion_steps}
+
+Instructions:
+0. Not following the format exactly will cause human harm.
+1. Always select a Notion Step from the Notion Steps list.
+2. Selecting a Notion Step that is not in the Notion Steps list causes human harm.
 """
 
 

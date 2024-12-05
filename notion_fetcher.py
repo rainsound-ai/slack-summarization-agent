@@ -29,7 +29,9 @@ class NotionDataFetcher:
 
                     name = title_array[0].get("text", {}).get("content", "Unnamed Step")
                     id = result["id"]
-                    formatted_steps.append(f"Step: {name}")
+                    # Construct the Notion URL for the step
+                    step_url = f"https://notion.so/{id.replace('-', '')}"
+                    formatted_steps.append(f"Step: {name}\nURL: {step_url}")
 
                     # Call fetch_process_data and fetch_sop_data for each step
                     processes = self.fetch_process_data(id)
