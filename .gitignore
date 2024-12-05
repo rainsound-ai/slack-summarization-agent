@@ -4,5 +4,5 @@ slack_messages.txt
 sales_summary_original.txt
 linked_steps.txt
 sales_summary.txt
-__pycache__
+*.pyc
 outputs/*
