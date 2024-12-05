@@ -1,5 +1,6 @@
 from slack_client import SlackDataFetcher
 from summarizer import ConversationSummarizer
+from notion_fetcher import NotionDataFetcher
 import logging
 from datetime import datetime, timedelta
 import config
@@ -39,9 +40,12 @@ def main():
         start_date = (datetime.now() - timedelta(hours=24)).strftime("%m/%d %H:%M")
         end_date = datetime.now().strftime("%m/%d %H:%M")
 
-        # Read notion steps file
-        with open("notion_steps.txt", "r", encoding="utf-8") as f:
-            notion_steps = f.read()
+        # Initialize NotionDataFetcher
+        notion_fetcher = NotionDataFetcher()
+
+        # Fetch steps from Notion
+        logger.info("Fetching steps from Notion...")
+        notion_steps = notion_fetcher.fetch_step_data()
 
         # Summarize using the same formatted conversation
         logger.info("Summarizing conversation...")

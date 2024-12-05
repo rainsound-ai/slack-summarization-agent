@@ -11,6 +11,10 @@ SLACK_TEST_CHANNEL = "bot-spam-channel"
 # API Tokens
 SLACK_BOT_TOKEN = os.getenv("SLACK_BOT_TOKEN")
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY")
+NOTION_API_KEY = os.getenv("NOTION_API_KEY")
+NOTION_STEPS_DATABASE_ID = os.getenv("NOTION_STEPS_DATABASE_ID")
+NOTION_PROCESSES_DATABASE_ID = os.getenv("NOTION_PROCESS_DATABASE_ID")
+NOTION_SOP_DATABASE_ID = os.getenv("NOTION_SOP_DATABASE_ID")
 
 # Time configurations with explicit timezone
 EST = pytz.timezone("America/New_York")
