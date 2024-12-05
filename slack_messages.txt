@@ -1,8 +1,20 @@
 
 === Channel: sales-team ===
 
+[12/04/2024 17:56] **Miles**: from @Busch:
+
+<https://claude.site/artifacts/139581d7-d796-4949-80a2-aa32a183b43a|https://claude.site/artifacts/139581d7-d796-4949-80a2-aa32a183b43a>
+
+<https://claude.site/artifacts/e9ddf420-5020-4d90-9cb1-c854cb2803a7|https://claude.site/artifacts/e9ddf420-5020-4d90-9cb1-c854cb2803a7> [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733353003442989
+
 [12/04/2024 17:39] **Busch**: Demo of linking to source messages/conversations from which a bullet point in our summary was drawn
 <https://www.loom.com/share/d31deb8d3fb247c3878c103390770efe> [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733351986457209
+
+[Thread started]
+
+    [12/04/2024 17:55] **Miles** (reply): nice, sources cited [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733352945195659
+
+[End of thread]
 
 [12/04/2024 17:05] **Miles**: we've known about the slack ai for awhile btw. it's just so much more robust to build off our own solutions when possible and we hadn't yet committed in this direction
 
