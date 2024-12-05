@@ -1,11 +1,179 @@
 
 === Channel: sales-team ===
 
+[12/05/2024 12:01] **Miles**: this is a nice description of RAG @Luca . it'd be nice to have diagrams like these in our skill tree [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733418116820319
+
+[File shared] IMG_1952.jpg - [Link](https://files.slack.com/files-pri/T067TJ1EE15-F083EHZC7V5/img_1952.jpg)
+
+[12/05/2024 11:29] **Miles**: idea (just for brainstorming, not to shake anything up we're currently doing):
+
+if we can create a schedule next step button or the like, i wonder if what we actually want is the ability to schedule a next step based off of a variety of slack interactions. here's what i mean by 'interactions'
+
+• schedule a next step based on a daily hyperpersonalized executive summary (what we're currently doing)
+• schedule a next step based on the specific outcomes of a meeting. this could be done from the meeting summary itself
+• schedule a next step based on a specific thread or channel
+• schedule a next step based on the contents of a slack canvas
+i think those other interactions are genuinely places in which next steps emerge for us
+
+the moonshot goal in my mind is that every person in the company always knows what their next step is so there's minimal alignment overhead and everyone can just cook [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733416158898299
+
+[Thread started]
+
+    [12/05/2024 11:30] **Miles** (reply): i'd love feedback on this idea whenever anyone has spare bandwidth :relaxed: i feel like it could legitimately be the way forward [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733416242055769
+
+    [12/05/2024 11:39] **Brent** (reply): the moonshot goal in my mind is that every person in the company always knows what their next step is so there's minimal alignment overhead and everyone can just cook
+
+I would agree with this statement. Like we talked about last night a bit at the table... This is what would allow those dashboards to really be effective if everyone was dialed in. Dashboards create organizational accountability I'd argue to help leaders know if something is slipping or ahead of schedule ... etc [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733416760114129
+
+    [12/05/2024 11:42] **Miles** (reply): (double post for visibility @Brent)
+
+got some time to workshop some ideas for this product in a bit? 
+
+'notebooklm for next steps' just popped into my head as a place to be end of Q1
+
+i'd also love to align on your dashboard ideas [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733416927090219
+
+    [12/05/2024 11:43] **Brent** (reply): Yeah! We can connect. I'll text you privately to align our paths today and save everyone from our back and forth on that [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733417032431089
+
+[End of thread]
+
+[12/05/2024 11:07] **Miles**: at this ERP automation workshop for the next while, but i'm on my laptop and on call for a tight feedback and iteration loop on this demo video [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733414844813879
+
+[File shared] IMG_1935.png - [Link](https://files.slack.com/files-pri/T067TJ1EE15-F084HH5RPGQ/img_1935.png)
+
+[Thread started]
+
+[End of thread]
+
+[12/05/2024 11:02] **Brent**: Well done y'all! [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733414567556319
+
+[12/05/2024 11:01] **Miles**: we'll get that over to you and iterate from there :relaxed: [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733414509874169
+
+[12/05/2024 11:01] **Miles**: @Ben Ortega just met with @Aubrey and @Busch 
+
+we should have the next iteration of a demo video soon. we came up with some more ideas since we talked this morning:
+
+
+• planning on showing the summary at the start
+• then click a citation link relevant to the next step and show the messages from which it was derived 
+• then click a 'schedule next step' button to make the calendar population extra visual [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733414490226909
+
+[12/04/2024 23:02] **Miles**: this is interesting. someone mentioned this when i described what we're working on 
+
+<https://support.microsoft.com/en-us/office/first-things-to-know-about-loop-components-in-microsoft-teams-ee2a584b-5785-4dd6-8a2d-956131a29c81|https://support.microsoft.com/en-us/office/first-things-to-know-about-loop-components-in-microsoft-teams-ee2a584b-5785-4dd6-8a2d-956131a29c81> [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733371323780549
+
+[12/04/2024 20:38] **Busch**: I think we should just do this
+<https://www.loom.com/share/8ff6a6fc46a04e4faef3c0556187c0dc> [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733362719664409
+
+[Thread started]
+
+    [12/04/2024 21:18] **Busch** (reply): (One toggle not toggles)
+Since we’ll have only one next step for one person to start [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733365100780749
+
+    [12/04/2024 21:18] **Miles** (reply): agreed [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733365126376019
+
+[End of thread]
+
+[12/04/2024 20:38] **Miles**: ok cool, what do you think are the best processes to start with? was planning on doing a curate to see how good we could get it as a starting point [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733362693406239
+
+[12/04/2024 20:30] **Aubrey**: @Miles, I'll go ahead and grab the Notion stuff for @Busch since the SOP agent already has that pretty much locked in [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733362217074269
+
+[12/04/2024 19:52] **Miles**: love this DnD approach to assessing what an agent is @Luca @Aubrey @Ian [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733359968057629
+
+[File shared] Screenshot 2024-12-04 at 4.52.06 PM.png - [Link](https://files.slack.com/files-pri/T067TJ1EE15-F083TFFGC20/screenshot_2024-12-04_at_4.52.06_pm.png)
+
+[12/04/2024 19:35] **Miles**: the details sections waste the first bullet point just reiterating what the main blurb already said
+
+it's also just a pure summary with no recommendations, next steps, etc etc
+
+only use case i can see for this is if i just came back from a break and was ok missing out on substantial amounts of detail rather than just reading the actual messages [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733358922395729
+
+[Thread started]
+
+    [12/04/2024 21:12] **Busch** (reply): It’s interesting they default to muting a channel when you add it to the recap 
+I wonder what the psychology behind that is 
+
+I guess they assume people will recap only and stop reading? [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733364759975819
+
+[End of thread]
+
+[12/04/2024 19:32] **Miles**: i think this summarize feature is a bit better than the recap version above, especially with the detail buttons like @Luca was talking about, but frankly still not very good [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733358751313469
+
+[File shared] Screenshot 2024-12-04 at 4.31.43 PM.png - [Link](https://files.slack.com/files-pri/T067TJ1EE15-F083TDFBEA0/screenshot_2024-12-04_at_4.31.43_pm.png)
+
+[12/04/2024 19:21] **Miles**: their UI features are great though as @Aubrey pointed out [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733358066891579
+
+[12/04/2024 19:20] **Miles**: first impression is that slack ai kinda sucks tbh lol [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733358015920889
+
+[12/04/2024 19:19] **Miles**: this just isn't as useful as a customizable daily executive summary IMO. that's even before we get to auto-populating your calendar, etc [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733357989021279
+
+[File shared] Screenshot 2024-12-04 at 4.19.02 PM.png - [Link](https://files.slack.com/files-pri/T067TJ1EE15-F083TC9DUUU/screenshot_2024-12-04_at_4.19.02_pm.png)
+
+[12/04/2024 18:59] **Aubrey**: If you have to read a page worth of summaries versus reading a bunch of slack messages, you're not saving that much time [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733356748762649
+
+[12/04/2024 18:58] **Aubrey**: I imagine nailing the quality/verbosity balance is going to be super important. If it gives you 1-2 paragraphs, but it has pretty much everything you need to know, that'd be huge [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733356720507269
+
+[Thread started]
+
+    [12/04/2024 18:59] **Busch** (reply): Yea agreed
+How balance that with having just one next step and the strategic initiatives it results from [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733356790391679
+
+    [12/04/2024 19:00] **Busch** (reply): @Miles current proposal for execute summary of a channel is basically that [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733356816893949
+
+    [12/04/2024 19:07] **Luca** (reply): Agreed that this is very important.
+
+First is to dial in really good defaults. We’ll probably want some task decomposition here rather than just asking the model, “summarize this.”
+
+Second, we might consider giving users some control over this. For example, an “expand” link / button after each bullet point that fleshes out that item. A “detail” slider is kind of a similar vibe for each bullet point, but we probably don’t need that level of granularity. [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733357238046149
+
+[End of thread]
+
+[12/04/2024 18:58] **Busch**: And let’s you focus on a channel 
+Ours initially did the whole slack [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733356680454239
+
+[12/04/2024 18:57] **Busch**: This strikes me as pretty much what we had to begin with but better - has message links which we didn’t at first but do now 
+The summary content is really damn good but verbose as heck [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733356656004339
+
+[12/04/2024 18:56] **Busch**: Only options are all unread or 7 days 
+No customization for summary 
+
+First obviously missing things to me [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733356591878539
+
+[12/04/2024 18:55] **Miles**: for sure, totally agree. we put that on our feature list [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733356511927929
+
+[12/04/2024 18:51] **hello-at-rainsound.​ai**: It looks like you can mute channels manually as a user, I wonder if we could mirror that, where the channels you subscribe to with our agent also mutes them in Slack [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733356316154639
+
+[12/04/2024 18:50] **hello-at-rainsound.​ai**: I'll be honest, being able to mute certain channels and still get a summary is a really strong contender [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733356214526019
+
+[12/04/2024 18:49] **Busch**: *Let’s see what we’re trying to beat [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733356148072239
+
+[Thread started]
+
+    [12/04/2024 18:55] **Aubrey** (reply): And take feature ideas from :eyes: [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733356546645719
+
+[End of thread]
+
+[12/04/2024 18:48] **hello-at-rainsound.​ai**: (I would do the ping in <#C06884AKSNN|>, but Brent isn't in there and also has access to Slack AI, so didn't want to leave him out) [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733356101808369
+
+[12/04/2024 18:47] **hello-at-rainsound.​ai**: , we should have access to Slack AI, feel free to give it a try and see if it's something worth messing with! [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733356052400399
+
 [12/04/2024 17:56] **Miles**: from @Busch:
+
+stopgap demos we can use in random conversations with people @Ben Ortega @Brent
+
+(posting again here for visibility) 
 
 <https://claude.site/artifacts/139581d7-d796-4949-80a2-aa32a183b43a|https://claude.site/artifacts/139581d7-d796-4949-80a2-aa32a183b43a>
 
 <https://claude.site/artifacts/e9ddf420-5020-4d90-9cb1-c854cb2803a7|https://claude.site/artifacts/e9ddf420-5020-4d90-9cb1-c854cb2803a7> [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733353003442989
+
+[Thread started]
+
+    [12/04/2024 18:01] **Busch** (reply): thanks @Miles hope this is useful to yall!
+the links are almost the same but id use this second one since the styling is little more modern
+<https://claude.site/artifacts/e9ddf420-5020-4d90-9cb1-c854cb2803a7> [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733353263418619
+
+[End of thread]
 
 [12/04/2024 17:39] **Busch**: Demo of linking to source messages/conversations from which a bullet point in our summary was drawn
 <https://www.loom.com/share/d31deb8d3fb247c3878c103390770efe> [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733351986457209
@@ -13,6 +181,13 @@
 [Thread started]
 
     [12/04/2024 17:55] **Miles** (reply): nice, sources cited [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733352945195659
+
+    [12/04/2024 18:03] **Busch** (reply): look at the most recent summary in <#C080HKK9D26|> [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733353399405519
+
+    [12/04/2024 18:04] **Busch** (reply): thats the most up to date
+leaving it here overnight so we can chew on it, i don’t want to get too deep on engineering the wrong things tonight [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733353451095599
+
+    [12/04/2024 18:08] **Miles** (reply): left feedback in that channel :slightly_smiling_face: [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733353735152259
 
 [End of thread]
 
@@ -31,6 +206,15 @@ that being said, probably time to go ahead and press go on setting up our acct t
     [12/04/2024 17:12] **Miles** (reply): we might try to get on their <https://slack.com/marketplace/category/At07HZAKCSAC-agents-assistants|marketplace> [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733350339317769
 
     [12/04/2024 17:44] **Miles** (reply): @Aubrey ^ [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733352294968099
+
+    [12/04/2024 18:42] **hello-at-rainsound.​ai** (reply): As a heads up, it's a fair bit pricey [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733355776906679
+
+    [12/04/2024 18:44] **hello-at-rainsound.​ai** (reply): It more than doubles our Slack plan ($696/year -&gt; $1,656/year, $960/year by itself) so if we don't end up liking it, we should make sure to nix it pretty quick. [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733355895584099
+
+    [12/04/2024 18:45] **Miles** (reply): ok yeah, let's do as quick of a trial as we can [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733355928214259
+
+    [12/04/2024 19:07] **Aubrey** (reply): (to clean the thread)
+Done, see: <https://rainsound-ai.slack.com/archives/C06887AJJNN/p1733356052400399> [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733357242891109
 
 [End of thread]
 
@@ -91,6 +275,8 @@ Side by side offerings slide/graphic comes to mind for website or information pa
     [12/04/2024 17:52] **Miles** (reply): the daily recap doesn't seem even close to our executive summary at first blush. you can see a gif of it in the link luca posted above. will have to try it to be sure, but i genuinely don't think there's anything to be concerned about here
 
 our thing is way different than theirs [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733352727662919
+
+    [12/04/2024 18:34] **Brent** (reply): Different. And better id argue. [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733355253247059
 
 [End of thread]
 
@@ -213,173 +399,3 @@ I bet those new tools like Q and Bedrock have a fantastic DX too [Message URL]: 
 [File shared] IMG_1889.jpg - [Link](https://files.slack.com/files-pri/T067TJ1EE15-F083KV0J6QM/img_1889.jpg)
 
 [12/04/2024 12:10] **Miles**: @Busch this is great. i think we should copy this [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733332207167019
-
-[Thread started]
-
-    [12/04/2024 11:45] **Miles** (reply): cool, ben was just saying that's the magic line to cross. as soon as it does the automatic pop onto calendar thing, we can show people and blow their minds. 
-
-was curious if possible to have that today or tomorrow for some meetings we'll be having (one is with Noah from tribe actually). but no sweat if not :relaxed: [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733330759247169
-
-    [12/04/2024 11:57] **Busch** (reply): i can pivot to that if its higher priority than slack summary agent being unbroken [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733331462179839
-
-    [12/04/2024 11:57] **Busch** (reply): im pivoting to that [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733331475837799
-
-    [12/04/2024 11:58] **Busch** (reply): will debug slack summary later [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733331485119859
-
-    [12/04/2024 11:58] **Miles** (reply): ok cool def whatever you think is highest priority, just wanted to throw that idea your way [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733331504690099
-
-[End of thread]
-
-[12/04/2024 11:25] **Busch**: Anyone’s have a sec to check that out? [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733329551754899
-
-[Thread started]
-
-    [12/04/2024 11:42] **Miles** (reply): got 15 min, in a huddle now [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733330570268719
-
-    [12/04/2024 11:49] **Miles** (reply): 10 min left if you need immediate feedback. walking into this [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733330987519799
-
-    [12/04/2024 11:51] **Miles** (reply): i'll probably have some time between 2:30-3:30 as well if you want to touch base then [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733331115220799
-
-    [12/04/2024 12:16] **Busch** (reply): Feedback on slack summary would be great
-Current prompt:
-
-```def get_channel_prompt(channel_name, conversation):
-    """Prompt for individual channel summaries."""
-    return f"""
-    Analyze this Slack conversation from the sales team channel. The participants are primarily Miles, Ben, and Brent, 
-    who are discussing sales activities for an AI company. Provide a structured summary focused on sales insights.
-
-    Include:
-    1. Deal Pipeline Updates:
-        • New opportunities identified
-        • Deal stages and changes
-        • Potential deal values (if mentioned)
-    
-    2. Customer Interactions:
-        • Key meetings and outcomes
-        • Customer feedback or concerns
-        • Success stories or testimonials
-    
-    3. Sales Strategy:
-        • Confirmed decisions ("Decision: [item]")
-        • Active initiatives ("Action: [item] - Owner: [name]")
-        • Ideas being explored ("Strategy Discussion: [items]")
-    
-    4. Product/Market Insights:
-        • Competitive intelligence
-        • Market feedback
-        • Feature requests or product gaps
-    
-    5. Resources &amp; Support:
-        • Important files/links shared
-        • Sales collateral needs
-        • Cross-team support requests
-
-    Keep the summary focused on actionable insights and clear distinctions between confirmed plans vs. discussions.
-    
-    Conversation:
-    {conversation}
-    """
-
-def get_final_summary_prompt(channel_summaries, start_date, end_date):
-    """Prompt for creating the final ultra-concise summary."""
-    return f"""You are creating an executive sales summary for an AI company's leadership team.
-    Focus on insights valuable to the CEO, Sales Manager, and Account Executives.
-    
-    Create a scannable summary that highlights key business impacts and action items.
-    
-    Format the response exactly like this:
-    📅 *Sales Team Summary ({start_date} - {end_date})*
-    ---
-
-    💰 *Pipeline &amp; Deals:*
-    • [Key updates on deals, conversions, and revenue impact]
-
-    👥 *Customer &amp; Market Insights:*
-    • [Critical feedback, patterns, or market intelligence]
-
-    📈 *Strategic Initiatives:*
-    • [Confirmed] [List confirmed decisions and actions]
-    • [In Progress] [List active initiatives]
-    • [Exploring] [List strategies under discussion]
-
-    ⚠️ *Needs Attention:*
-    • [Blockers, support needs, or immediate actions required]
-
-    🔗 *Key Resources:*
-    • [Only critical documents/links]
-
-    Channel Summaries to Process:
-    {channel_summaries}
-    """``` [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733332617378589
-
-[End of thread]
-
-[12/04/2024 11:25] **Busch**: Not sure haven’t looked into Google calendar api and I’m current working on slack summary agent [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733329545302129
-
-[Thread started]
-
-    [12/04/2024 11:45] **Miles** (reply): cool, ben was just saying that's the magic line to cross. as soon as it does the automatic pop onto calendar thing, we can show people and blow their minds. 
-
-was curious if possible to have that today or tomorrow for some meetings we'll be having (one is with Noah from tribe actually). but no sweat if not :relaxed: [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733330759247169
-
-    [12/04/2024 11:57] **Busch** (reply): i can pivot to that if its higher priority than slack summary agent being unbroken [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733331462179839
-
-    [12/04/2024 11:57] **Busch** (reply): im pivoting to that [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733331475837799
-
-    [12/04/2024 11:58] **Busch** (reply): will debug slack summary later [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733331485119859
-
-    [12/04/2024 11:58] **Miles** (reply): ok cool def whatever you think is highest priority, just wanted to throw that idea your way [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733331504690099
-
-[End of thread]
-
-[12/04/2024 11:14] **Miles**: (not caring about accuracy) [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733328891138949
-
-[12/04/2024 11:14] **Miles**: @Busch how fast do you think we could get something to automatically pop onto the calendar? [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733328861479189
-
-[12/04/2024 01:20] **Brent**: Brent's Schedule
-
-Time               Session            Location
-8:30 AM	        CMP 314	Caesar's Forum
-10:30 AM	TLC 302	        MGM
-1:00 PM	        AIM 281	        Wynn
-3:30 PM	        AIM 323	        Caesar's Forum
-5:30 PM	        AIM 251	        Venetian [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733293206262779
-
-[12/04/2024 01:18] **Brent**: @Miles
-your schedule tomorrow
-
-Time               Session           Location
-9:00 AM	        NTA 404	        MGM
-11:30 AM	WPS 311	Wynn - Not recommended
-12:30 PM	AIM 316	        MGM
-1:30 PM	        INO 104	        MGM
-4:00 PM	        ANT 308	        MGM
-5:30 PM	        ANT 405	        MGM [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733293099650259
-
-[12/04/2024 01:15] **Brent**: @Ben Ortega
-your schedule tomorrow
-
-Time	         Session	    Location
-11:30 AM	AIM 258	     Venetian
-12:30 PM	ACT 280	     Venetian
-1:00 PM	        AIM 306	     Wynn
-3:00 PM	        AIM 274	     Venetian
-5:30 PM	        MAM 319   Wynn [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733292959634429
-
-[Thread started]
-
-    [12/04/2024 02:01] **Miles** (reply): small note, ACT280 at 12:30 was just an idea, but you'll likely want to skip that so you have some breathing room to get to AIM306 [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733295661447929
-
-[End of thread]
-
-[12/03/2024 20:04] **Busch**: That was incredibly inspiring and energizing [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733274271091719
-
-[12/03/2024 19:02] **Busch**: I’m doing this livestream 
-ARC203-INT | Architectural methods &amp; breakthroughs for innovative apps in the cloud [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733270526816769
-
-[12/03/2024 18:29] **Brent**: Potential Partnership Motions
-
-1. Conferences (including remaining time at AWS)
-2. Personal network and network connections (Warm leads) 
-3. Cold engagement / LinkedIn motions (Probably won't need this) [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733268583371419

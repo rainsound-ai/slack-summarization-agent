@@ -105,13 +105,104 @@ class ConversationSummarizer:
             logger.error(f"Error in summarization: {e}")
             return f"Error summarizing conversation: {str(e)}"
 
-    def format_for_slack(self, summary: str) -> str:
-        """Format the summary for better readability in Slack."""
-        # Replace markdown with Slack-friendly formatting
-        summary = summary.replace("**", "*")  # Convert bold markdown to Slack bold
-        summary = summary.replace("__", "_")  # Convert italic markdown to Slack italic
-        # Add more formatting adjustments as needed
-        return summary
+    def format_for_slack(self, summary: str) -> List[Dict]:
+        """Format the summary as interactive Slack blocks."""
+        sections = summary.split("\n")
+        blocks = []
+        current_section = None
+        next_steps = []
+
+        def create_header(text: str) -> Dict:
+            return {
+                "type": "header",
+                "text": {
+                    "type": "plain_text",
+                    "text": text,
+                    "emoji": True
+                }
+            }
+
+        def create_section(text: str) -> Dict:
+            return {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": text
+                }
+            }
+
+        def truncate_text(text: str, max_length: int = 150) -> str:
+            """Truncate text to fit within Slack's limits."""
+            if len(text) <= max_length:
+                return text
+            return text[:max_length - 3] + "..."
+
+        def create_checkbox_items(items: List[str]) -> List[Dict]:
+            """Create checkbox items, splitting into multiple blocks if needed."""
+            checkbox_blocks = []
+            current_items = []
+            
+            for i, item in enumerate(items):
+                truncated_text = truncate_text(item)
+                current_items.append({
+                    "type": "checkboxes",
+                    "action_id": f"action-{i}",
+                    "options": [{
+                        "text": {
+                            "type": "mrkdwn",
+                            "text": truncated_text
+                        },
+                        "value": f"value-{i}"
+                    }]
+                })
+                
+                if len(current_items) == 5 or len(item) > 150:
+                    checkbox_blocks.append({
+                        "type": "actions",
+                        "elements": current_items
+                    })
+                    current_items = []
+            
+            if current_items:
+                checkbox_blocks.append({
+                    "type": "actions",
+                    "elements": current_items
+                })
+            
+            return checkbox_blocks
+
+        for line in sections:
+            line = line.strip()
+            if not line:
+                continue
+
+            if "Executive Summary" in line:
+                blocks.append(create_header("Executive Summary"))
+            elif "Strategic Initiatives:" in line:
+                current_section = "initiatives"
+                blocks.append(create_header("Strategic Initiatives"))
+            elif "Next Steps:" in line:
+                current_section = "next_steps"
+                blocks.append(create_header("Next Steps"))
+            elif "Key Links:" in line:
+                if next_steps:
+                    blocks.extend(create_checkbox_items(next_steps))
+                    next_steps = []
+                current_section = "links"
+                blocks.append(create_header("Key Links"))
+            elif line.startswith("-") or line.startswith("•"):
+                content = line[1:].strip()
+                if current_section == "next_steps":
+                    next_steps.append(content)
+                elif current_section == "initiatives":
+                    blocks.append(create_section(content))
+                elif current_section == "links":
+                    blocks.append(create_section(content))
+
+        if next_steps:
+            blocks.extend(create_checkbox_items(next_steps))
+
+        return blocks
 
     def chunk_summary(self, summary: str) -> List[str]:
         """Split summary into chunks of maximum size."""

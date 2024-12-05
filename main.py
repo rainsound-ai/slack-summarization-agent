@@ -39,7 +39,7 @@ def main():
         channel_summary = summarizer.summarize_conversation(formatted_conversation, start_date, end_date)
         
         logger.info("Sending sales summary to Slack...")
-        slack_fetcher.send_message_to_channel('slack-summarization-agent', channel_summary)
+        slack_fetcher.send_message_to_channel('test-slack-summarization-agent', channel_summary)
         logger.info("Sales team summary successfully sent!")
 
     except Exception as e:

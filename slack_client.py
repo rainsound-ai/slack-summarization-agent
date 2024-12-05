@@ -163,7 +163,7 @@ class SlackDataFetcher:
         message_url = f"{base_url}/{channel_id}/p{ts_formatted}"
         return message_url
 
-    def send_message_to_channel(self, channel_name: str, message: str) -> None:
+    def send_message_to_channel(self, channel_name: str, blocks: List[Dict]) -> None:
         """Send a message to a specific channel."""
         try:
             # First, find the channel ID
@@ -182,14 +182,43 @@ class SlackDataFetcher:
                 logger.error(f"Channel {channel_name} not found")
                 return
 
-            # Send the message
             response = self.client.chat_postMessage(
                 channel=channel_id,
-                text=message
+                blocks=blocks,
+                text="Sales Team Summary"  # Fallback text
             )
-            
             if not response["ok"]:
                 logger.error(f"Error sending message: {response['error']}")
             
         except SlackApiError as e:
             logger.error(f"Error sending message to channel: {e}")
+
+    def post_summary(self, channel_id: str, summary: List[Dict]) -> None:
+        """Post the summary to Slack using interactive blocks."""
+        try:
+            response = self.client.chat_postMessage(
+                channel=channel_id,
+                blocks=summary,
+                text="Sales Team Summary" # Fallback text
+            )
+            if not response["ok"]:
+                logger.error(f"Error posting summary: {response['error']}")
+        except SlackApiError as e:
+            logger.error(f"Error posting summary: {e}")
+
+    def chunk_summary(self, summary: str, limit: int) -> List[str]:
+        """Split summary into chunks of maximum size."""
+        chunks = []
+        current_chunk = ""
+        
+        for line in summary.split('\n'):
+            if len(current_chunk) + len(line) + 1 <= limit:
+                current_chunk += line + '\n'
+            else:
+                chunks.append(current_chunk.strip())
+                current_chunk = line + '\n'
+        
+        if current_chunk:
+            chunks.append(current_chunk.strip())
+        
+        return chunks
