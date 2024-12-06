@@ -1,0 +1,58 @@
+[
+  {
+    "task": "Add AWS contacts to the AWS Connection List spreadsheet",
+    "assignee": "Brent",
+    "step": "Put a link in the summary database",
+    "parent_process": "Create an entry in the knowledge base",
+    "similarity_score": 0.7506683362657459
+  },
+  {
+    "task": "Add AWS contacts to the AWS Connection List spreadsheet",
+    "assignee": "Miles",
+    "step": "Put a link in the summary database",
+    "parent_process": "Create an entry in the knowledge base",
+    "similarity_score": 0.7506683362657459
+  },
+  {
+    "task": "Workshop product ideas and dashboard implementation",
+    "assignee": "Miles",
+    "step": "Brainstorm tasks related to milestones",
+    "parent_process": "Generate Strategy Report for next cycle",
+    "similarity_score": 0.818909361384954
+  },
+  {
+    "task": "Workshop product ideas and dashboard implementation",
+    "assignee": "Brent",
+    "step": "Brainstorm tasks related to milestones",
+    "parent_process": "Generate Strategy Report for next cycle",
+    "similarity_score": 0.818909361384954
+  },
+  {
+    "task": "Update the demo video incorporating feedback",
+    "assignee": "Busch",
+    "step": "Fill out the website update form",
+    "parent_process": "Execute the Website Update Queue",
+    "similarity_score": 0.8041910020129845
+  },
+  {
+    "task": "Follow up with SuperAnnotate and other interested parties",
+    "assignee": "Miles",
+    "step": "Follow-up With Leads Post Event",
+    "parent_process": "Attend Conferences",
+    "similarity_score": 0.8334843413703273
+  },
+  {
+    "task": "Review the Glean AI demo for inspiration",
+    "assignee": "Ben Ortega",
+    "step": "Research the tool",
+    "parent_process": "Find new Engineering Tools",
+    "similarity_score": 0.8115231911799518
+  },
+  {
+    "task": "Review the Glean AI demo for inspiration",
+    "assignee": "Brent",
+    "step": "Research the tool",
+    "parent_process": "Find new Engineering Tools",
+    "similarity_score": 0.8115231911799518
+  }
+]

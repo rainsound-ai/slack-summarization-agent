@@ -91,7 +91,7 @@ class ConversationSummarizer:
     def summarize_conversation(self, conversation: str, start_date: str, end_date: str) -> str:
         """Read pre-generated summary from file instead of calling OpenAI."""
         try:
-            # Comment out OpenAI call
+            # Comment out to save 🤑💰💰 on OpenAI calls
             prompt = get_sales_summary_prompt(conversation, start_date, end_date)
             response = client.chat.completions.create(
                 model=self.model,
@@ -99,6 +99,7 @@ class ConversationSummarizer:
             )
             summary = response.choices[0].message.content.strip()
 
+            # Uncomment to save 🤑💰💰 on OpenAI calls
             # Instead, read from file
             # with open('sales_summary.txt', 'r', encoding='utf-8') as f:
             #     summary = f.read().strip()
