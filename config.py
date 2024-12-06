@@ -8,6 +8,7 @@ load_dotenv()
 # API Tokens
 SLACK_BOT_TOKEN = os.getenv('SLACK_BOT_TOKEN')
 OPENAI_API_KEY = os.getenv('OPENAI_API_KEY')
+SLACK_SIGNING_SECRET = os.getenv('SLACK_SIGNING_SECRET')
 
 # Time configurations with explicit timezone
 EST = pytz.timezone('America/New_York')

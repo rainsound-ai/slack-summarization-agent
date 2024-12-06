@@ -89,16 +89,20 @@ class ConversationSummarizer:
         return "\n\n".join(formatted_msgs)
 
     def summarize_conversation(self, conversation: str, start_date: str, end_date: str) -> str:
-        """Summarize the conversation using the OpenAI model."""
+        """Read pre-generated summary from file instead of calling OpenAI."""
         try:
-            prompt = get_sales_summary_prompt(conversation, start_date, end_date)
-            # Replace with your OpenAI API call
-            response = client.chat.completions.create(
-                model=self.model,
-                messages=[{"role": "user", "content": prompt}]
-            )
+            # Comment out OpenAI call
+            # prompt = get_sales_summary_prompt(conversation, start_date, end_date)
+            # response = client.chat.completions.create(
+            #     model=self.model,
+            #     messages=[{"role": "user", "content": prompt}]
+            # )
+            # summary = response.choices[0].message.content.strip()
 
-            summary = response.choices[0].message.content.strip()
+            # Instead, read from file
+            with open('sales_summary.txt', 'r', encoding='utf-8') as f:
+                summary = f.read().strip()
+            
             formatted_summary = self.format_for_slack(summary)
             return formatted_summary
         except Exception as e:
@@ -199,6 +203,7 @@ class ConversationSummarizer:
                 elif current_section == "links":
                     blocks.append(create_section(content))
 
+        # Make sure we add any remaining next steps
         if next_steps:
             blocks.extend(create_checkbox_items(next_steps))
 
