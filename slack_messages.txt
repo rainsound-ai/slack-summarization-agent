@@ -173,9 +173,3 @@ I thought task would automatically pop to assigned person vs requiring someone t
 I think video needs something in the project channel being discussed between two people, and in that thread a “hey Miles can you enable Slack AI so we can test it” mentioned. That is highlighted for viewer to see. 
 
 Then move to summarization channel and see the “next step task”. With the calendar window on side showing the new “Slack AI” task popping to calendar. You may have to have the calendar up the whole time so viewers can see no task, and then new task to help them see the automation. [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733419292505109
-
-[12/05/2024 12:12] **Miles**: @Busch just finished this iteration of the demo video. would love to hear your feedback and we'll iterate on it as needed today [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733418736627339
-
-[12/05/2024 12:10] **Miles**: here you go @Ben Ortega and @Brent [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733418626659119
-
-[File shared] Checkboxes.mov - [Link](https://files.slack.com/files-tmb/T067TJ1EE15-F084HV4TM4G-2e74deb541/checkboxes.mp4)
