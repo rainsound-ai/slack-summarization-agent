@@ -1,6 +1,10 @@
 
 === Channel: sales-team ===
 
+[12/06/2024 12:31] **Brent**: Couldn't agree more! Every area of the business was dialed in this week! Well done y'all!
+
+Let's not lose any momentum! Keep it on the gas pedal and keep driving forward! [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733506270611979
+
 [12/06/2024 11:21] **Miles**: thanks again @Ben Ortega and @Brent :heart: :heart: :heart: really great job this week. every day was a banger 
 
 glad we get to work together [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733502118955879
@@ -9,6 +13,16 @@ glad we get to work together [Message URL]: https://yourworkspace.slack.com/arch
 
     [12/06/2024 11:29] **Busch** (reply): Same! Months of progress every day is just incredible. @Miles @Brent and @Ben Ortega y’all rock!
 Thanks for crushing so hard this week! Grateful to be working together [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733502583125509
+
+    [12/06/2024 12:30] **Brent** (reply): It was a great decision on the team to make a move toward this.
+
+I'd love to note, there is a lot of synergy flowing between sales, product and business dev....
+
+But NONE of that would be possible if y'all weren't crushing in the back making moves @Busch @Luca @Aubrey @Ian
+
+This week was a great team effort and it is looking like this whole team is in great unity. Well done y'all!
+
+The best is yet to come! [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733506218428269
 
 [End of thread]
 
@@ -36,6 +50,10 @@ $5,000,000 / $300 ≈ 16,667 individual subscribers. [Message URL]: https://your
 
     [12/06/2024 11:20] **Ben Ortega** (reply): btw... if you view <http://builtwith.com|builtwith.com> you'll see there are 2.8M sites that use slack: <https://trends.builtwith.com/websitelist/Slack/Historical> [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733502052744899
 
+    [12/06/2024 12:28] **Brent** (reply): That means our TAM would be 2.8M companies!
+
+with the way this thing works, let's estimate a goal of 25% adoption rate out the gate... puts us at a couple hundred thousand users which would be a phenomenal adoption rate to start with [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733506085840019
+
 [End of thread]
 
 [12/06/2024 11:08] **Miles**: next three weeks:
@@ -51,6 +69,10 @@ $5,000,000 / $300 ≈ 16,667 individual subscribers. [Message URL]: https://your
 
 i think we can probably just update our all hands shaping document with what we know now and that'll get us pretty close [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733502479406809
 
+    [12/06/2024 12:25] **Brent** (reply): @Miles are we still aligned on the "idea dump" convo we had?
+
+For clarity: wanting to give everyone an opportunity to dump all of their ideas, so Miles and I can create that roadmap with the end in mind. [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733505946146859
+
 [End of thread]
 
 [12/06/2024 10:42] **Ben Ortega**: Here is the sales enablement for "Rainsound Slack Tool": <https://docs.google.com/document/d/1mXP1AfkYskQ4LX8utYzPR1qis6sMW9v66-gHh_Z7vFQ/edit?usp=sharing> [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733499759736129
@@ -63,7 +85,19 @@ they invited me to dinner, had some very cool cognitive architecture discussions
 
 let's keep working with these guys [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733470323687849
 
+[Thread started]
+
+    [12/06/2024 12:24] **Brent** (reply): Great job connecting with them and engaging! Well done! [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733505853807159
+
+[End of thread]
+
 [12/06/2024 01:37] **Busch**: Hell yea :the_horns: [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733467058114759
+
+[Thread started]
+
+    [12/06/2024 12:23] **Brent** (reply): I love that you made it out to Weezer! [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733505786884199
+
+[End of thread]
 
 [File shared] IMG_2016.MOV - [Link](https://files.slack.com/files-tmb/T067TJ1EE15-F083Y38DV7V-f80cb18adc/img_2016.mp4)
 
@@ -135,41 +169,3 @@ I thought task would automatically pop to assigned person vs requiring someone t
 [12/05/2024 12:48] **Busch**: i think i found some magic [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733420935173409
 
 [12/05/2024 12:48] **Busch**: tiktokking it right now [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733420931188419
-
-[12/05/2024 12:44] **Miles**: @Ben Ortega what do you think? [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733420652333679
-
-[File shared] checkboxes demo2.mov - [Link](https://files.slack.com/files-tmb/T067TJ1EE15-F083EQVDM5M-be3c50310d/checkboxes_demo2.mp4)
-
-[12/05/2024 12:40] **Busch**: updated demo [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733420419619289
-
-[12/05/2024 12:39] **Busch**: I can try but not sure where to start other than a google [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733420399211659
-
-[Thread started]
-
-    [12/05/2024 12:45] **Miles** (reply): chatgpt recommended these as alternatives to adobe premier pro
-
-<https://filmora.wondershare.com/>
-
-<https://www.capcut.com/> [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733420705475869
-
-    [12/05/2024 12:46] **Miles** (reply): think i'm going to add adobe suite to our tool auditing pipeline. it's too good for design and demos to not just have that on hand @Aubrey @Luca @Ian [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733420762554019
-
-    [12/05/2024 12:47] **Miles** (reply): i'll check these out now @Busch if you wanna get some vitamin d [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733420873460139
-
-    [12/05/2024 12:48] **Aubrey** (reply): Everyone I've talked to has said that even though Adobe is the worst, their products are top tier, so I tend to agree. [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733420888902089
-
-    [12/05/2024 12:48] **Aubrey** (reply): And ~$60 a month isn't too bad, about as much as Slack AI cost and I imagine we'll get a ton more value out of it, assuming we use it regularly [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733420920539289
-
-[End of thread]
-
-[12/05/2024 12:36] **Miles**: what do you think of some editing magic that makes the calendar event sparkle or radiate some cool effect when it populates @Busch ? [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733420173052809
-
-[12/05/2024 12:35] **Ben Ortega**: Yes. I think folks need to see it as a new task derived from convo in channel to daily summation. With that magical POP! [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733420129466479
-
-[12/05/2024 12:29] **Miles**: cool, is this the right interpretation of your feedback @Ben Ortega? i'm hearing: you want to see the conversation, then the summary, and have the calendar up the whole time. like a slight reordering of the script and presentation [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733419754838459
-
-[12/05/2024 12:21] **Ben Ortega**: Closer. 
-
-I think video needs something in the project channel being discussed between two people, and in that thread a “hey Miles can you enable Slack AI so we can test it” mentioned. That is highlighted for viewer to see. 
-
-Then move to summarization channel and see the “next step task”. With the calendar window on side showing the new “Slack AI” task popping to calendar. You may have to have the calendar up the whole time so viewers can see no task, and then new task to help them see the automation. [Message URL]: https://yourworkspace.slack.com/archives/C06887AJJNN/p1733419292505109
