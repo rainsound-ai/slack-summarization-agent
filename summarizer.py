@@ -2,7 +2,7 @@ from openai import OpenAI
 from typing import List, Dict
 import logging
 from config import OPENAI_API_KEY, MAX_CHUNK_SIZE, EST
-from prompt import get_sales_summary_prompt
+from prompt import get_sales_summary_prompt, link_next_steps_to_notion_steps_prompt
 from datetime import datetime
 import re
 
@@ -11,27 +11,28 @@ logger = logging.getLogger(__name__)
 
 client = OpenAI(api_key=OPENAI_API_KEY)
 
+
 class ConversationSummarizer:
     def __init__(self, user_map: Dict[str, str]):
-        self.model = "o1-preview"
+        self.model = "o1-mini"
         self.user_map = user_map
 
     def _clean_text(self, text: str) -> str:
         """Clean text while preserving @mentions."""
         # Replace <@U12345> format with just the @ mention
-        text = re.sub(r'<@(U[A-Z0-9]+)>', r'@\1', text)
-        
+        text = re.sub(r"<@(U[A-Z0-9]+)>", r"@\1", text)
+
         # Remove channel tags
-        text = re.sub(r'<#C[A-Z0-9]+\|([^>]+)>', r'#\1', text)
-        
+        text = re.sub(r"<#C[A-Z0-9]+\|([^>]+)>", r"#\1", text)
+
         # Remove special tokens
-        text = re.sub(r'<![a-zA-Z]+>', '', text)
-        
+        text = re.sub(r"<![a-zA-Z]+>", "", text)
+
         # Replace user IDs with usernames using the user_map
-        for user_id in re.findall(r'@(U[A-Z0-9]+)', text):
+        for user_id in re.findall(r"@(U[A-Z0-9]+)", text):
             if user_id in self.user_map:
-                text = text.replace(f'@{user_id}', f'@{self.user_map[user_id]}')
-        
+                text = text.replace(f"@{user_id}", f"@{self.user_map[user_id]}")
+
         return text.strip()
 
     def _prepare_conversation(self, messages: List[Dict]) -> str:
@@ -58,14 +59,16 @@ class ConversationSummarizer:
             # Include shared files
             for file in files:
                 if isinstance(file, dict):
-                    file_name = file.get('name', 'Unnamed file')
-                    file_url = file.get('url_private', 'No URL')
-                    formatted_msgs.append(f"[File shared] {file_name} - [Link]({file_url})")
+                    file_name = file.get("name", "Unnamed file")
+                    file_url = file.get("url_private", "No URL")
+                    formatted_msgs.append(
+                        f"[File shared] {file_name} - [Link]({file_url})"
+                    )
 
             # Include shared links
             for link in links:
                 if isinstance(link, dict):
-                    link_url = link.get('url', 'No URL')
+                    link_url = link.get("url", "No URL")
                     formatted_msgs.append(f"[Link shared] {link_url}")
 
             # Format thread replies
@@ -75,7 +78,9 @@ class ConversationSummarizer:
                     reply_user = reply.get("user", "Unknown User")
                     reply_text = self._clean_text(reply.get("text", ""))
                     reply_timestamp = reply.get("timestamp", "")
-                    reply_timestamp_dt = datetime.fromtimestamp(float(reply_timestamp), EST)
+                    reply_timestamp_dt = datetime.fromtimestamp(
+                        float(reply_timestamp), EST
+                    )
                     reply_timestamp_str = reply_timestamp_dt.strftime("%m/%d/%Y %H:%M")
                     reply_message_url = reply.get("message_url", "")
 
@@ -85,17 +90,18 @@ class ConversationSummarizer:
                             formatted_reply += f" [Message URL]: {reply_message_url}"
                         formatted_msgs.append(formatted_reply)
                 formatted_msgs.append("[End of thread]")
-        
+
         return "\n\n".join(formatted_msgs)
 
-    def summarize_conversation(self, conversation: str, start_date: str, end_date: str) -> str:
+    def summarize_conversation(
+        self, conversation: str, start_date: str, end_date: str
+    ) -> str:
         """Summarize the conversation using the OpenAI model."""
         try:
             prompt = get_sales_summary_prompt(conversation, start_date, end_date)
             # Replace with your OpenAI API call
             response = client.chat.completions.create(
-                model=self.model,
-                messages=[{"role": "user", "content": prompt}]
+                model=self.model, messages=[{"role": "user", "content": prompt}]
             )
 
             summary = response.choices[0].message.content.strip()
@@ -117,15 +123,25 @@ class ConversationSummarizer:
         """Split summary into chunks of maximum size."""
         chunks = []
         current_chunk = ""
-        
-        for paragraph in summary.split('\n'):
+
+        for paragraph in summary.split("\n"):
             if len(current_chunk) + len(paragraph) + 1 <= MAX_CHUNK_SIZE:
-                current_chunk += (paragraph + '\n')
+                current_chunk += paragraph + "\n"
             else:
                 chunks.append(current_chunk.strip())
-                current_chunk = paragraph + '\n'
-        
+                current_chunk = paragraph + "\n"
+
         if current_chunk:
             chunks.append(current_chunk.strip())
-            
-        return chunks 
+
+        return chunks
+
+    def link_next_steps_to_notion_steps(
+        self, channel_summary: str, notion_steps: str
+    ) -> str:
+        """Link the next steps to the notion steps."""
+        prompt = link_next_steps_to_notion_steps_prompt(channel_summary, notion_steps)
+        response = client.chat.completions.create(
+            model=self.model, messages=[{"role": "user", "content": prompt}]
+        )
+        return response.choices[0].message.content.strip()
