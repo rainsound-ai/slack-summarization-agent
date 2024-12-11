@@ -4,12 +4,17 @@ import os
 import subprocess
 from dotenv import load_dotenv
 import threading
+from task_prioritizer import TaskPrioritizer
+from notion_client import NotionClient
 
 load_dotenv()
 
 app = Flask(__name__)
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
+
+notion_client = NotionClient()
+task_prioritizer = TaskPrioritizer()
 
 def start_ngrok():
     """Start ngrok in a separate thread with the configured static endpoint."""
@@ -28,28 +33,32 @@ def start_ngrok():
 @app.route('/webhook', methods=['POST'])
 def handle_webhook():
     try:
-        data = request.json
+        webhook_data = request.json
         logger.info("Received webhook from Notion automation")
         
-        # Log the full payload for debugging
-        logger.info(f"Webhook payload: {data}")
+        # Get all potential/not started subprojects for Miles Porter
+        subprojects = notion_client.get_user_subprojects()  # Uses default "Miles Porter"
         
-        # Extract properties from the webhook payload
-        properties = data.get('properties', {})
+        if not subprojects:
+            logger.info("No eligible subprojects found for Miles Porter")
+            return jsonify({'message': 'No eligible subprojects found'}), 200
         
-        if properties:
-            subproject = properties.get('Sub-project', {}).get('title', [{}])[0].get('text', {}).get('content', 'Unknown')
-            button_clicker = properties.get('Button Clicker', {}).get('people', [])
-            blocked_by = properties.get('Blocked by', {}).get('relation', [])
-            blocking = properties.get('Blocking', {}).get('relation', [])
-            
+        # Prioritize tasks
+        next_task = task_prioritizer.prioritize_tasks(subprojects)
+        
+        if next_task:
             logger.info(f"""
-            Button clicked for:
-            - Subproject: {subproject}
-            - Clicked by: {button_clicker}
-            - Blocked by: {len(blocked_by)} items
-            - Blocking: {len(blocking)} items
+            Next task identified for Miles Porter:
+            - Title: {next_task['title']}
+            - Score: {next_task['score']}
+            - Impact: {next_task['impact']}
+            - Urgency: {next_task['urgency']}
+            - Importance: {next_task['importance']}
+            - Blocking: {len(next_task['blocking'])} tasks
+            - Blocked by: {len(next_task['blocked_by'])} tasks
             """)
+        else:
+            logger.info("No next task identified - all tasks are blocked")
             
         return jsonify({'success': True}), 200
         

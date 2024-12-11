@@ -3,6 +3,7 @@ import requests
 import logging
 import os
 from dotenv import load_dotenv
+import json
 
 load_dotenv()
 
@@ -25,6 +26,21 @@ class NotionClient:
         
         # Add this to debug the database structure
         self._debug_database_structure()
+        
+        # Add value mappings for Notion properties
+        self.priority_map = {
+            'High': 3,
+            'Low': 1
+        }
+        
+        # Project Priority is 1-5 with 1 being highest, so we'll invert it
+        self.project_priority_map = {
+            1: 5,  # 1 (highest) -> 5 points
+            2: 4,
+            3: 3,
+            4: 2,
+            5: 1   # 5 (lowest) -> 1 point
+        }
 
     def _debug_database_structure(self):
         """Debug helper to print out the actual database structure from Notion."""
@@ -215,3 +231,146 @@ class NotionClient:
         except Exception as e:
             logger.error(f"Error setting up webhook integration: {e}")
             return False
+
+    def get_user_subprojects(self, person_id="bdf265bb07fe4d9d88773686ed9dbddf"):  # Miles Porter's Notion ID
+        """Get all potential/not started subprojects for a person by their Notion ID."""
+        try:
+            url = f"{self.base_url}/databases/{self.subprojects_db_id}/query"
+            
+            logger.info(f"Querying subprojects for person ID: {person_id}")
+            
+            data = {
+                "filter": {
+                    "and": [
+                        # Team Comp filter
+                        {
+                            "property": "Team Comp",
+                            "relation": {
+                                "contains": person_id
+                            }
+                        },
+                        # Status filter - exclude "Out of current scope" and "Done"
+                        {
+                            "property": "Status",
+                            "status": {
+                                "does_not_equal": "Out of current scope"
+                            }
+                        },
+                        {
+                            "property": "Status",
+                            "status": {
+                                "does_not_equal": "Done"
+                            }
+                        },
+                        # Project Status filter - only Active projects
+                        {
+                            "property": "Project Status",
+                            "rollup": {
+                                "any": {
+                                    "select": {
+                                        "equals": "Active"
+                                    }
+                                }
+                            }
+                        }
+                    ]
+                }
+            }
+            
+            # Add debug logging for the query
+            logger.info(f"Sending query to Notion: {json.dumps(data, indent=2)}")
+            
+            response = requests.post(url, headers=self.headers, json=data)
+            response.raise_for_status()
+            
+            results = response.json().get('results', [])
+            logger.info(f"Found {len(results)} subprojects")
+            
+            subprojects = []
+            for item in results:
+                properties = item.get('properties', {})
+                
+                # Convert text values to numeric scores
+                urgency = properties.get('Urgency', {}).get('select', {}).get('name', 'Low')
+                importance = properties.get('Importance', {}).get('select', {}).get('name', 'Low')
+                impact = properties.get('Impact', {}).get('select', {}).get('name', 'Low')
+                
+                # Get project priority (1-5) and map to our 5-1 scale
+                project_priority_raw = properties.get('Project Priority', {}).get('rollup', {}).get('number', 5)
+                
+                subprojects.append({
+                    'id': item['id'],
+                    'title': self._extract_title(properties.get('Sub-project', {})),
+                    'urgency': self.priority_map.get(urgency, 0),
+                    'importance': self.priority_map.get(importance, 0),
+                    'impact': self.priority_map.get(impact, 0),
+                    'project_priority': self.project_priority_map.get(project_priority_raw, 0),
+                    'blocking': properties.get('Blocking', {}).get('relation', []),
+                    'blocked_by': properties.get('Blocked by', {}).get('relation', []),
+                    'status': properties.get('Status', {}).get('status', {}).get('name'),
+                    # Add raw values for debugging
+                    'raw_values': {
+                        'urgency': urgency,
+                        'importance': importance,
+                        'impact': impact,
+                        'project_priority': project_priority_raw
+                    }
+                })
+                
+                # Log the conversion for debugging
+                logger.info(f"""
+                Value conversion for "{self._extract_title(properties.get('Sub-project', {}))}":
+                - Urgency: {urgency} -> {self.priority_map.get(urgency, 0)}
+                - Importance: {importance} -> {self.priority_map.get(importance, 0)}
+                - Impact: {impact} -> {self.priority_map.get(impact, 0)}
+                - Project Priority: {project_priority_raw} -> {self.project_priority_map.get(project_priority_raw, 0)}
+                """)
+            
+            return subprojects
+            
+        except Exception as e:
+            logger.error(f"Error fetching user subprojects: {e}")
+            if isinstance(e, requests.exceptions.HTTPError):
+                logger.error(f"Response content: {e.response.content}")
+            return []
+
+    def _extract_title(self, title_prop):
+        """Helper to extract title from Notion property."""
+        try:
+            return title_prop.get('title', [{}])[0].get('text', {}).get('content', '')
+        except:
+            return ''
+
+    def get_person_by_user_id(self, user_id: str):
+        """Get person details from People database using their Notion user ID."""
+        try:
+            url = f"{self.base_url}/databases/{self.people_db_id}/query"
+            
+            # Query for the person with matching Notion User ID
+            data = {
+                "filter": {
+                    "property": "Notion User",
+                    "relation": {
+                        "contains": user_id
+                    }
+                }
+            }
+            
+            response = requests.post(url, headers=self.headers, json=data)
+            response.raise_for_status()
+            
+            results = response.json().get('results', [])
+            if results:
+                person = results[0]
+                person_id = person['id']
+                logger.info(f"Found person in People database with ID: {person_id}")
+                return person_id
+            
+            logger.error(f"No person found in People database for user ID: {user_id}")
+            return None
+            
+        except Exception as e:
+            logger.error(f"Error getting person by user ID: {e}")
+            if isinstance(e, requests.exceptions.HTTPError):
+                logger.error(f"Response content: {e.response.content}")
+            return None
