@@ -142,3 +142,76 @@ class NotionClient:
                 "notion_created": success
             })
         return results 
+
+    def create_webhook(self, url: str):
+        """Create a new webhook in Notion."""
+        try:
+            webhook_url = f"{self.base_url}/webhooks"
+            data = {
+                "url": url,
+                "events": ["page_properties_changed"]  # This will trigger when button properties change
+            }
+            
+            response = requests.post(webhook_url, headers=self.headers, json=data)
+            response.raise_for_status()
+            
+            logger.info(f"Created webhook: {response.json()}")
+            return response.json()
+            
+        except Exception as e:
+            logger.error(f"Error creating webhook: {e}")
+            if isinstance(e, requests.exceptions.HTTPError):
+                logger.error(f"Response content: {e.response.content}")
+            return None
+
+    def create_button_property(self, database_id: str):
+        """Add a button property to a database."""
+        try:
+            url = f"{self.base_url}/databases/{database_id}"
+            
+            data = {
+                "properties": {
+                    "Test Button": {  # Name of the button property
+                        "type": "button",
+                        "button": {}
+                    }
+                }
+            }
+            
+            response = requests.patch(url, headers=self.headers, json=data)
+            response.raise_for_status()
+            logger.info("Created button property in database")
+            return True
+            
+        except Exception as e:
+            logger.error(f"Error creating button property: {e}")
+            return False
+
+    def setup_webhook_integration(self):
+        """Set up the webhook integration for the button clicks."""
+        try:
+            webhook_url = "https://whole-mastodon-top.ngrok-free.app/webhook"
+            
+            # Create the webhook
+            webhook_data = {
+                "parent": {
+                    "database_id": self.subprojects_db_id
+                },
+                "properties": {
+                    "Test Button": {
+                        "button": {}
+                    }
+                },
+                "url": webhook_url,
+                "events": ["page_properties_changed"]
+            }
+            
+            response = self.create_webhook(webhook_url)
+            if response:
+                logger.info("Successfully set up webhook integration")
+                return True
+            return False
+            
+        except Exception as e:
+            logger.error(f"Error setting up webhook integration: {e}")
+            return False
