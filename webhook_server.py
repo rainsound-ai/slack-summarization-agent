@@ -60,6 +60,11 @@ def handle_webhook():
         else:
             logger.info("No next task identified - all tasks are blocked")
             
+        current_task = webhook_data['data']['id']
+        # Update the status for the subproject that was just clicked to "Done"
+        # Update the status for the Next task identified for Miles Porter to "In progress"
+        notion_client.update_subproject_status(next_task['id'], "In progress")
+        notion_client.update_subproject_status(current_task, "Done")
         return jsonify({'success': True}), 200
         
     except Exception as e:

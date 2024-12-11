@@ -374,3 +374,12 @@ class NotionClient:
             if isinstance(e, requests.exceptions.HTTPError):
                 logger.error(f"Response content: {e.response.content}")
             return None
+    
+    def update_subproject_status(self, subproject_id: str, status: str):
+        """Update the status of a subproject in Notion."""
+        url = f"{self.base_url}/pages/{subproject_id}"
+        data = {"properties": {"Status": {"status": {"name": status}}}}
+        response = requests.patch(url, headers=self.headers, json=data)
+        response.raise_for_status()
+        logger.info(f"Updated status for subproject {subproject_id} to {status}")
+        return True
