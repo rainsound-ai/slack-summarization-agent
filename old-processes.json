@@ -1,0 +1,575 @@
+{
+  "processes": [
+    {
+      "name": "Attend Conferences",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Conduct Event Delivery",
+          "sops": [
+            {
+              "name": "How To Conduct Event Delivery",
+              "body": "Booth setup "
+            },
+            {
+              "name": "How to Filter qualified leads",
+              "body": "Regular qualified leads get a follow-up phone call in a week "
+            },
+            {
+              "name": "How to Collect data on qualified leads",
+              "body": "Explore the venue "
+            }
+          ]
+        },
+        {
+          "name": "2. Conduct Event Teardown",
+          "sops": [
+            {
+              "name": "How To Conduct Event Teardown",
+              "body": "Once event is officially closed and doors are closed, onsite team to support marketing with the tear down and packaging of any remaining items from the event. "
+            }
+          ]
+        },
+        {
+          "name": "3. Follow-up With Leads Post Event",
+          "sops": [
+            {
+              "name": "How To Follow-Up On An Event",
+              "body": "Within 2 days post event, Marketing and Sales to organize an event retrospective, gather any additional details from company participants (leads, off hand meetings, lessons learned, kudos, etc) to include in overall follow up plan. "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Propose A Process Iteration",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Fill out the Process Iteration Request Form",
+          "sops": [
+            {
+              "name": "How to fill out any form",
+              "body": "Visit the "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Summarize meeting transcripts",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Collect meeting transcripts",
+          "sops": [
+            {
+              "name": "How to collect meeting transcripts",
+              "body": "Record the meeting with Jumpshare "
+            }
+          ]
+        },
+        {
+          "name": "2. Create a summary",
+          "sops": [
+            {
+              "name": "How to create a summary",
+              "body": "Submit a personalized prompt for your preferred style of summary "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Find new Engineering Tools",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Research the tool",
+          "sops": [
+            {
+              "name": "How to Research the tool",
+              "body": " "
+            }
+          ]
+        },
+        {
+          "name": "2. Fill out the Tool Proposal Form",
+          "sops": [
+            {
+              "name": "How to fill out the tool proposal form",
+              "body": " "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Shape Project Runways",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Fill out the System Design Document",
+          "sops": [
+            {
+              "name": "How to Create the System Design Document (Internal)",
+              "body": "If your project is: "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Create a plan for the next cycle",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Execute the Cycle Level Upkeep Agenda",
+          "sops": [
+            {
+              "name": "How to Execute the Cycle Level Upkeep Agenda",
+              "body": "Do Top of mind for the upcoming cycle "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Make Purchases",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Make the purchase",
+          "sops": [
+            {
+              "name": "How to make a purchase (TBD)",
+              "body": " "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Generate Metrics Reports for current Cycle",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Intake Company Metrics",
+          "sops": []
+        },
+        {
+          "name": "2. Generate Reports",
+          "sops": [
+            {
+              "name": "How to create a KPI report (TBD)",
+              "body": " "
+            },
+            {
+              "name": "How to create a finance report (TBD)",
+              "body": " "
+            }
+          ]
+        },
+        {
+          "name": "3. Chat With Metrics Report In Slack",
+          "sops": []
+        }
+      ]
+    },
+    {
+      "name": "Create a purchase order",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Complete a Purchase Proposal Form",
+          "sops": [
+            {
+              "name": "How to collect feedback on the purchase-orders channel (TBD)",
+              "body": " "
+            },
+            {
+              "name": "How to fill out any form",
+              "body": "Visit the "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Create an entry in the knowledge base",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Put a link in the summary database",
+          "sops": [
+            {
+              "name": "How to Put a link in the summary database",
+              "body": "Put the link in the link summary database "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Propose A New Process",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Fill out the process proposal form",
+          "sops": [
+            {
+              "name": "How to fill out any form",
+              "body": "Visit the "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Iterate On Processes",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Iterate on the process",
+          "sops": [
+            {
+              "name": "How to collect feedback on the processes channel (TBD)",
+              "body": " "
+            },
+            {
+              "name": "How to optimize the process",
+              "body": "Reviewed the submitted iteration proposal form "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Execute the next item in the adoption queue",
+      "body": "Input / Output:",
+      "steps": []
+    },
+    {
+      "name": "Execute The External Engineering Loop",
+      "body": "Input / Output:",
+      "steps": []
+    },
+    {
+      "name": "Execute The Internal Agent Engineering Loop",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Crush Engineering",
+          "sops": []
+        }
+      ]
+    },
+    {
+      "name": "Design and Prototype Agents",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Make an entry in the agent queue",
+          "sops": [
+            {
+              "name": "How to Create an entry in the agent queue",
+              "body": "An entry should have: "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Onboard Client",
+      "body": "Input/Output:",
+      "steps": []
+    },
+    {
+      "name": "Perform the sales loop",
+      "body": "Steps",
+      "steps": []
+    },
+    {
+      "name": "Prepare For Conferences",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Strategic Planning",
+          "sops": [
+            {
+              "name": "How To Conduct Strategic Planning",
+              "body": "Review Go-to-Market (GTM) strategy - Ideal client profiles, targeted market of professionals (User or Economic Buyers), annual objectives. "
+            }
+          ]
+        },
+        {
+          "name": "2. Conference Selection",
+          "sops": [
+            {
+              "name": "How To Select Conferences",
+              "body": "Research for industry, technology, and/or business conferences - event reputation, size of event, User/Economic Buyer accessibility, location of event, cost of event, duration, access to previous attendee lists, and access to registered attendee lists (ahead of event). "
+            }
+          ]
+        },
+        {
+          "name": "3. Event Preparation",
+          "sops": [
+            {
+              "name": "How To Prepare For An Event",
+              "body": "Marketing: "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Create Content",
+      "body": "Input / Output:",
+      "steps": []
+    },
+    {
+      "name": "Audit And Procure Engineering Tools",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Review each tool",
+          "sops": [
+            {
+              "name": "How to Review each tool (TBD)",
+              "body": " "
+            }
+          ]
+        },
+        {
+          "name": "2. Add any recurring costs to the automated expenses fund",
+          "sops": [
+            {
+              "name": "How to Add any recurring costs to the automated expenses fund (TBD)",
+              "body": " "
+            }
+          ]
+        },
+        {
+          "name": "3. Fill out the adoption form",
+          "sops": [
+            {
+              "name": "How to Make an entry in the adoption queue (TBD)",
+              "body": " "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Execute the Website Update Queue",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Fill out the website update form",
+          "sops": [
+            {
+              "name": "How to collect feedback on the website-updates channel (TBD)",
+              "body": " "
+            }
+          ]
+        },
+        {
+          "name": "2. Deploy website changes",
+          "sops": [
+            {
+              "name": "How to maintain deployed infrastructure (TBD)",
+              "body": " "
+            },
+            {
+              "name": "How to Deploy changes (TBD)",
+              "body": " "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Disburse Payroll",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Process internal transfers",
+          "sops": [
+            {
+              "name": "How to process internal transfers (TBD)",
+              "body": " "
+            }
+          ]
+        },
+        {
+          "name": "2. Create Wingspan disbursements",
+          "sops": [
+            {
+              "name": "How to create wingspan disbursements (TBD)",
+              "body": " "
+            }
+          ]
+        },
+        {
+          "name": "3. Share how much everyone is getting paid",
+          "sops": [
+            {
+              "name": "How to share what the payment amount was (TBD)",
+              "body": " "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Create and execute contracts",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Work with the contractor or client and contract author to define the terms of the contract",
+          "sops": [
+            {
+              "name": "How to work with the contract author",
+              "body": "If this is going to be a short-term engagement, we need an SOP-style contract "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Onboard and Orient New Hires",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Get the contractor set up with our IT infrastructure",
+          "sops": [
+            {
+              "name": "How to Get the contractor set up with our IT infrastructure",
+              "body": "Add the Contractor to Google Workspace "
+            }
+          ]
+        },
+        {
+          "name": "2. Setting up payment details",
+          "sops": [
+            {
+              "name": "How to Set up new contractor in Wingspan",
+              "body": "Collect the Contractor\u2019s bank account information and W-9 "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Find and Evaluate Contractors",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Use a recruiter to find a potential new hire",
+          "sops": [
+            {
+              "name": "How to use a recruiter to find a contractor",
+              "body": "Research the typical job that performs this process "
+            }
+          ]
+        },
+        {
+          "name": "2. Evaluate the potential new hire",
+          "sops": [
+            {
+              "name": "How to evaluate a contractor",
+              "body": "Provide information about the contractor in Slack to communicate their capabilities "
+            }
+          ]
+        },
+        {
+          "name": "3. Make an entry in the Review Contracts Queue",
+          "sops": [
+            {
+              "name": "How to make an entry in a queue",
+              "body": "Add an entry to the associated queue. "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Design A New Process",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Fill out the process design form",
+          "sops": [
+            {
+              "name": "How To Format the process\u2019 page",
+              "body": " "
+            },
+            {
+              "name": "How to capture top of mind thoughts",
+              "body": "Talk free-form about the process at hand "
+            },
+            {
+              "name": "How to fill out any form",
+              "body": "Visit the "
+            }
+          ]
+        },
+        {
+          "name": "2. Design each step",
+          "sops": [
+            {
+              "name": "How to write steps",
+              "body": "Conduct research on existing workflows "
+            }
+          ]
+        },
+        {
+          "name": "3. Fill out the adoption form",
+          "sops": [
+            {
+              "name": "How to collect feedback on the processes channel (TBD)",
+              "body": " "
+            },
+            {
+              "name": "How to make an entry in a queue",
+              "body": "Add an entry to the associated queue. "
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Generate Strategy Report for next cycle",
+      "body": "Input / Output:",
+      "steps": [
+        {
+          "name": "1. Iterate on milestones",
+          "sops": [
+            {
+              "name": "How to Iterate on milestones (TBD)",
+              "body": "Decomposing systems to find milestones (next biggest thing) "
+            }
+          ]
+        },
+        {
+          "name": "2. Brainstorm tasks related to milestones",
+          "sops": [
+            {
+              "name": "How to Brainstorm tasks related to milestones (TBD)",
+              "body": "Decomposing milestones to find possible layers of paint "
+            }
+          ]
+        },
+        {
+          "name": "3. Turn this into a report",
+          "sops": [
+            {
+              "name": "How to Turn this into a report (TBD)",
+              "body": " "
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

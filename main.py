@@ -1,5 +1,6 @@
 from slack_client import SlackDataFetcher
 from task_mapper import TaskMapper
+from notion_client import NotionClient
 import logging
 from datetime import datetime, timedelta
 import json
@@ -39,8 +40,9 @@ def main():
         # Initialize components
         slack_fetcher = SlackDataFetcher()
         task_mapper = TaskMapper()
+        notion_client = NotionClient()
 
-        # Read messages from sales_summary.txt instead of using sample data
+        # Read messages from sales_summary.txt
         messages = parse_sales_summary()
         if not messages:
             logger.error("No messages found in sales summary file")
@@ -54,17 +56,21 @@ def main():
         logger.info("Mapping tasks to processes...")
         mapped_tasks = task_mapper.map_tasks_to_processes(tasks)
 
+        # Create subprojects in Notion
+        logger.info("Creating subprojects in Notion...")
+        results = notion_client.create_subprojects(mapped_tasks)
+
         # Pretty print the results
-        logger.info("\n=== Mapped Tasks ===")
-        pprint(mapped_tasks, indent=2, width=100)
+        logger.info("\n=== Results ===")
+        pprint(results, indent=2, width=100)
 
-        # Save mapped tasks to file (keeping this for reference)
+        # Save results to file
         output_file = "mapped_tasks.json"
-        logger.info(f"\nSaving mapped tasks to {output_file}...")
+        logger.info(f"\nSaving results to {output_file}...")
         with open(output_file, 'w') as f:
-            json.dump(mapped_tasks, f, indent=2)
+            json.dump(results, f, indent=2)
 
-        logger.info("Task mapping completed successfully!")
+        logger.info("Process completed successfully!")
 
     except Exception as e:
         logger.error(f"Error in main process: {e}")
