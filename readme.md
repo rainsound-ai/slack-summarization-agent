@@ -56,3 +56,11 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 # Ngrok 
 Run `ngrok http --url=whole-mastodon-top.ngrok-free.app 5000`
+
+# New Stuff
+Run `python main.py` to suggest new sub projects from slack and send them to notion marked as "Potential".
+Run the webhook server and click the notion button to:
+   ✅ Mark the sub project that's clicked as "Done"
+   ✅ Mark the suggested subproject as "In progress"
+   [] send a dm about the next step
+   [] send a calendar invite
