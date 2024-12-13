@@ -6,8 +6,8 @@
     "parent_process": "Attend Conferences",
     "project": "attend_ces",
     "project_display_name": "Attend CES",
-    "similarity_score": 0.8302152025113863,
-    "notion_created": true
+    "similarity_score": 0.8302152025113883,
+    "notion_created": false
   },
   {
     "subproject": "Workshop product ideas and dashboard implementation",
@@ -16,8 +16,8 @@
     "parent_process": "Attend Conferences",
     "project": "attend_ces",
     "project_display_name": "Attend CES",
-    "similarity_score": 0.8266142514351696,
-    "notion_created": true
+    "similarity_score": 0.8266142514351701,
+    "notion_created": false
   },
   {
     "subproject": "Add AWS contacts to the AWS Connection List spreadsheet",
@@ -26,7 +26,7 @@
     "parent_process": "Attend Conferences",
     "project": "attend_ces",
     "project_display_name": "Attend CES",
-    "similarity_score": 0.7639592121780905,
-    "notion_created": true
+    "similarity_score": 0.7639592121780893,
+    "notion_created": false
   }
 ]

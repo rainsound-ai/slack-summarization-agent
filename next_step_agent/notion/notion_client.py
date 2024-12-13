@@ -4,23 +4,29 @@ import logging
 import os
 from dotenv import load_dotenv
 import json
+from config import (
+    NOTION_API_KEY,
+    NOTION_STEPS_DATABASE_ID,
+    NOTION_PROJECTS_DATABASE_ID,
+    NOTION_SUBPROJECTS_DATABASE_ID,
+)
 
 load_dotenv()
 
 logger = logging.getLogger(__name__)
 
+
 class NotionClient:
     def __init__(self):
-        self.api_key = os.getenv('NOTION_API_KEY')
-        self.subprojects_db_id = os.getenv('NOTION_SUBPROJECTS_DB_ID')
-        self.steps_db_id = os.getenv('NOTION_STEPS_DB_ID')
-        self.projects_db_id = os.getenv('NOTION_PROJECTS_DB_ID')
-        self.people_db_id = os.getenv('NOTION_PEOPLE_DB_ID')
+        self.api_key = NOTION_API_KEY
+        self.subprojects_db_id = NOTION_SUBPROJECTS_DATABASE_ID
+        self.steps_db_id = NOTION_STEPS_DATABASE_ID
+        self.projects_db_id = NOTION_PROJECTS_DATABASE_ID
 
         self.headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
-            "Notion-Version": "2022-06-28"
+            "Notion-Version": "2022-06-28",
         }
         self.base_url = "https://api.notion.com/v1"
 
@@ -28,10 +34,7 @@ class NotionClient:
         self._debug_database_structure()
 
         # Add value mappings for Notion properties
-        self.priority_map = {
-            'High': 3,
-            'Low': 1
-        }
+        self.priority_map = {"High": 3, "Low": 1}
 
         # Project Priority is 1-5 with 1 being highest, so we'll invert it
         self.project_priority_map = {
@@ -39,7 +42,7 @@ class NotionClient:
             2: 4,
             3: 3,
             4: 2,
-            5: 1   # 5 (lowest) -> 1 point
+            5: 1,  # 5 (lowest) -> 1 point
         }
 
     def _debug_database_structure(self):
@@ -52,7 +55,7 @@ class NotionClient:
             # properties = response.json().get('properties', {})
             # logger.info("Database properties:")
             # for prop_name, prop_details in properties.items():
-                # logger.info(f"Property '{prop_name}' of type '{prop_details.get('type')}'")
+            # logger.info(f"Property '{prop_name}' of type '{prop_details.get('type')}'")
 
         except Exception as e:
             logger.error(f"Error fetching database structure: {e}")
@@ -63,19 +66,12 @@ class NotionClient:
         """Get Notion page ID by searching for its title in a database."""
         try:
             url = f"{self.base_url}/databases/{database_id}/query"
-            data = {
-                "filter": {
-                    "property": "Name",
-                    "title": {
-                        "equals": title
-                    }
-                }
-            }
+            data = {"filter": {"property": "Name", "title": {"equals": title}}}
             response = requests.post(url, headers=self.headers, json=data)
             response.raise_for_status()
-            results = response.json().get('results', [])
+            results = response.json().get("results", [])
             if results:
-                return results[0]['id']
+                return results[0]["id"]
             return None
         except Exception as e:
             logger.error(f"Error getting page ID for {title}: {e}")
@@ -85,13 +81,19 @@ class NotionClient:
         """Create a subproject in Notion with status 'potential'."""
         try:
             # Get related page IDs
-            project_id = self._get_page_id_by_title(self.projects_db_id, mapped_task["project_display_name"])
+            project_id = self._get_page_id_by_title(
+                self.projects_db_id, mapped_task["project_display_name"]
+            )
             step_id = self._get_page_id_by_title(self.steps_db_id, mapped_task["step"])
-            person_id = self._get_page_id_by_title(self.people_db_id, "Miles Porter")  # Hardcoded for now
+            person_id = self._get_page_id_by_title(
+                self.people_db_id, "Miles Porter"
+            )  # Hardcoded for now
 
             if not all([project_id, step_id, person_id]):
                 logger.error("Failed to get all required page IDs")
-                logger.error(f"Project ID: {project_id}, Step ID: {step_id}, Person ID: {person_id}")
+                logger.error(
+                    f"Project ID: {project_id}, Step ID: {step_id}, Person ID: {person_id}"
+                )
                 return False
 
             url = f"{self.base_url}/pages"
@@ -99,41 +101,13 @@ class NotionClient:
                 "parent": {"database_id": self.subprojects_db_id},
                 "properties": {
                     "Sub-project": {
-                        "title": [
-                            {
-                                "text": {
-                                    "content": mapped_task["subproject"]
-                                }
-                            }
-                        ]
+                        "title": [{"text": {"content": mapped_task["subproject"]}}]
                     },
-                    "Status": {
-                        "status": {
-                            "name": "Potential"
-                        }
-                    },
-                    "Project": {
-                        "relation": [
-                            {
-                                "id": project_id
-                            }
-                        ]
-                    },
-                    "Step": {
-                        "relation": [
-                            {
-                                "id": step_id
-                            }
-                        ]
-                    },
-                    "Team Comp": {
-                        "relation": [
-                            {
-                                "id": person_id
-                            }
-                        ]
-                    }
-                }
+                    "Status": {"status": {"name": "Potential"}},
+                    "Project": {"relation": [{"id": project_id}]},
+                    "Step": {"relation": [{"id": step_id}]},
+                    "Team Comp": {"relation": [{"id": person_id}]},
+                },
             }
 
             response = requests.post(url, headers=self.headers, json=data)
@@ -153,11 +127,8 @@ class NotionClient:
         results = []
         for task in mapped_tasks:
             success = self.create_subproject(task)
-            results.append({
-                **task,
-                "notion_created": success
-            })
-        return results 
+            results.append({**task, "notion_created": success})
+        return results
 
     def create_webhook(self, url: str):
         """Create a new webhook in Notion."""
@@ -165,7 +136,9 @@ class NotionClient:
             webhook_url = f"{self.base_url}/webhooks"
             data = {
                 "url": url,
-                "events": ["page_properties_changed"]  # This will trigger when button properties change
+                "events": [
+                    "page_properties_changed"
+                ],  # This will trigger when button properties change
             }
 
             response = requests.post(webhook_url, headers=self.headers, json=data)
@@ -189,7 +162,7 @@ class NotionClient:
                 "properties": {
                     "Test Button": {  # Name of the button property
                         "type": "button",
-                        "button": {}
+                        "button": {},
                     }
                 }
             }
@@ -210,16 +183,10 @@ class NotionClient:
 
             # Create the webhook
             webhook_data = {
-                "parent": {
-                    "database_id": self.subprojects_db_id
-                },
-                "properties": {
-                    "Test Button": {
-                        "button": {}
-                    }
-                },
+                "parent": {"database_id": self.subprojects_db_id},
+                "properties": {"Test Button": {"button": {}}},
                 "url": webhook_url,
-                "events": ["page_properties_changed"]
+                "events": ["page_properties_changed"],
             }
 
             response = self.create_webhook(webhook_url)
@@ -232,7 +199,9 @@ class NotionClient:
             logger.error(f"Error setting up webhook integration: {e}")
             return False
 
-    def get_user_subprojects(self, person_id="bdf265bb07fe4d9d88773686ed9dbddf"):  # Miles Porter's Notion ID
+    def get_user_subprojects(
+        self, person_id="bdf265bb07fe4d9d88773686ed9dbddf"
+    ):  # Miles Porter's Notion ID
         """Get all potential/not started subprojects for a person by their Notion ID."""
         try:
             url = f"{self.base_url}/databases/{self.subprojects_db_id}/query"
@@ -243,36 +212,18 @@ class NotionClient:
                 "filter": {
                     "and": [
                         # Team Comp filter
-                        {
-                            "property": "Team Comp",
-                            "relation": {
-                                "contains": person_id
-                            }
-                        },
+                        {"property": "Team Comp", "relation": {"contains": person_id}},
                         # Status filter - exclude "Out of current scope" and "Done"
                         {
                             "property": "Status",
-                            "status": {
-                                "does_not_equal": "Out of current scope"
-                            }
+                            "status": {"does_not_equal": "Out of current scope"},
                         },
-                        {
-                            "property": "Status",
-                            "status": {
-                                "does_not_equal": "Done"
-                            }
-                        },
+                        {"property": "Status", "status": {"does_not_equal": "Done"}},
                         # Project Status filter - only Active projects
                         {
                             "property": "Project Status",
-                            "rollup": {
-                                "any": {
-                                    "select": {
-                                        "equals": "Active"
-                                    }
-                                }
-                            }
-                        }
+                            "rollup": {"any": {"select": {"equals": "Active"}}},
+                        },
                     ]
                 }
             }
@@ -283,39 +234,59 @@ class NotionClient:
             response = requests.post(url, headers=self.headers, json=data)
             response.raise_for_status()
 
-            results = response.json().get('results', [])
+            results = response.json().get("results", [])
             logger.info(f"Found {len(results)} subprojects")
 
             subprojects = []
             for item in results:
-                properties = item.get('properties', {})
+                properties = item.get("properties", {})
 
                 # Convert text values to numeric scores
-                urgency = properties.get('Urgency', {}).get('select', {}).get('name', 'Low')
-                importance = properties.get('Importance', {}).get('select', {}).get('name', 'Low')
-                impact = properties.get('Impact', {}).get('select', {}).get('name', 'Low')
+                urgency = (
+                    properties.get("Urgency", {}).get("select", {}).get("name", "Low")
+                )
+                importance = (
+                    properties.get("Importance", {})
+                    .get("select", {})
+                    .get("name", "Low")
+                )
+                impact = (
+                    properties.get("Impact", {}).get("select", {}).get("name", "Low")
+                )
 
                 # Get project priority (1-5) and map to our 5-1 scale
-                project_priority_raw = properties.get('Project Priority', {}).get('rollup', {}).get('number', 5)
+                project_priority_raw = (
+                    properties.get("Project Priority", {})
+                    .get("rollup", {})
+                    .get("number", 5)
+                )
 
-                subprojects.append({
-                    'id': item['id'],
-                    'title': self._extract_title(properties.get('Sub-project', {})),
-                    'urgency': self.priority_map.get(urgency, 0),
-                    'importance': self.priority_map.get(importance, 0),
-                    'impact': self.priority_map.get(impact, 0),
-                    'project_priority': self.project_priority_map.get(project_priority_raw, 0),
-                    'blocking': properties.get('Blocking', {}).get('relation', []),
-                    'blocked_by': properties.get('Blocked by', {}).get('relation', []),
-                    'status': properties.get('Status', {}).get('status', {}).get('name'),
-                    # Add raw values for debugging
-                    'raw_values': {
-                        'urgency': urgency,
-                        'importance': importance,
-                        'impact': impact,
-                        'project_priority': project_priority_raw
+                subprojects.append(
+                    {
+                        "id": item["id"],
+                        "title": self._extract_title(properties.get("Sub-project", {})),
+                        "urgency": self.priority_map.get(urgency, 0),
+                        "importance": self.priority_map.get(importance, 0),
+                        "impact": self.priority_map.get(impact, 0),
+                        "project_priority": self.project_priority_map.get(
+                            project_priority_raw, 0
+                        ),
+                        "blocking": properties.get("Blocking", {}).get("relation", []),
+                        "blocked_by": properties.get("Blocked by", {}).get(
+                            "relation", []
+                        ),
+                        "status": properties.get("Status", {})
+                        .get("status", {})
+                        .get("name"),
+                        # Add raw values for debugging
+                        "raw_values": {
+                            "urgency": urgency,
+                            "importance": importance,
+                            "impact": impact,
+                            "project_priority": project_priority_raw,
+                        },
                     }
-                })
+                )
 
                 # Log the conversion for debugging
                 logger.info(f"""
@@ -337,9 +308,9 @@ class NotionClient:
     def _extract_title(self, title_prop):
         """Helper to extract title from Notion property."""
         try:
-            return title_prop.get('title', [{}])[0].get('text', {}).get('content', '')
+            return title_prop.get("title", [{}])[0].get("text", {}).get("content", "")
         except:
-            return ''
+            return ""
 
     def get_person_by_user_id(self, user_id: str):
         """Get person details from People database using their Notion user ID."""
@@ -348,21 +319,16 @@ class NotionClient:
 
             # Query for the person with matching Notion User ID
             data = {
-                "filter": {
-                    "property": "Notion User",
-                    "relation": {
-                        "contains": user_id
-                    }
-                }
+                "filter": {"property": "Notion User", "relation": {"contains": user_id}}
             }
 
             response = requests.post(url, headers=self.headers, json=data)
             response.raise_for_status()
 
-            results = response.json().get('results', [])
+            results = response.json().get("results", [])
             if results:
                 person = results[0]
-                person_id = person['id']
+                person_id = person["id"]
                 logger.info(f"Found person in People database with ID: {person_id}")
                 return person_id
 
