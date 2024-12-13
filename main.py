@@ -8,46 +8,147 @@ from pprint import pprint
 import re
 from next_step_agent.calendar.calendar_utils import create_test_event
 import sys
-
+from next_step_agent.summarizer import ConversationSummarizer
+import config
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def parse_sales_summary(file_path="sales_summary.txt"):
-    """Parse the sales summary file into a list of message dictionaries."""
+def generate_daily_report():
+    """This DMs the channel summary and highest priority subproject to the user"""
+    slack_fetcher = SlackDataFetcher()
+    channel_summary, formatted_summary = summarize_slack_channel("sales-team")
+
+    if channel_summary and formatted_summary:
+        formatted_blocks = [
+            {"type": "section", "text": {"type": "mrkdwn", "text": channel_summary}}
+        ]
+        slack_fetcher.send_message_to_channel(
+            "slack-summarization-agent", formatted_blocks
+        )
+    pass
+
+
+def generate_calendar_event():
+    """This creates a calendar event with the highest priority subproject for the user"""
+    pass
+
+
+def send_slack_message():
+    pass
+
+
+def summarize_slack_channel(channel_name):
+    try:
+        # Initialize components
+        slack_fetcher = SlackDataFetcher()
+        summarizer = ConversationSummarizer(slack_fetcher.user_map)
+
+        # Get messages from the sales-team channel
+        logger.info(f"Fetching {channel_name} conversations...")
+
+        conversations = slack_fetcher.fetch_conversations(channel_name)
+
+        if channel_name not in conversations:
+            logger.error(f"{channel_name} channel not found or no messages available")
+            return None, None
+
+        # Format conversation for both file and AI
+        formatted_conversation = summarizer._prepare_conversation(
+            conversations[channel_name]
+        )
+
+        # Save formatted conversation to file (overwrite mode)
+        logger.info(f"Saving formatted messages to slack_messages_{channel_name}...")
+        with open(
+            f"outputs/slack_messages_{channel_name}.txt", "w", encoding="utf-8"
+        ) as f:
+            f.write("\n=== Channel: sales-team ===\n\n")
+            f.write(formatted_conversation)
+
+        # Get current date range
+        start_date = (datetime.now() - timedelta(hours=24)).strftime("%m/%d %H:%M")
+        end_date = datetime.now().strftime("%m/%d %H:%M")
+
+        # Summarize using the same formatted conversation
+        logger.info("Summarizing conversation...")
+        channel_summary, formatted_summary = summarizer.summarize_conversation(
+            formatted_conversation, start_date, end_date
+        )
+
+        # Format the summary as Slack blocks
+        formatted_blocks = [
+            {"type": "section", "text": {"type": "mrkdwn", "text": channel_summary}}
+        ]
+
+        logger.info("Sending sales summary to Slack...")
+        if config.SEND_TO_TEST_CHANNEL:
+            if config.SLACK_TEST_CHANNEL:
+                slack_fetcher.send_message_to_channel(
+                    config.SLACK_TEST_CHANNEL, formatted_blocks
+                )
+                logger.info(f"Summary: {channel_summary}")
+                logger.info(f"Sales summary sent to {config.SLACK_TEST_CHANNEL}")
+            else:
+                logger.error("Test channel not set in config.py")
+        else:
+            slack_fetcher.send_message_to_channel(
+                "slack-summarization-agent", formatted_blocks
+            )
+            logger.info("Sales team summary successfully sent!")
+
+        return channel_summary, formatted_summary
+
+    except Exception as e:
+        logger.error(f"Error parsing sales summary file: {e}")
+        return None, None
+
+
+def get_tasks_from_channel_summary(channel_name):
     messages = []
     try:
-        with open(file_path, "r") as f:
-            content = f.read()
+        channel_summary, formatted_summary = summarize_slack_channel(channel_name)
+        logger.info(f"Formatted summary: {formatted_summary}")
+        if not formatted_summary:
+            logger.error("No channel summary found")
+            return messages
 
-        # Extract tasks from the "Next Steps:" section
-        next_steps_pattern = r"- (.*?) \(Assigned to: @(.*?),.*?\)"
-        matches = re.findall(next_steps_pattern, content)
+        # Parse the formatted_summary if it's a string
+        if isinstance(formatted_summary, str):
+            formatted_summary = json.loads(formatted_summary)
 
-        for task, assignees in matches:
-            # Handle multiple assignees
-            assignee_list = [name.strip() for name in assignees.split("and")]
-            for assignee in assignee_list:
-                messages.append({"user": assignee, "text": task})
+        # Extract tasks from the checkboxes in the formatted summary
+        for block in formatted_summary:
+            if block.get("type") == "actions":
+                for element in block.get("elements", []):
+                    if element.get("type") == "checkboxes":
+                        for option in element.get("options", []):
+                            text = option.get("text", {}).get("text", "")
+                            # Extract task and assignee using regex
+                            match = re.search(r"(.*?)\(Assigned to: @([^,]+)", text)
+                            if match:
+                                task = match.group(1).strip()
+                                assignee = match.group(2).strip()
+                                messages.append({"user": assignee, "text": task})
 
+        logger.info(f"Extracted tasks: {messages}")
         return messages
     except Exception as e:
         logger.error(f"Error parsing sales summary file: {e}")
         return []
 
 
-def main():
+def map_and_create_subprojects(channel_name):
     try:
         # Initialize components
-        slack_fetcher = SlackDataFetcher()
         task_mapper = TaskMapper()
         notion_client = NotionClient()
 
         # Read messages from sales_summary.txt
-        messages = parse_sales_summary()
+        messages = get_tasks_from_channel_summary(channel_name)
         if not messages:
-            logger.error("No messages found in sales summary file")
+            logger.error("No messages found in the channel summary")
             return
 
         # Extract tasks from messages
@@ -69,10 +170,18 @@ def main():
         # Save results to file
         output_file = "mapped_tasks.json"
         logger.info(f"\nSaving results to {output_file}...")
-        with open(output_file, "w") as f:
+        with open(f"outputs/{output_file}", "w") as f:
             json.dump(results, f, indent=2)
 
         logger.info("Process completed successfully!")
+    except Exception as e:
+        logger.error(f"Error in map_and_create_subprojects: {e}")
+        raise
+
+
+def main():
+    try:
+        map_and_create_subprojects("sales-team")
 
     except Exception as e:
         logger.error(f"Error in main process: {e}")

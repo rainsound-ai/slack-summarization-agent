@@ -17,6 +17,13 @@ class SlackDataFetcher:
     def _get_user_info(self) -> Dict[str, str]:
         """Fetch and cache user ID to username mapping."""
         user_map = {}
+        # Check if we have cached user info less than an hour old
+        if hasattr(self, "_user_map_timestamp"):
+            time_diff = datetime.now() - self._user_map_timestamp
+            if time_diff.total_seconds() < 3600 and hasattr(self, "_cached_user_map"):
+                logger.info("Using cached user map")
+                return self._cached_user_map
+
         try:
             response = self.client.users_list()
             for user in response["members"]:
@@ -24,7 +31,12 @@ class SlackDataFetcher:
                     "profile", {}
                 ).get("real_name", "Unknown User")
                 user_map[user["id"]] = name
+
+            # Cache the results with timestamp
+            self._cached_user_map = user_map
+            self._user_map_timestamp = datetime.now()
             return user_map
+
         except SlackApiError as e:
             logger.error(f"Error fetching user info: {e}")
             return {}
@@ -33,12 +45,11 @@ class SlackDataFetcher:
         """Generate a direct URL to a Slack message."""
         base_url = "https://yourworkspace.slack.com/archives"
         # Replace 'yourworkspace' with your actual Slack workspace domain
-
         ts_formatted = timestamp.replace(".", "")
         message_url = f"{base_url}/{channel_id}/p{ts_formatted}"
         return message_url
 
-    def organize_conversations(self) -> Dict[str, List[Dict]]:
+    def fetch_conversations(self, channel_name: str) -> Dict[str, List[Dict]]:
         """Fetch and organize conversations from sales-team channel only."""
         conversations = {}
 
@@ -55,13 +66,13 @@ class SlackDataFetcher:
 
             # Find sales-team channel
             for channel in channels:
-                if channel["name"] == "sales-team":
+                if channel["name"] == channel_name:
                     channel_id = channel["id"]
 
                     try:
                         messages = self.get_channel_messages(channel_id)
                         if messages:
-                            conversations["sales-team"] = messages
+                            conversations[channel_name] = messages
                     except SlackApiError as e:
                         logger.error(
                             f"Error fetching messages for sales-team channel: {e}"
@@ -164,15 +175,6 @@ class SlackDataFetcher:
         }
 
         return processed
-
-    def _generate_message_url(self, channel_id: str, timestamp: str) -> str:
-        """Generate a direct URL to a Slack message."""
-        base_url = "https://yourworkspace.slack.com/archives"
-        # Replace 'yourworkspace' with your actual Slack workspace domain
-
-        ts_formatted = timestamp.replace(".", "")
-        message_url = f"{base_url}/{channel_id}/p{ts_formatted}"
-        return message_url
 
     def send_message_to_channel(self, channel_name: str, blocks: List[Dict]) -> None:
         """Send a message to a specific channel."""

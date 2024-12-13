@@ -14,7 +14,7 @@ client = OpenAI(api_key=OPENAI_API_KEY)
 
 class ConversationSummarizer:
     def __init__(self, user_map: Dict[str, str]):
-        self.model = "o1-preview"
+        self.model = "gpt-4o"
         self.user_map = user_map
 
     def _clean_text(self, text: str) -> str:
@@ -103,7 +103,9 @@ class ConversationSummarizer:
             response = client.chat.completions.create(
                 model=self.model, messages=[{"role": "user", "content": prompt}]
             )
+            logger.info(f"OpenAI response: {response}")
             summary = response.choices[0].message.content.strip()
+            logger.info(f"Summary: {summary}")
 
             # Uncomment to save 🤑💰💰 on OpenAI calls
             # Instead, read from file
@@ -111,7 +113,10 @@ class ConversationSummarizer:
             #     summary = f.read().strip()
 
             formatted_summary = self.format_for_slack(summary)
-            return formatted_summary
+            logger.info(f"Formatted summary: {formatted_summary}")
+
+            return summary, formatted_summary
+
         except Exception as e:
             logger.error(f"Error in summarization: {e}")
             return f"Error summarizing conversation: {str(e)}"

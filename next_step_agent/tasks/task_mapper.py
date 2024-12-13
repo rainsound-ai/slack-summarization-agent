@@ -16,7 +16,7 @@ class TaskMapper:
     def __init__(self):
         self.notion_fetcher = NotionDataFetcher()
         self.processes = self._load_processes()
-        self.model = "o1-preview"
+        self.model = "gpt-4o"
         self.embedding_model = "text-embedding-ada-002"
 
     def _load_processes(self) -> Dict:
@@ -28,6 +28,17 @@ class TaskMapper:
                 "Business Lead Frequency", "select", "Common"
             )
             logger.info(f"Fetched {len(notion_processes)} processes")
+
+            # Initialize notion_projects list before the loop
+            notion_projects = []
+            for process in notion_processes:
+                # Extend the list with projects for each process
+                notion_projects.extend(
+                    self.notion_fetcher.fetch_project_data_by_filter(
+                        "Processes", "relation", process["id"]
+                    )
+                )
+            logger.info(f"Fetched {len(notion_projects)} projects")
 
             # Initialize the processes dictionary
             processes = {"processes": [], "projects": {}}
@@ -54,12 +65,44 @@ class TaskMapper:
                 # Add process to processes list
                 processes["processes"].append(process_entry)
 
-                # Add to projects
-                process_key = process_name.lower().replace(" ", "_")
-                processes["projects"][process_key] = {
-                    "display_name": process_name,
-                    "processes": [process_name],
-                }
+            # Process projects and link them to processes
+            for project in notion_projects:
+                try:
+                    # Extract project name from properties
+                    project_name = project["properties"]["Name"]["title"][0]["text"][
+                        "content"
+                    ]
+                    # Create a URL-friendly key for the project
+                    project_key = project_name.lower().replace(" ", "_")
+
+                    # Get linked processes from the project's properties
+                    linked_processes = []
+                    if "Processes" in project["properties"]:
+                        linked_processes = [
+                            relation["id"]
+                            for relation in project["properties"]["Processes"].get(
+                                "relation", []
+                            )
+                        ]
+
+                    # Map process IDs to process names
+                    process_names = []
+                    for process_id in linked_processes:
+                        for process in notion_processes:
+                            if process.get("id") == process_id:
+                                process_names.append(process["name"])
+
+                    # Add to projects dictionary
+                    processes["projects"][project_key] = {
+                        "display_name": project_name,
+                        "processes": process_names,
+                    }
+
+                except (KeyError, IndexError) as e:
+                    logger.error(
+                        f"Error processing project {project.get('id', 'unknown')}: {e}"
+                    )
+                    continue
 
             logger.info(
                 f"Loaded processes from Notion: {json.dumps(processes, indent=2)}"
@@ -93,7 +136,11 @@ class TaskMapper:
             logger.info(f"OpenAI Response: {response_content}")
 
             try:
-                tasks = json.loads(response_content)
+                # Remove any markdown formatting that might be present
+                clean_content = (
+                    response_content.replace("```json", "").replace("```", "").strip()
+                )
+                tasks = json.loads(clean_content)
                 return tasks
             except json.JSONDecodeError as je:
                 logger.error(f"JSON parsing error: {je}")
@@ -166,7 +213,10 @@ class TaskMapper:
             most_similar_idx = similarities.index(max(similarities))
             most_similar_step = all_steps[most_similar_idx]
             parent_process = step_to_process[most_similar_step]
-            project = process_to_project.get(parent_process, "Unknown Project")
+            logger.info(f"parent_process: {parent_process}")
+            logger.info(f"process_to_project: {process_to_project}")
+            project = process_to_project.get(parent_process, "No matching project")
+            logger.info(f"project: {project}")
 
             mapped_task = {
                 "subproject": miles_tasks[i]["task"],
@@ -174,9 +224,9 @@ class TaskMapper:
                 "step": most_similar_step.split(" - ")[0],
                 "parent_process": parent_process,
                 "project": project,
-                "project_display_name": self.processes["projects"][project][
-                    "display_name"
-                ],
+                "project_display_name": self.processes["projects"]
+                .get(project, {})
+                .get("display_name", project),
                 "similarity_score": max(similarities),
             }
             mapped_tasks.append(mapped_task)

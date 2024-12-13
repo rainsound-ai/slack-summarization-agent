@@ -1,4 +1,4 @@
-from typing import Dict, List
+from typing import Dict, List, Optional
 import requests
 import logging
 import os
@@ -18,6 +18,15 @@ logger = logging.getLogger(__name__)
 
 class NotionClient:
     def __init__(self):
+        if not all(
+            [
+                NOTION_SUBPROJECTS_DATABASE_ID,
+                NOTION_STEPS_DATABASE_ID,
+                NOTION_PROJECTS_DATABASE_ID,
+            ]
+        ):
+            raise ValueError("All database IDs must be provided")
+
         self.api_key = NOTION_API_KEY
         self.subprojects_db_id = NOTION_SUBPROJECTS_DATABASE_ID
         self.steps_db_id = NOTION_STEPS_DATABASE_ID
@@ -62,17 +71,31 @@ class NotionClient:
             if isinstance(e, requests.exceptions.HTTPError):
                 logger.error(f"Response content: {e.response.content}")
 
-    def _get_page_id_by_title(self, database_id: str, title: str) -> str:
+    def _get_page_id_by_title(
+        self, database_id: str, title: Optional[str]
+    ) -> Optional[str]:
         """Get Notion page ID by searching for its title in a database."""
+        if not database_id or not title:
+            logger.error(
+                f"Missing required parameter: database_id={database_id}, title={title}"
+            )
+            return None
+
         try:
             url = f"{self.base_url}/databases/{database_id}/query"
             data = {"filter": {"property": "Name", "title": {"equals": title}}}
             response = requests.post(url, headers=self.headers, json=data)
             response.raise_for_status()
             results = response.json().get("results", [])
-            if results:
-                return results[0]["id"]
-            return None
+
+            if not results:
+                logger.warning(
+                    f"No results found for title '{title}' in database {database_id}"
+                )
+                return None
+
+            return results[0]["id"]
+
         except Exception as e:
             logger.error(f"Error getting page ID for {title}: {e}")
             return None
@@ -80,23 +103,54 @@ class NotionClient:
     def create_subproject(self, mapped_task: Dict) -> bool:
         """Create a subproject in Notion with status 'potential'."""
         try:
-            # Get related page IDs
-            project_id = self._get_page_id_by_title(
-                self.projects_db_id, mapped_task["project_display_name"]
-            )
-            step_id = self._get_page_id_by_title(self.steps_db_id, mapped_task["step"])
-            person_id = self._get_page_id_by_title(
-                self.people_db_id, "Miles Porter"
-            )  # Hardcoded for now
+            # Validate required fields
+            project_name = mapped_task.get("project_display_name")
+            step_name = mapped_task.get("step")
 
-            if not all([project_id, step_id, person_id]):
-                logger.error("Failed to get all required page IDs")
+            if not project_name or not step_name:
                 logger.error(
-                    f"Project ID: {project_id}, Step ID: {step_id}, Person ID: {person_id}"
+                    f"Missing required fields: project_name={project_name}, step_name={step_name}"
                 )
                 return False
 
+            logger.info(f"Project Name: {project_name}")
+            logger.info(f"Step Name: {step_name}")
+
+            # Get related page IDs
+            project_id = self._get_page_id_by_title(self.projects_db_id, project_name)
+            if not project_id:
+                logger.error(f"Could not find project with name: {project_name}")
+
+            step_id = self._get_page_id_by_title(self.steps_db_id, step_name)
+            if not step_id:
+                logger.error(f"Could not find step with name: {step_name}")
+
+            if not project_id and not step_id:
+                return False
+
+            # Get Miles' Notion ID from users.json
+            with open("next_step_agent/data/users.json") as f:
+                users_data = json.load(f)
+                user_id = None
+                for user in users_data["users"]:  # Access the "users" array
+                    if user.get("name") == "Miles Porter":
+                        user_id = user.get("notion_id")
+                        break
+
+            logger.info(f"User ID: {user_id}")
+            if not user_id:
+                logger.error("Could not find Miles Porter's Notion ID in users.json")
+                return False
+
+            if not all([project_id, step_id, user_id]):
+                logger.error("Failed to get all required page IDs")
+                logger.error(
+                    f"Project ID: {project_id}, Step ID: {step_id}, User ID: {user_id}"
+                )
+
             url = f"{self.base_url}/pages"
+            logger.info(f"URL: {url}")
+
             data = {
                 "parent": {"database_id": self.subprojects_db_id},
                 "properties": {
@@ -104,12 +158,17 @@ class NotionClient:
                         "title": [{"text": {"content": mapped_task["subproject"]}}]
                     },
                     "Status": {"status": {"name": "Potential"}},
-                    "Project": {"relation": [{"id": project_id}]},
-                    "Step": {"relation": [{"id": step_id}]},
-                    "Team Comp": {"relation": [{"id": person_id}]},
+                    "Team Comp": {"people": [{"id": user_id}]},
                 },
             }
 
+            if project_id:
+                data["properties"]["Project"] = {"relation": [{"id": project_id}]}
+            if step_id:
+                data["properties"]["Step"] = {"relation": [{"id": step_id}]}
+
+            logger.info(f"Data: {data}")
+            logger.info(f"Creating subproject: {mapped_task['subproject']}")
             response = requests.post(url, headers=self.headers, json=data)
             response.raise_for_status()
 
@@ -199,20 +258,18 @@ class NotionClient:
             logger.error(f"Error setting up webhook integration: {e}")
             return False
 
-    def get_user_subprojects(
-        self, person_id="bdf265bb07fe4d9d88773686ed9dbddf"
-    ):  # Miles Porter's Notion ID
+    def fetch_and_prioritize_user_subprojects(self, user_id):
         """Get all potential/not started subprojects for a person by their Notion ID."""
         try:
             url = f"{self.base_url}/databases/{self.subprojects_db_id}/query"
 
-            logger.info(f"Querying subprojects for person ID: {person_id}")
+            logger.info(f"Querying subprojects for person ID: {user_id}")
 
             data = {
                 "filter": {
                     "and": [
                         # Team Comp filter
-                        {"property": "Team Comp", "relation": {"contains": person_id}},
+                        {"property": "Team Comp", "relation": {"contains": user_id}},
                         # Status filter - exclude "Out of current scope" and "Done"
                         {
                             "property": "Status",
@@ -253,6 +310,9 @@ class NotionClient:
                 impact = (
                     properties.get("Impact", {}).get("select", {}).get("name", "Low")
                 )
+                effort = (
+                    properties.get("Effort", {}).get("select", {}).get("name", "Low")
+                )
 
                 # Get project priority (1-5) and map to our 5-1 scale
                 project_priority_raw = (
@@ -271,6 +331,7 @@ class NotionClient:
                         "project_priority": self.project_priority_map.get(
                             project_priority_raw, 0
                         ),
+                        "effort": self.priority_map.get(effort, 0),
                         "blocking": properties.get("Blocking", {}).get("relation", []),
                         "blocked_by": properties.get("Blocked by", {}).get(
                             "relation", []
@@ -284,6 +345,7 @@ class NotionClient:
                             "importance": importance,
                             "impact": impact,
                             "project_priority": project_priority_raw,
+                            "effort": effort,
                         },
                     }
                 )
@@ -295,6 +357,7 @@ class NotionClient:
                 - Importance: {importance} -> {self.priority_map.get(importance, 0)}
                 - Impact: {impact} -> {self.priority_map.get(impact, 0)}
                 - Project Priority: {project_priority_raw} -> {self.project_priority_map.get(project_priority_raw, 0)}
+                - Effort: {effort} -> {self.priority_map.get(effort, 0)}
                 """)
 
             return subprojects
@@ -312,34 +375,34 @@ class NotionClient:
         except:
             return ""
 
-    def get_person_by_user_id(self, user_id: str):
-        """Get person details from People database using their Notion user ID."""
-        try:
-            url = f"{self.base_url}/databases/{self.people_db_id}/query"
+    # def get_person_by_user_id(self, user_id: str):
+    #     """Get person details from People database using their Notion user ID."""
+    #     try:
+    #         url = f"{self.base_url}/databases/{self.people_db_id}/query"
 
-            # Query for the person with matching Notion User ID
-            data = {
-                "filter": {"property": "Notion User", "relation": {"contains": user_id}}
-            }
+    #         # Query for the person with matching Notion User ID
+    #         data = {
+    #             "filter": {"property": "Notion User", "relation": {"contains": user_id}}
+    #         }
 
-            response = requests.post(url, headers=self.headers, json=data)
-            response.raise_for_status()
+    #         response = requests.post(url, headers=self.headers, json=data)
+    #         response.raise_for_status()
 
-            results = response.json().get("results", [])
-            if results:
-                person = results[0]
-                person_id = person["id"]
-                logger.info(f"Found person in People database with ID: {person_id}")
-                return person_id
+    #         results = response.json().get("results", [])
+    #         if results:
+    #             person = results[0]
+    #             person_id = person["id"]
+    #             logger.info(f"Found person in People database with ID: {person_id}")
+    #             return person_id
 
-            logger.error(f"No person found in People database for user ID: {user_id}")
-            return None
+    #         logger.error(f"No person found in People database for user ID: {user_id}")
+    #         return None
 
-        except Exception as e:
-            logger.error(f"Error getting person by user ID: {e}")
-            if isinstance(e, requests.exceptions.HTTPError):
-                logger.error(f"Response content: {e.response.content}")
-            return None
+    #     except Exception as e:
+    #         logger.error(f"Error getting person by user ID: {e}")
+    #         if isinstance(e, requests.exceptions.HTTPError):
+    #             logger.error(f"Response content: {e.response.content}")
+    #         return None
 
     def update_subproject_status(self, subproject_id: str, status: str):
         """Update the status of a subproject in Notion."""

@@ -31,3 +31,5 @@ MAX_CHUNK_SIZE = 3999
 # Channel configurations
 EXCLUDE_ARCHIVED = True
 DEBUG_LOGGING = True
+SEND_TO_TEST_CHANNEL = True
+SLACK_TEST_CHANNEL = "bot-spam-channel"

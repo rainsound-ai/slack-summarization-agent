@@ -144,6 +144,7 @@ class NotionDataFetcher:
 
             processes.append(
                 {
+                    "id": result["id"],  # Add the process ID
                     "name": name,
                     "sops": sops,
                     "steps": steps,
@@ -170,12 +171,12 @@ class NotionDataFetcher:
         sops = []
         for result in response["results"]:
             name = result["properties"]["Name"]["title"][0]["text"]["content"]
-            page_id = result["id"]
-            body_content = self.get_page_content(page_id)
+            id = result["id"]
+            body_content = self.get_page_content(id)
             sops.append({"name": name, "body_content": body_content})
         return sops
 
-    def fetch_projects_data_by_filter(
+    def fetch_project_data_by_filter(
         self, filter_property_name, filter_property_type, filter_property_value
     ):
         response = self.client.databases.query(

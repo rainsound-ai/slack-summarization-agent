@@ -2,6 +2,7 @@ from flask import Flask, request, jsonify
 import logging
 import os
 import subprocess
+import json
 from dotenv import load_dotenv
 import threading
 from next_step_agent.tasks.task_prioritizer import TaskPrioritizer
@@ -36,9 +37,18 @@ def handle_webhook():
         logger.info("Received webhook from Notion automation")
 
         # Get all potential/not started subprojects for Miles Porter
-        subprojects = (
-            notion_client.get_user_subprojects()
-        )  # Uses default "Miles Porter"
+        # Get Miles Porter's Notion ID from users.json
+        with open("users.json") as f:
+            users_data = json.load(f)
+            user_notion_ID = next(
+                user["notion_id"]
+                for user in users_data
+                if user["name"] == "Miles Porter"
+            )
+
+        subprojects = notion_client.fetch_and_prioritize_user_subprojects(
+            user_notion_ID
+        )
 
         if not subprojects:
             logger.info("No eligible subprojects found for Miles Porter")
