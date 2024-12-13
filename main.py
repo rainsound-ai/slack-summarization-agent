@@ -1,3 +1,4 @@
+from typing import Dict
 from next_step_agent.slack.slack_client import SlackDataFetcher
 from next_step_agent.tasks.task_mapper import TaskMapper
 from next_step_agent.notion.notion_client import NotionClient
@@ -11,6 +12,7 @@ import sys
 from next_step_agent.summarizer import ConversationSummarizer
 import config
 from next_step_agent.tasks.task_prioritizer import TaskPrioritizer
+from next_step_agent.calendar.calendar_utils import create_calendar_event
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -45,6 +47,9 @@ def daily_updates(target_slack_channel: str, summary_channel: str):
             slack_fetcher.send_message_to_channel(
                 target_slack_channel, formatted_blocks
             )
+
+        # Generate a calendar event for the user
+        generate_calendar_event(highest_priority_subproject)
     pass
 
 
@@ -57,9 +62,14 @@ def triggered_updates():
     pass
 
 
-def generate_calendar_event():
+def generate_calendar_event(subproject: Dict):
     """This creates a calendar event with the highest priority subproject for the user"""
-    pass
+    event_data = {
+        "summary": subproject["title"],
+        "description": f"Step: {subproject['step']}\nProject: {subproject['parent_project']}",
+    }
+    logger.info(f"Creating calendar event: {event_data}")
+    create_calendar_event(event_data)
 
 
 def send_slack_message():
