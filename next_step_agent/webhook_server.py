@@ -38,17 +38,15 @@ def handle_webhook():
 
         # Get all potential/not started subprojects for Miles Porter
         # Get Miles Porter's Notion ID from users.json
-        with open("users.json") as f:
+        with open("next_step_agent/data/users.json") as f:
             users_data = json.load(f)
-            user_notion_ID = next(
-                user["notion_id"]
-                for user in users_data
-                if user["name"] == "Miles Porter"
-            )
+            user_id = None
+            for user in users_data["users"]:  # Access the "users" array
+                if user.get("name") == "Miles Porter":
+                    user_id = user.get("notion_id")
+                    break
 
-        subprojects = notion_client.fetch_and_prioritize_user_subprojects(
-            user_notion_ID
-        )
+        subprojects = notion_client.fetch_user_subprojects(user_notion_ID)
 
         if not subprojects:
             logger.info("No eligible subprojects found for Miles Porter")

@@ -258,7 +258,7 @@ class NotionClient:
             logger.error(f"Error setting up webhook integration: {e}")
             return False
 
-    def fetch_and_prioritize_user_subprojects(self, user_id):
+    def fetch_user_subprojects(self, user_id):
         """Get all potential/not started subprojects for a person by their Notion ID."""
         try:
             url = f"{self.base_url}/databases/{self.subprojects_db_id}/query"
@@ -269,7 +269,7 @@ class NotionClient:
                 "filter": {
                     "and": [
                         # Team Comp filter
-                        {"property": "Team Comp", "relation": {"contains": user_id}},
+                        {"property": "Team Comp", "people": {"contains": user_id}},
                         # Status filter - exclude "Out of current scope" and "Done"
                         {
                             "property": "Status",
@@ -291,27 +291,61 @@ class NotionClient:
             response = requests.post(url, headers=self.headers, json=data)
             response.raise_for_status()
 
-            results = response.json().get("results", [])
+            # Add debug logging for raw response
+            logger.info(f"Raw response status code: {response.status_code}")
+            logger.info(f"Raw response headers: {response.headers}")
+
+            response_json = response.json()
+            if not response_json:
+                logger.error("Received empty response from Notion")
+                return []
+
+            logger.info(f"Response JSON: {json.dumps(response_json, indent=2)}")
+
+            results = response_json.get("results", [])
+            if not results:
+                logger.info("No results found in response")
+                return []
+
             logger.info(f"Found {len(results)} subprojects")
 
             subprojects = []
             for item in results:
-                properties = item.get("properties", {})
+                if not item:
+                    logger.warning("Found null item in results")
+                    continue
+
+                properties = item.get("properties")
+                if not properties:
+                    logger.warning(f"No properties found for item: {item}")
+                    continue
 
                 # Convert text values to numeric scores
                 urgency = (
                     properties.get("Urgency", {}).get("select", {}).get("name", "Low")
+                    if properties.get("Urgency")
+                    and properties.get("Urgency").get("select")
+                    else "Low"
                 )
                 importance = (
                     properties.get("Importance", {})
                     .get("select", {})
                     .get("name", "Low")
+                    if properties.get("Importance")
+                    and properties.get("Importance").get("select")
+                    else "Low"
                 )
                 impact = (
                     properties.get("Impact", {}).get("select", {}).get("name", "Low")
+                    if properties.get("Impact")
+                    and properties.get("Impact").get("select")
+                    else "Low"
                 )
                 effort = (
                     properties.get("Effort", {}).get("select", {}).get("name", "Low")
+                    if properties.get("Effort")
+                    and properties.get("Effort").get("select")
+                    else "Low"
                 )
 
                 # Get project priority (1-5) and map to our 5-1 scale
@@ -320,6 +354,14 @@ class NotionClient:
                     .get("rollup", {})
                     .get("number", 5)
                 )
+                step = self.get_title_by_page_id(
+                    properties.get("Step", {}).get("relation", [{}])[0].get("id", "")
+                )
+                logger.info(f"Step: {step}")
+                parent_project = self.get_title_by_page_id(
+                    properties.get("Project", {}).get("relation", [{}])[0].get("id", "")
+                )
+                logger.info(f"Parent Project: {parent_project}")
 
                 subprojects.append(
                     {
@@ -328,9 +370,11 @@ class NotionClient:
                         "urgency": self.priority_map.get(urgency, 0),
                         "importance": self.priority_map.get(importance, 0),
                         "impact": self.priority_map.get(impact, 0),
+                        "parent_project": parent_project,
                         "project_priority": self.project_priority_map.get(
                             project_priority_raw, 0
                         ),
+                        "step": step,
                         "effort": self.priority_map.get(effort, 0),
                         "blocking": properties.get("Blocking", {}).get("relation", []),
                         "blocked_by": properties.get("Blocked by", {}).get(
@@ -358,6 +402,8 @@ class NotionClient:
                 - Impact: {impact} -> {self.priority_map.get(impact, 0)}
                 - Project Priority: {project_priority_raw} -> {self.project_priority_map.get(project_priority_raw, 0)}
                 - Effort: {effort} -> {self.priority_map.get(effort, 0)}
+                - step: {step}
+                - parent_project: {parent_project}
                 """)
 
             return subprojects
@@ -374,6 +420,20 @@ class NotionClient:
             return title_prop.get("title", [{}])[0].get("text", {}).get("content", "")
         except:
             return ""
+
+    def get_title_by_page_id(self, page_id: str):
+        """Get title from Notion page by ID."""
+        url = f"{self.base_url}/pages/{page_id}"
+        response = requests.get(url, headers=self.headers)
+        response.raise_for_status()
+        return (
+            response.json()
+            .get("properties", {})
+            .get("Name", {})
+            .get("title", [{}])[0]
+            .get("text", {})
+            .get("content", "")
+        )
 
     # def get_person_by_user_id(self, user_id: str):
     #     """Get person details from People database using their Notion user ID."""

@@ -10,23 +10,50 @@ from next_step_agent.calendar.calendar_utils import create_test_event
 import sys
 from next_step_agent.summarizer import ConversationSummarizer
 import config
+from next_step_agent.tasks.task_prioritizer import TaskPrioritizer
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 
-def generate_daily_report():
-    """This DMs the channel summary and highest priority subproject to the user"""
+def daily_updates(target_slack_channel: str, summary_channel: str):
+    """This DMs the channel summary, the highest priority subproject, and generates a calendar event for the user once a day"""
     slack_fetcher = SlackDataFetcher()
-    channel_summary, formatted_summary = summarize_slack_channel("sales-team")
 
-    if channel_summary and formatted_summary:
+    daily_update_summary = summarize_slack_channel(summary_channel)
+    if daily_update_summary:
         formatted_blocks = [
-            {"type": "section", "text": {"type": "mrkdwn", "text": channel_summary}}
+            {
+                "type": "section",
+                "text": {"type": "mrkdwn", "text": daily_update_summary},
+            }
         ]
-        slack_fetcher.send_message_to_channel(
-            "slack-summarization-agent", formatted_blocks
-        )
+        slack_fetcher.send_message_to_channel(target_slack_channel, formatted_blocks)
+
+        # Get the highest priority subproject
+        highest_priority_subproject = get_highest_priority_subproject()
+        if highest_priority_subproject:
+            formatted_blocks = [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": f"Highest priority subproject: {highest_priority_subproject['title']}\nStep: {highest_priority_subproject['step']}\nProject: {highest_priority_subproject['parent_project']}",
+                    },
+                }
+            ]
+            slack_fetcher.send_message_to_channel(
+                target_slack_channel, formatted_blocks
+            )
+    pass
+
+
+def test_daily_updates():
+    daily_updates("bot-spam-channel", "sales-team")
+
+
+def triggered_updates():
+    """This DMs the channel summary, the highest priority subproject, and generates a calendar event for the user when the complete button is pushed"""
     pass
 
 
@@ -37,6 +64,27 @@ def generate_calendar_event():
 
 def send_slack_message():
     pass
+
+
+def get_highest_priority_subproject():
+    notion_client = NotionClient()
+    user_notion_ID = get_user_notion_id("Miles Porter")
+    subprojects = notion_client.fetch_user_subprojects(user_notion_ID)
+    task_prioritizer = TaskPrioritizer()
+    next_task = task_prioritizer.prioritize_tasks(subprojects)
+    return next_task
+    pass
+
+
+def get_user_notion_id(name: str):
+    with open("next_step_agent/data/users.json") as f:
+        users_data = json.load(f)
+        user_id = None
+        for user in users_data["users"]:  # Access the "users" array
+            if user.get("name") == "Miles Porter":
+                user_id = user.get("notion_id")
+                break
+    return user_id
 
 
 def summarize_slack_channel(channel_name):
@@ -73,7 +121,7 @@ def summarize_slack_channel(channel_name):
 
         # Summarize using the same formatted conversation
         logger.info("Summarizing conversation...")
-        channel_summary, formatted_summary = summarizer.summarize_conversation(
+        channel_summary = summarizer.summarize_conversation(
             formatted_conversation, start_date, end_date
         )
 
@@ -98,7 +146,7 @@ def summarize_slack_channel(channel_name):
             )
             logger.info("Sales team summary successfully sent!")
 
-        return channel_summary, formatted_summary
+        return channel_summary
 
     except Exception as e:
         logger.error(f"Error parsing sales summary file: {e}")
@@ -108,7 +156,17 @@ def summarize_slack_channel(channel_name):
 def get_tasks_from_channel_summary(channel_name):
     messages = []
     try:
-        channel_summary, formatted_summary = summarize_slack_channel(channel_name)
+        slack_fetcher = SlackDataFetcher()
+        summarizer = ConversationSummarizer(slack_fetcher.user_map)
+
+        channel_summary = summarize_slack_channel(channel_name)
+
+        # Add type check before passing to format_for_slack
+        if isinstance(channel_summary, tuple) or channel_summary is None:
+            logger.error("No valid channel summary found")
+            return messages
+
+        formatted_summary = summarizer.format_for_slack(channel_summary)
         logger.info(f"Formatted summary: {formatted_summary}")
         if not formatted_summary:
             logger.error("No channel summary found")
@@ -182,6 +240,7 @@ def map_and_create_subprojects(channel_name):
 def main():
     try:
         map_and_create_subprojects("sales-team")
+        test_daily_updates()
 
     except Exception as e:
         logger.error(f"Error in main process: {e}")

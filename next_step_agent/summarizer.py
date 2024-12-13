@@ -112,10 +112,7 @@ class ConversationSummarizer:
             # with open('sales_summary.txt', 'r', encoding='utf-8') as f:
             #     summary = f.read().strip()
 
-            formatted_summary = self.format_for_slack(summary)
-            logger.info(f"Formatted summary: {formatted_summary}")
-
-            return summary, formatted_summary
+            return summary
 
         except Exception as e:
             logger.error(f"Error in summarization: {e}")
