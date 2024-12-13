@@ -17,6 +17,13 @@ The Slack Summarization Agent is a tool designed to fetch, process, and summariz
    cd slack-summarization-agent
    ```
 
+2. **Set Up Environment**:
+   Ensure you have Python installed, then run:
+   ```bash
+   python3 -m venv .venv
+   source .venv/bin/activate
+   ```
+
 2. **Install Dependencies**:
    Ensure you have Python installed, then run:
    ```bash
@@ -28,6 +35,9 @@ The Slack Summarization Agent is a tool designed to fetch, process, and summariz
    ```
    SLACK_BOT_TOKEN=your-slack-bot-token
    OPENAI_API_KEY=your-openai-api-key
+   NOTION_API_KEY=your-notion-api-key
+   NOTION_DATABASE_ID=your-notion-database-id
+   BOT_TEST_CHANNEL=your-test-channel-name
    ```
 
 ## Usage

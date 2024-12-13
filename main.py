@@ -16,11 +16,11 @@ def parse_sales_summary(file_path='sales_summary.txt'):
     try:
         with open(file_path, 'r') as f:
             content = f.read()
-            
+
         # Extract tasks from the "Next Steps:" section
         next_steps_pattern = r'- (.*?) \(Assigned to: @(.*?),.*?\)'
         matches = re.findall(next_steps_pattern, content)
-        
+
         for task, assignees in matches:
             # Handle multiple assignees
             assignee_list = [name.strip() for name in assignees.split('and')]
@@ -29,7 +29,7 @@ def parse_sales_summary(file_path='sales_summary.txt'):
                     "user": assignee,
                     "text": task
                 })
-                
+
         return messages
     except Exception as e:
         logger.error(f"Error parsing sales summary file: {e}")

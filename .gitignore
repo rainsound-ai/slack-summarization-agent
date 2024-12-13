@@ -1,2 +1,10 @@
 .env
 slack_messages.txt
+venv/
+.env
+.DS_Store
+sales_summary_original.txt
+linked_steps.txt
+sales_summary.txt
+*.pyc
+outputs/*
