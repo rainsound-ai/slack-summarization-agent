@@ -94,12 +94,14 @@ class ConversationSummarizer:
         return "\n\n".join(formatted_msgs)
 
     def summarize_conversation(
-        self, conversation: str, start_date: str, end_date: str
+        self, conversation: str, milestones: List[str], start_date: str, end_date: str
     ) -> str:
         """Read pre-generated summary from file instead of calling OpenAI."""
         try:
             # Comment out to save 🤑💰💰 on OpenAI calls
-            prompt = get_sales_summary_prompt(conversation, start_date, end_date)
+            prompt = get_sales_summary_prompt(
+                conversation, milestones, start_date, end_date
+            )
             response = client.chat.completions.create(
                 model=self.model, messages=[{"role": "user", "content": prompt}]
             )

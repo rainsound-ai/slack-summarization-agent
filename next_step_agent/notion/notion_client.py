@@ -9,6 +9,8 @@ from config import (
     NOTION_STEPS_DATABASE_ID,
     NOTION_PROJECTS_DATABASE_ID,
     NOTION_SUBPROJECTS_DATABASE_ID,
+    NOTION_PROCESSES_DATABASE_ID,
+    NOTION_SYSTEMS_DATABASE_ID,
 )
 
 load_dotenv()
@@ -31,6 +33,8 @@ class NotionClient:
         self.subprojects_db_id = NOTION_SUBPROJECTS_DATABASE_ID
         self.steps_db_id = NOTION_STEPS_DATABASE_ID
         self.projects_db_id = NOTION_PROJECTS_DATABASE_ID
+        self.processes_db_id = NOTION_PROCESSES_DATABASE_ID
+        self.systems_db_id = NOTION_SYSTEMS_DATABASE_ID
 
         self.headers = {
             "Authorization": f"Bearer {self.api_key}",
@@ -354,12 +358,21 @@ class NotionClient:
                     .get("rollup", {})
                     .get("number", 5)
                 )
-                step = self.get_title_by_page_id(
-                    properties.get("Step", {}).get("relation", [{}])[0].get("id", "")
+
+                # Safely get step and parent project IDs
+                step_relations = properties.get("Step", {}).get("relation", [])
+                step = (
+                    self.get_title_by_page_id(step_relations[0].get("id"))
+                    if step_relations
+                    else ""
                 )
                 logger.info(f"Step: {step}")
-                parent_project = self.get_title_by_page_id(
-                    properties.get("Project", {}).get("relation", [{}])[0].get("id", "")
+
+                project_relations = properties.get("Project", {}).get("relation", [])
+                parent_project = (
+                    self.get_title_by_page_id(project_relations[0].get("id"))
+                    if project_relations
+                    else ""
                 )
                 logger.info(f"Parent Project: {parent_project}")
 
@@ -472,3 +485,29 @@ class NotionClient:
         response.raise_for_status()
         logger.info(f"Updated status for subproject {subproject_id} to {status}")
         return True
+
+    def fetch_all_milestones(self):
+        """Fetch all milestones from the Systems database."""
+        url = f"{self.base_url}/databases/{self.systems_db_id}/query"
+        response = requests.post(url, headers=self.headers)
+        response.raise_for_status()
+
+        milestones = []
+        for page in response.json().get("results", []):
+            # Get Next Milestone property
+            rich_text = (
+                page.get("properties", {})
+                .get("Next Milestone", {})
+                .get("rich_text", [])
+            )
+
+            if rich_text and len(rich_text) > 0:
+                next_milestone = rich_text[0].get("text", {}).get("content", "")
+                if next_milestone and next_milestone.strip() != "":
+                    milestones.append(next_milestone)
+                    logger.info(
+                        f"Found milestone '{next_milestone}' for system {page['id']}"
+                    )
+
+        logger.info(f"All milestones found: {milestones}")
+        return list(set(milestones))  # Remove duplicates

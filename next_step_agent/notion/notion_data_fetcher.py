@@ -2,7 +2,7 @@ from notion_client import Client
 from config import (
     NOTION_API_KEY,
     NOTION_STEPS_DATABASE_ID,
-    NOTION_PROCESS_DATABASE_ID,
+    NOTION_PROCESSES_DATABASE_ID,
     NOTION_SOP_DATABASE_ID,
     NOTION_PROJECTS_DATABASE_ID,
 )
@@ -104,7 +104,7 @@ class NotionDataFetcher:
     ):
         response = self.client.databases.query(
             **{
-                "database_id": NOTION_PROCESS_DATABASE_ID,
+                "database_id": NOTION_PROCESSES_DATABASE_ID,
                 "filter": {
                     "property": filter_property_name,
                     filter_property_type: {"equals": filter_property_value},

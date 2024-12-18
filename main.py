@@ -26,18 +26,20 @@ def daily_updates(target_slack_channel: str, summary_channel: str):
 
     daily_update_summary = summarize_slack_channel(summary_channel)
     if daily_update_summary:
-        formatted_blocks = [
+        daily_update_summary_blocks = [
             {
                 "type": "section",
                 "text": {"type": "mrkdwn", "text": daily_update_summary},
             }
         ]
-        slack_fetcher.send_message_to_channel(target_slack_channel, formatted_blocks)
+        slack_fetcher.send_message_to_channel(
+            target_slack_channel, daily_update_summary_blocks
+        )
 
     # Get the highest priority subproject
     highest_priority_subproject = get_highest_priority_subproject()
     if highest_priority_subproject:
-        formatted_blocks = [
+        highest_priority_subproject_blocks = [
             {
                 "type": "section",
                 "text": {
@@ -46,7 +48,9 @@ def daily_updates(target_slack_channel: str, summary_channel: str):
                 },
             }
         ]
-        slack_fetcher.send_message_to_channel(target_slack_channel, formatted_blocks)
+        slack_fetcher.send_message_to_channel(
+            target_slack_channel, highest_priority_subproject_blocks
+        )
 
         # Generate a calendar event for the user
         generate_calendar_event(highest_priority_subproject)
@@ -54,9 +58,7 @@ def daily_updates(target_slack_channel: str, summary_channel: str):
 
 
 def triggered_updates(target_slack_channel: str):
-    """This DMs the channel summary, the highest priority subproject, and generates a calendar event for the user when the complete button is pushed"""
-    map_and_create_subprojects("sales-team")
-    slack_fetcher = SlackDataFetcher()
+    """This DMs the highest priority subproject, and generates a calendar event for the user when the complete button is pushed"""    slack_fetcher = SlackDataFetcher()
     # Get the highest priority subproject
     highest_priority_subproject = get_highest_priority_subproject()
     if highest_priority_subproject:
@@ -86,10 +88,6 @@ def generate_calendar_event(subproject: Dict):
     create_calendar_event(event_data)
 
 
-def send_slack_message():
-    pass
-
-
 def get_highest_priority_subproject():
     notion_client = NotionClient()
     user_notion_ID = get_user_notion_id("Miles Porter")
@@ -114,6 +112,7 @@ def get_user_notion_id(name: str):
 def summarize_slack_channel(channel_name):
     try:
         # Initialize components
+        notion_fetcher = NotionClient()
         slack_fetcher = SlackDataFetcher()
         summarizer = ConversationSummarizer(slack_fetcher.user_map)
 
@@ -143,32 +142,15 @@ def summarize_slack_channel(channel_name):
         start_date = (datetime.now() - timedelta(hours=24)).strftime("%m/%d %H:%M")
         end_date = datetime.now().strftime("%m/%d %H:%M")
 
+        milestones = notion_fetcher.fetch_all_milestones()
+
         # Summarize using the same formatted conversation
         logger.info("Summarizing conversation...")
         channel_summary = summarizer.summarize_conversation(
-            formatted_conversation, start_date, end_date
+            formatted_conversation, milestones, start_date, end_date
         )
 
-        # Format the summary as Slack blocks
-        formatted_blocks = [
-            {"type": "section", "text": {"type": "mrkdwn", "text": channel_summary}}
-        ]
-
         logger.info("Sending sales summary to Slack...")
-        if config.SEND_TO_TEST_CHANNEL:
-            if config.SLACK_TEST_CHANNEL:
-                slack_fetcher.send_message_to_channel(
-                    config.SLACK_TEST_CHANNEL, formatted_blocks
-                )
-                logger.info(f"Summary: {channel_summary}")
-                logger.info(f"Sales summary sent to {config.SLACK_TEST_CHANNEL}")
-            else:
-                logger.error("Test channel not set in config.py")
-        else:
-            slack_fetcher.send_message_to_channel(
-                "slack-summarization-agent", formatted_blocks
-            )
-            logger.info("Sales team summary successfully sent!")
 
         return channel_summary
 
@@ -262,8 +244,30 @@ def map_and_create_subprojects(channel_name):
 
 
 def main():
+    slack_fetcher = SlackDataFetcher()
     try:
+        slack_fetcher.send_message_to_channel(
+            "bot-spam-channel",
+            [
+                {
+                    "type": "section",
+                    "text": {"type": "mrkdwn", "text": "Now testing daily updates!"},
+                }
+            ],
+        )
         daily_updates("bot-spam-channel", "sales-team")
+        slack_fetcher.send_message_to_channel(
+            "bot-spam-channel",
+            [
+                {
+                    "type": "section",
+                    "text": {
+                        "type": "mrkdwn",
+                        "text": "Now testing triggered updates!",
+                    },
+                }
+            ],
+        )
         triggered_updates("bot-spam-channel")
 
     except Exception as e:
