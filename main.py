@@ -58,7 +58,8 @@ def daily_updates(target_slack_channel: str, summary_channel: str):
 
 
 def triggered_updates(target_slack_channel: str):
-    """This DMs the highest priority subproject, and generates a calendar event for the user when the complete button is pushed"""    slack_fetcher = SlackDataFetcher()
+    """This DMs the highest priority subproject, and generates a calendar event for the user when the complete button is pushed"""
+    slack_fetcher = SlackDataFetcher()
     # Get the highest priority subproject
     highest_priority_subproject = get_highest_priority_subproject()
     if highest_priority_subproject:
