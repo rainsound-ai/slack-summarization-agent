@@ -143,6 +143,14 @@ def create_calendar_event(event: Dict):
             }
             logger.debug(f"Checking availability with query: {free_busy_query}")
 
+            # Round up to next :00 or :30
+            current_minutes = current_time.minute
+            if current_minutes > 30:
+                current_time = current_time.replace(minute=0) + timedelta(hours=1)
+            elif current_minutes > 0 and current_minutes <= 30:
+                current_time = current_time.replace(minute=30)
+            logger.debug(f"Rounded time to next slot: {current_time}")
+
             try:
                 free_busy = service.freebusy().query(body=free_busy_query).execute()
                 calendar_busy = free_busy["calendars"][user_email]["busy"]
@@ -190,6 +198,7 @@ def create_calendar_event(event: Dict):
                     "event_id": created_event["id"],
                     "status": "success",
                     "scheduled_time": current_time.isoformat(),
+                    "event_url": created_event["htmlLink"],
                 }
             )
         except Exception as e:

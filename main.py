@@ -53,7 +53,10 @@ def daily_updates(target_slack_channel: str, summary_channel: str):
         )
 
         # Generate a calendar event for the user
-        generate_calendar_event(highest_priority_subproject)
+        calendar_event_url = generate_calendar_event_and_return_url(
+            highest_priority_subproject
+        )
+        set_subproject_calendar_event(highest_priority_subproject, calendar_event_url)
     pass
 
 
@@ -75,18 +78,28 @@ def triggered_updates(target_slack_channel: str):
         slack_fetcher.send_message_to_channel(target_slack_channel, formatted_blocks)
 
         # Generate a calendar event for the user
-        generate_calendar_event(highest_priority_subproject)
+        calendar_event_url = generate_calendar_event_and_return_url(
+            highest_priority_subproject
+        )
+        set_subproject_calendar_event(highest_priority_subproject, calendar_event_url)
     pass
 
 
-def generate_calendar_event(subproject: Dict):
+def generate_calendar_event_and_return_url(subproject: Dict):
     """This creates a calendar event with the highest priority subproject for the user"""
     event_data = {
         "summary": subproject["title"],
-        "description": f"Step: {subproject['step']}\nProject: {subproject['parent_project']}",
+        "description": f"Step: {subproject['step']}\nProject: {subproject['parent_project']}\nLink: {subproject['self_link']}",
     }
     logger.info(f"Creating calendar event: {event_data}")
-    create_calendar_event(event_data)
+    calendar_event = create_calendar_event(event_data)
+    return calendar_event[0]["event_url"]
+
+
+def set_subproject_calendar_event(subproject: Dict, calendar_event_url: str):
+    if calendar_event_url:
+        notion_client = NotionClient()
+        notion_client.update_subproject_calendar_event(subproject, calendar_event_url)
 
 
 def get_highest_priority_subproject():

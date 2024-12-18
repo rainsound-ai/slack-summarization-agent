@@ -404,6 +404,7 @@ class NotionClient:
                             "project_priority": project_priority_raw,
                             "effort": effort,
                         },
+                        "self_link": f"https://notion.so/{item['id'].replace('-', '')}",
                     }
                 )
 
@@ -511,3 +512,14 @@ class NotionClient:
 
         logger.info(f"All milestones found: {milestones}")
         return list(set(milestones))  # Remove duplicates
+
+    def update_subproject_calendar_event(
+        self, subproject: Dict, calendar_event_id: str
+    ):
+        """Update the calendar event for a subproject in Notion."""
+        url = f"{self.base_url}/pages/{subproject['id']}"
+        data = {"properties": {"Calendar Event": {"url": calendar_event_id}}}
+        response = requests.patch(url, headers=self.headers, json=data)
+        response.raise_for_status()
+        logger.info(f"Updated calendar event for subproject {subproject['id']}")
+        return True
