@@ -24,6 +24,7 @@ def daily_updates(target_slack_channel: str, summary_channel: str):
 
     slack_fetcher = SlackDataFetcher()
 
+    # Send executive summary
     daily_update_summary = summarize_slack_channel(summary_channel)
     if daily_update_summary:
         daily_update_summary_blocks = [
@@ -36,7 +37,7 @@ def daily_updates(target_slack_channel: str, summary_channel: str):
             target_slack_channel, daily_update_summary_blocks
         )
 
-    # Get the highest priority subproject
+    # Send highest priority subproject
     highest_priority_subproject = get_highest_priority_subproject()
     if highest_priority_subproject:
         highest_priority_subproject_blocks = [
@@ -57,6 +58,19 @@ def daily_updates(target_slack_channel: str, summary_channel: str):
             highest_priority_subproject
         )
         set_subproject_calendar_event(highest_priority_subproject, calendar_event_url)
+
+        # Send links
+        links_blocks = [
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"Calendar Event: {calendar_event_url}\nSubproject: {highest_priority_subproject['self_link']}",
+                },
+            }
+        ]
+
+        slack_fetcher.send_message_to_channel(target_slack_channel, links_blocks)
     pass
 
 
@@ -82,6 +96,18 @@ def triggered_updates(target_slack_channel: str):
             highest_priority_subproject
         )
         set_subproject_calendar_event(highest_priority_subproject, calendar_event_url)
+        # Send links
+        links_blocks = [
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"Calendar Event: {calendar_event_url}\nSubproject: {highest_priority_subproject['self_link']}",
+                },
+            }
+        ]
+
+        slack_fetcher.send_message_to_channel(target_slack_channel, links_blocks)
     pass
 
 
