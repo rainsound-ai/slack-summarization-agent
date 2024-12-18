@@ -20,6 +20,8 @@ logger = logging.getLogger(__name__)
 
 def daily_updates(target_slack_channel: str, summary_channel: str):
     """This DMs the channel summary, the highest priority subproject, and generates a calendar event for the user once a day"""
+    map_and_create_subprojects("sales-team")
+
     slack_fetcher = SlackDataFetcher()
 
     daily_update_summary = summarize_slack_channel(summary_channel)
@@ -32,33 +34,45 @@ def daily_updates(target_slack_channel: str, summary_channel: str):
         ]
         slack_fetcher.send_message_to_channel(target_slack_channel, formatted_blocks)
 
-        # Get the highest priority subproject
-        highest_priority_subproject = get_highest_priority_subproject()
-        if highest_priority_subproject:
-            formatted_blocks = [
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": f"Highest priority subproject: {highest_priority_subproject['title']}\nStep: {highest_priority_subproject['step']}\nProject: {highest_priority_subproject['parent_project']}",
-                    },
-                }
-            ]
-            slack_fetcher.send_message_to_channel(
-                target_slack_channel, formatted_blocks
-            )
+    # Get the highest priority subproject
+    highest_priority_subproject = get_highest_priority_subproject()
+    if highest_priority_subproject:
+        formatted_blocks = [
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"Highest priority subproject: {highest_priority_subproject['title']}\nStep: {highest_priority_subproject['step']}\nProject: {highest_priority_subproject['parent_project']}",
+                },
+            }
+        ]
+        slack_fetcher.send_message_to_channel(target_slack_channel, formatted_blocks)
 
         # Generate a calendar event for the user
         generate_calendar_event(highest_priority_subproject)
     pass
 
 
-def test_daily_updates():
-    daily_updates("bot-spam-channel", "sales-team")
-
-
-def triggered_updates():
+def triggered_updates(target_slack_channel: str):
     """This DMs the channel summary, the highest priority subproject, and generates a calendar event for the user when the complete button is pushed"""
+    map_and_create_subprojects("sales-team")
+    slack_fetcher = SlackDataFetcher()
+    # Get the highest priority subproject
+    highest_priority_subproject = get_highest_priority_subproject()
+    if highest_priority_subproject:
+        formatted_blocks = [
+            {
+                "type": "section",
+                "text": {
+                    "type": "mrkdwn",
+                    "text": f"Highest priority subproject: {highest_priority_subproject['title']}\nStep: {highest_priority_subproject['step']}\nProject: {highest_priority_subproject['parent_project']}",
+                },
+            }
+        ]
+        slack_fetcher.send_message_to_channel(target_slack_channel, formatted_blocks)
+
+        # Generate a calendar event for the user
+        generate_calendar_event(highest_priority_subproject)
     pass
 
 
@@ -249,8 +263,8 @@ def map_and_create_subprojects(channel_name):
 
 def main():
     try:
-        map_and_create_subprojects("sales-team")
-        test_daily_updates()
+        daily_updates("bot-spam-channel", "sales-team")
+        triggered_updates("bot-spam-channel")
 
     except Exception as e:
         logger.error(f"Error in main process: {e}")
