@@ -10,3 +10,4 @@ sales_summary.txt
 outputs/*
 credentials.json
 token.pickle
+user_map_cache.json

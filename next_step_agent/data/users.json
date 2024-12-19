@@ -34,6 +34,13 @@
         "slack_id": "U068AHXKZT6",
         "notion_id": "e0dc9fd801274727a22e3ed81829ca81",
         "timezone": "America/New_York"
+      },
+      {
+        "name": "Brent Ferris",
+        "email": "brenton@ferriswheelsolutions.com",
+        "slack_id": "U07PJEQCKE2",
+        "notion_id": "11ad872b594c81258ef400028160cec0",
+        "timezone": "America/New_York"
       }
   ]
 }

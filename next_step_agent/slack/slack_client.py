@@ -5,6 +5,8 @@ from slack_sdk.errors import SlackApiError
 from typing import List, Dict
 from config import SLACK_BOT_TOKEN, EST, START_DATE, END_DATE
 import urllib.parse
+import os
+import json
 
 logger = logging.getLogger(__name__)
 
@@ -17,12 +19,20 @@ class SlackDataFetcher:
     def _get_user_info(self) -> Dict[str, str]:
         """Fetch and cache user ID to username mapping."""
         user_map = {}
-        # Check if we have cached user info less than an hour old
-        if hasattr(self, "_user_map_timestamp"):
-            time_diff = datetime.now() - self._user_map_timestamp
-            if time_diff.total_seconds() < 3600 and hasattr(self, "_cached_user_map"):
-                logger.info("Using cached user map")
-                return self._cached_user_map
+        cache_file = "user_map_cache.json"
+
+        # Check if cache file exists and is less than an hour old
+        try:
+            if os.path.exists(cache_file):
+                file_time = datetime.fromtimestamp(os.path.getmtime(cache_file))
+                time_diff = datetime.now() - file_time
+
+                if time_diff.total_seconds() < 3600:
+                    logger.info("Using cached user map")
+                    with open(cache_file, "r") as f:
+                        return json.load(f)
+        except Exception as e:
+            logger.error(f"Error reading cache file: {e}")
 
         try:
             response = self.client.users_list()
@@ -32,9 +42,13 @@ class SlackDataFetcher:
                 ).get("real_name", "Unknown User")
                 user_map[user["id"]] = name
 
-            # Cache the results with timestamp
-            self._cached_user_map = user_map
-            self._user_map_timestamp = datetime.now()
+            # Cache the results to file
+            try:
+                with open(cache_file, "w") as f:
+                    json.dump(user_map, f)
+            except Exception as e:
+                logger.error(f"Error writing cache file: {e}")
+
             return user_map
 
         except SlackApiError as e:

@@ -158,6 +158,7 @@ class TaskMapper:
 
         # Filter for Miles' tasks only
         miles_tasks = [task for task in tasks if task["assignee"].lower() == "miles"]
+        logger.info(f"Miles tasks: {miles_tasks}")
         if not miles_tasks:
             logger.info("No tasks found assigned to Miles")
             return []
@@ -228,6 +229,7 @@ class TaskMapper:
                 .get(project, {})
                 .get("display_name", project),
                 "similarity_score": max(similarities),
+                "description": miles_tasks[i]["description"],
             }
             mapped_tasks.append(mapped_task)
 
@@ -258,8 +260,8 @@ Messages:
 
 Required JSON format:
 [
-    {{"task": "Create the project timeline", "assignee": "John"}},
-    {{"task": "Review the proposal", "assignee": "Sarah"}}
+    {{"task": "Create the project timeline", "assignee": "John", "description": "Create the project timeline"}},
+    {{"task": "Review the proposal", "assignee": "Sarah", "description": "Review the proposal"}}
 ]
 
 Ensure the output is a valid JSON array. Do not include any additional text or formatting."""

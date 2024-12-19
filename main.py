@@ -20,11 +20,15 @@ logger = logging.getLogger(__name__)
 
 def daily_updates(target_slack_channel: str, summary_channel: str):
     """This DMs the channel summary, the highest priority subproject, and generates a calendar event for the user once a day"""
-    map_and_create_subprojects("sales-team")
 
     slack_fetcher = SlackDataFetcher()
 
-    # Send executive summary
+    # Initialize block variables
+    daily_update_summary_blocks = []
+    highest_priority_subproject_blocks = []
+    links_blocks = []
+
+    # Get the executive summary
     daily_update_summary = summarize_slack_channel(summary_channel)
     if daily_update_summary:
         daily_update_summary_blocks = [
@@ -33,11 +37,8 @@ def daily_updates(target_slack_channel: str, summary_channel: str):
                 "text": {"type": "mrkdwn", "text": daily_update_summary},
             }
         ]
-        slack_fetcher.send_message_to_channel(
-            target_slack_channel, daily_update_summary_blocks
-        )
 
-    # Send highest priority subproject
+    # Get the highest priority subproject
     highest_priority_subproject = get_highest_priority_subproject()
     if highest_priority_subproject:
         highest_priority_subproject_blocks = [
@@ -49,28 +50,39 @@ def daily_updates(target_slack_channel: str, summary_channel: str):
                 },
             }
         ]
+
+    # Create calendar event and set notion subproject links
+    calendar_event_url = generate_calendar_event_and_return_url(
+        highest_priority_subproject
+    )
+    set_subproject_calendar_event(highest_priority_subproject, calendar_event_url)
+
+    links_blocks = [
+        {
+            "type": "section",
+            "text": {
+                "type": "mrkdwn",
+                "text": f"Calendar Event: {calendar_event_url}\nSubproject: {highest_priority_subproject['self_link']}",
+            },
+        }
+    ]
+
+    # Send messages
+    if len(daily_update_summary_blocks) > 0:
+        slack_fetcher.send_message_to_channel(
+            target_slack_channel, daily_update_summary_blocks
+        )
+
+    if len(highest_priority_subproject_blocks) > 0:
         slack_fetcher.send_message_to_channel(
             target_slack_channel, highest_priority_subproject_blocks
         )
 
-        # Generate a calendar event for the user
-        calendar_event_url = generate_calendar_event_and_return_url(
-            highest_priority_subproject
-        )
-        set_subproject_calendar_event(highest_priority_subproject, calendar_event_url)
-
-        # Send links
-        links_blocks = [
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": f"Calendar Event: {calendar_event_url}\nSubproject: {highest_priority_subproject['self_link']}",
-                },
-            }
-        ]
-
+    if len(links_blocks) > 0:
         slack_fetcher.send_message_to_channel(target_slack_channel, links_blocks)
+
+    # Create subprojects
+    map_and_create_subprojects(daily_update_summary)
     pass
 
 
@@ -199,69 +211,109 @@ def summarize_slack_channel(channel_name):
         return None, None
 
 
-def get_tasks_from_channel_summary(channel_name):
+def get_tasks_from_channel_summary(channel_summary):
     messages = []
     try:
-        slack_fetcher = SlackDataFetcher()
-        summarizer = ConversationSummarizer(slack_fetcher.user_map)
-
-        channel_summary = summarize_slack_channel(channel_name)
-
-        # Add type check before passing to format_for_slack
-        if isinstance(channel_summary, tuple) or channel_summary is None:
-            logger.error("No valid channel summary found")
+        # Initialize list to store extracted messages
+        if not channel_summary:
             return messages
 
-        formatted_summary = summarizer.format_for_slack(channel_summary)
-        logger.info(f"Formatted summary: {formatted_summary}")
-        if not formatted_summary:
-            logger.error("No channel summary found")
-            return messages
+        # Split into lines and look for task patterns
+        lines = channel_summary.split("\n")
+        in_next_steps = False
+        current_task = {}
 
-        # Parse the formatted_summary if it's a string
-        if isinstance(formatted_summary, str):
-            formatted_summary = json.loads(formatted_summary)
+        for line in lines:
+            line = line.strip()
 
-        # Extract tasks from the checkboxes in the formatted summary
-        for block in formatted_summary:
-            if block.get("type") == "actions":
-                for element in block.get("elements", []):
-                    if element.get("type") == "checkboxes":
-                        for option in element.get("options", []):
-                            text = option.get("text", {}).get("text", "")
-                            # Extract task and assignee using regex
-                            match = re.search(r"(.*?)\(Assigned to: @([^,]+)", text)
-                            if match:
-                                task = match.group(1).strip()
-                                assignee = match.group(2).strip()
-                                messages.append({"user": assignee, "text": task})
+            # Look for Next Steps section
+            if line == "Next Steps:":
+                in_next_steps = True
+                continue
 
-        logger.info(f"Extracted tasks: {messages}")
+            # Only process lines in Next Steps section
+            if not in_next_steps:
+                continue
+
+            # Look for task pattern with dash
+            if line.startswith("- "):
+                # Save previous task if exists
+                if current_task:
+                    messages.append(current_task)
+                    current_task = {}
+
+                # Parse task line
+                # Example: "- Refine Vision Document (Assigned to: @Miles, Description: Incorporate feedback..."
+                task_parts = line[2:].split("(", 1)
+                if len(task_parts) != 2:
+                    continue
+
+                task_name = task_parts[0].strip()
+                details = task_parts[1].rstrip(")")
+
+                # Initialize new task
+                current_task = {
+                    "task": task_name,
+                    "assignee": "",
+                    "description": "",
+                    "helps_milestone": "",
+                    "deadline": "",
+                }
+
+                # Parse details section
+                details_parts = [p.strip() for p in details.split(",")]
+                for part in details_parts:
+                    if part.startswith("Assigned to:"):
+                        current_task["assignee"] = (
+                            part.replace("Assigned to:", "").strip().lstrip("@")
+                        )
+                    elif part.startswith("Description:"):
+                        current_task["description"] = part.replace(
+                            "Description:", ""
+                        ).strip()
+                    elif part.startswith("How does this help reach the milestone:"):
+                        current_task["helps_milestone"] = part.replace(
+                            "How does this help reach the milestone:", ""
+                        ).strip()
+                    elif part.startswith("Deadline:"):
+                        # Extract just the deadline text before any URLs/links
+                        deadline_text = part.replace("Deadline:", "").strip()
+                        if ">" in deadline_text:
+                            deadline_text = deadline_text.split("<")[0].strip()
+                        current_task["deadline"] = deadline_text
+
+        # Add final task if exists
+        if current_task:
+            messages.append(current_task)
+            logger.info(f"Current task: {current_task}")
+
+        logger.info(f"Messages: {messages}")
         return messages
     except Exception as e:
         logger.error(f"Error parsing sales summary file: {e}")
         return []
 
 
-def map_and_create_subprojects(channel_name):
+def map_and_create_subprojects(channel_summary):
     try:
         # Initialize components
         task_mapper = TaskMapper()
         notion_client = NotionClient()
 
         # Read messages from sales_summary.txt
-        messages = get_tasks_from_channel_summary(channel_name)
+        messages = get_tasks_from_channel_summary(channel_summary)
         if not messages:
             logger.error("No messages found in the channel summary")
             return
 
         # Extract tasks from messages
-        logger.info("Extracting tasks from messages...")
-        tasks = task_mapper.extract_tasks(messages)
-
+        # logger.info("Extracting tasks from messages...")
+        # tasks = task_mapper.extract_tasks(messages)
+        # logger.info(f"Extracted tasks 🤏: {tasks}")
         # Map tasks to processes
         logger.info("Mapping tasks to processes...")
-        mapped_tasks = task_mapper.map_tasks_to_processes(tasks)
+        mapped_tasks = task_mapper.map_tasks_to_processes(messages)
+        logger.info(f"Mapped tasks 🤏: {mapped_tasks}")
 
         # Create subprojects in Notion
         logger.info("Creating subprojects in Notion...")

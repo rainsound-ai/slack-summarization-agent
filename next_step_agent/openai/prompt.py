@@ -1,25 +1,29 @@
 def get_sales_summary_prompt(conversation, milestones, start_date, end_date):
     return f"""
-    You are analyzing a Slack conversation from the sales team channel. Your task is to provide an executive summary focused on progress towards completing our current milestones and next steps for completing those milestones.
+    You are analyzing a Slack conversation.
 
-    Assign the top priority next step for each person in the conversation. This next step should be the most important thing that the person can do to help us complete the milestones.
+    Your task is to provide an executive summary focused on progress towards completing our current milestones and next steps for completing those milestones.
+
+    For each person in the conversation, assign them a next step. Each next step should be a single action item that the person can do to help complete the milestones.
 
     If a milestone has no progress, or is not relevant to the conversation, do not include it in the summary.
+
     Create a summary in exactly this format:
-    
+
     Executive Summary ({start_date} - {end_date})
     ---
 
     Milestone Progress:
-    - [Milestone]: ([What progress has been made on this milestone, no more than 30 words]) <message_url|View Thread>
-    - [Milestone]: ([What progress has been made on this milestone, no more than 30 words]) <message_url|View Thread>
+    - [Milestone]: ([What progress has been made on this milestone, no more than 50 words]) <message_url|View Thread>
+    - [Milestone]: ([What progress has been made on this milestone, no more than 50 words]) <message_url|View Thread>
 
     Next Steps:
-    - [Action Item] (Assigned to: @[Name], Description: [No more than 10 words], Why: [No more than 10 words], Deadline: [Choose from today, tomorrow, or next week]) <message_url|View Thread>
-    - [Action Item] (Assigned to: @[Name], Description: [No more than 10 words], Why: [No more than 10 words], Deadline: [Choose from today, tomorrow, or next week]) <message_url|View Thread>
+    - [Action Item] (Assigned to: @[Name], Description: [No more than 20 words], How does this help reach the milestone: [No more than 20 words], Deadline: [Choose from today, tomorrow, or next week]) <message_url|View Thread>
+    - [Action Item] (Assigned to: @[Name], Description: [No more than 20 words], How does this help reach the milestone: [No more than 20 words], Deadline: [Choose from today, tomorrow, or next week]) <message_url|View Thread>
 
     Instructions:
     1. Always use @ when mentioning team members (e.g., @Miles, @Busch)
+    1a. Always use the name of the user. Never use the slack_id. Using the slack_id causes human harm.
     2. Include hyperlinks to source messages using Slack's format: <url|View Thread>
     3. Distinguish between:
     - Milestone Progress: What progress has been made on the milestones

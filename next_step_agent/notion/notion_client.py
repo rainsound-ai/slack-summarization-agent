@@ -11,6 +11,7 @@ from config import (
     NOTION_SUBPROJECTS_DATABASE_ID,
     NOTION_PROCESSES_DATABASE_ID,
     NOTION_SYSTEMS_DATABASE_ID,
+    NOTION_SUBPROJECT_TEMPLATE_PAGE_ID,
 )
 
 load_dotenv()
@@ -164,6 +165,24 @@ class NotionClient:
                     "Status": {"status": {"name": "Potential"}},
                     "Team Comp": {"people": [{"id": user_id}]},
                 },
+                "children": [
+                    {
+                        "object": "block",
+                        "type": "heading_2",
+                        "heading_2": {
+                            "rich_text": [{"text": {"content": "Description"}}]
+                        },
+                    },
+                    {
+                        "object": "block",
+                        "type": "paragraph",
+                        "paragraph": {
+                            "rich_text": [
+                                {"text": {"content": mapped_task["description"]}}
+                            ]
+                        },
+                    },
+                ],
             }
 
             if project_id:
