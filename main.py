@@ -13,86 +13,67 @@ from next_step_agent.summarizer import ConversationSummarizer
 import config
 from next_step_agent.tasks.task_prioritizer import TaskPrioritizer
 from next_step_agent.calendar.calendar_utils import create_calendar_event
+from next_step_agent.interaction_handler import create_flask_app
+import threading
+import subprocess
+import time
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
+def start_flask_server():
+    """Start the Flask server for handling Slack interactions"""
+    app = create_flask_app()
+    logger.info("Starting Flask server on port 5000...")
+    app.run(port=5000)
 
-def daily_updates(target_slack_channel: str, summary_channel: str):
-    """This DMs the channel summary, the highest priority subproject, and generates a calendar event for the user once a day"""
+def get_highest_priority_subproject():
+    """Get the highest priority subproject from Notion"""
+    try:
+        notion_client = NotionClient()
+        
+        # Get Miles Porter's Notion ID from users.json
+        with open("next_step_agent/data/users.json") as f:
+            users_data = json.load(f)
+            user_id = None
+            for user in users_data["users"]:
+                if user.get("name") == "Miles Porter":
+                    user_id = user.get("notion_id")
+                    break
 
-    slack_fetcher = SlackDataFetcher()
+        if not user_id:
+            logger.error("Could not find Miles Porter's Notion ID")
+            return None
 
-    # Initialize block variables
-    daily_update_summary_blocks = []
-    highest_priority_subproject_blocks = []
-    links_blocks = []
+        # Get all potential/not started subprojects for Miles Porter
+        subprojects = notion_client.fetch_user_subprojects(user_id)
+        if not subprojects:
+            logger.info("No eligible subprojects found for Miles Porter")
+            return None
 
-    # Get the executive summary
-    daily_update_summary = summarize_slack_channel(summary_channel)
-    if daily_update_summary:
-        daily_update_summary_blocks = [
-            {
-                "type": "section",
-                "text": {"type": "mrkdwn", "text": daily_update_summary},
-            }
-        ]
+        # Prioritize tasks
+        task_prioritizer = TaskPrioritizer()
+        next_task = task_prioritizer.prioritize_tasks(subprojects)
 
-    # Get the highest priority subproject
-    highest_priority_subproject = get_highest_priority_subproject()
-    if highest_priority_subproject:
-        highest_priority_subproject_blocks = [
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": (
-                        f"*Highest priority subproject:* {highest_priority_subproject['title']}\n\n"
-                        f"*Step:* {highest_priority_subproject['step']}\n"
-                        f"*Project:* {highest_priority_subproject['parent_project']}\n"
-                        f"*Description:*\n{highest_priority_subproject['description']}\n\n"
-                        f"*How it forwards milestones:*\n{highest_priority_subproject['milestones']}\n\n"
-                        f"*Deadline:*\n{highest_priority_subproject['deadline']}\n\n"
-                        f"*Link:* {highest_priority_subproject['self_link']}\n\n"
-                    ),
-                },
-            }
-        ]
+        if next_task:
+            logger.info(f"""
+            Next task identified for Miles Porter:
+            - Title: {next_task['title']}
+            - Score: {next_task['score']}
+            - Impact: {next_task['impact']}
+            - Urgency: {next_task['urgency']}
+            - Importance: {next_task['importance']}
+            - Blocking: {len(next_task['blocking'])} tasks
+            - Blocked by: {len(next_task['blocked_by'])} tasks
+            """)
+            return next_task
+        else:
+            logger.info("No next task identified - all tasks are blocked")
+            return None
 
-    # Create calendar event and set notion subproject links
-    calendar_event_url = generate_calendar_event_and_return_url(
-        highest_priority_subproject
-    )
-    set_subproject_calendar_event(highest_priority_subproject, calendar_event_url)
-
-    links_blocks = [
-        {
-            "type": "section",
-            "text": {
-                "type": "mrkdwn",
-                "text": f"Calendar Event: {calendar_event_url}",
-            },
-        }
-    ]
-
-    # Send messages
-    if len(daily_update_summary_blocks) > 0:
-        slack_fetcher.send_message_to_channel(
-            target_slack_channel, daily_update_summary_blocks
-        )
-
-    if len(highest_priority_subproject_blocks) > 0:
-        slack_fetcher.send_message_to_channel(
-            target_slack_channel, highest_priority_subproject_blocks
-        )
-
-    if len(links_blocks) > 0:
-        slack_fetcher.send_message_to_channel(target_slack_channel, links_blocks)
-
-    # Create subprojects
-    map_and_create_subprojects(daily_update_summary)
-    pass
-
+    except Exception as e:
+        logger.error(f"Error getting highest priority subproject: {e}")
+        return None
 
 def triggered_updates(target_slack_channel: str):
     """This DMs the highest priority subproject, and generates a calendar event for the user when the complete button is pushed"""
@@ -100,6 +81,16 @@ def triggered_updates(target_slack_channel: str):
     # Get the highest priority subproject
     highest_priority_subproject = get_highest_priority_subproject()
     if highest_priority_subproject:
+        # Create calendar event first - pass the entire subproject info
+        calendar_event = create_calendar_event({
+            'title': highest_priority_subproject['title'],
+            'description': highest_priority_subproject['description'],
+            'deadline': highest_priority_subproject['deadline']
+        })
+        
+        # Get the calendar event URL from the result
+        calendar_link = calendar_event[0]['event_url'] if calendar_event and calendar_event[0].get('event_url') else None
+        
         highest_priority_subproject_blocks = [
             {
                 "type": "section",
@@ -113,297 +104,45 @@ def triggered_updates(target_slack_channel: str):
                         f"*How it forwards milestones:*\n{highest_priority_subproject['milestones']}\n\n"
                         f"*Deadline:*\n{highest_priority_subproject['deadline']}\n\n"
                         f"*Link:* {highest_priority_subproject['self_link']}\n\n"
+                        + (f"*Calendar Event:* {calendar_link}\n\n" if calendar_link else "")
                     ),
                 },
+            },
+            {
+                "type": "actions",
+                "elements": [
+                    {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Add Meetings",
+                            "emoji": True
+                        },
+                        "action_id": "add_meetings"
+                    }
+                ]
             }
         ]
         slack_fetcher.send_message_to_channel(
             target_slack_channel, highest_priority_subproject_blocks
         )
 
-        # Generate a calendar event for the user
-        calendar_event_url = generate_calendar_event_and_return_url(
-            highest_priority_subproject
-        )
-        set_subproject_calendar_event(highest_priority_subproject, calendar_event_url)
-        # Send links
-        links_blocks = [
-            {
-                "type": "section",
-                "text": {
-                    "type": "mrkdwn",
-                    "text": f"Calendar Event: {calendar_event_url}",
-                },
-            }
-        ]
-
-        slack_fetcher.send_message_to_channel(target_slack_channel, links_blocks)
-    pass
-
-
-def generate_calendar_event_and_return_url(subproject: Dict):
-    """This creates a calendar event with the highest priority subproject for the user"""
-    description_text = (
-        f"Project: {subproject['parent_project']}\n"
-        f"Step: {subproject['step']}\n"
-        f"Link: {subproject['self_link']}\n"
-        f"Description: {subproject['description']}\n"
-        f"Milestones: {subproject['milestones']}\n"
-        f"Deadline: {subproject['deadline']}"
-    )
-    event_data = {
-        "summary": subproject["title"],
-        "description": description_text,
-    }
-    logger.info(f"Creating calendar event: {event_data}")
-    calendar_event = create_calendar_event(event_data)
-    return calendar_event[0]["event_url"]
-
-
-def set_subproject_calendar_event(subproject: Dict, calendar_event_url: str):
-    if calendar_event_url:
-        notion_client = NotionClient()
-        notion_client.update_subproject_calendar_event(subproject, calendar_event_url)
-
-
-def get_highest_priority_subproject():
-    notion_client = NotionClient()
-    user_notion_ID = get_user_notion_id("Miles Porter")
-    subprojects = notion_client.fetch_user_subprojects(user_notion_ID)
-    task_prioritizer = TaskPrioritizer()
-    next_task = task_prioritizer.prioritize_tasks(subprojects)
-    return next_task
-    pass
-
-
-def get_user_notion_id(name: str):
-    with open("next_step_agent/data/users.json") as f:
-        users_data = json.load(f)
-        user_id = None
-        for user in users_data["users"]:  # Access the "users" array
-            if user.get("name") == "Miles Porter":
-                user_id = user.get("notion_id")
-                break
-    return user_id
-
-
-def summarize_slack_channel(channel_name):
-    try:
-        # Initialize components
-        notion_fetcher = NotionClient()
-        slack_fetcher = SlackDataFetcher()
-        summarizer = ConversationSummarizer(slack_fetcher.user_map)
-
-        # Get messages from the sales-team channel
-        logger.info(f"Fetching {channel_name} conversations...")
-
-        conversations = slack_fetcher.fetch_conversations(channel_name)
-
-        if channel_name not in conversations:
-            logger.error(f"{channel_name} channel not found or no messages available")
-            return None, None
-
-        # Format conversation for both file and AI
-        formatted_conversation = summarizer._prepare_conversation(
-            conversations[channel_name]
-        )
-
-        # Save formatted conversation to file (overwrite mode)
-        logger.info(f"Saving formatted messages to slack_messages_{channel_name}...")
-        with open(
-            f"outputs/slack_messages_{channel_name}.txt", "w", encoding="utf-8"
-        ) as f:
-            f.write("\n=== Channel: sales-team ===\n\n")
-            f.write(formatted_conversation)
-
-        # Get current date range
-        start_date = (datetime.now() - timedelta(hours=24)).strftime("%m/%d %H:%M")
-        end_date = datetime.now().strftime("%m/%d %H:%M")
-
-        milestones = notion_fetcher.fetch_all_milestones()
-
-        # Summarize using the same formatted conversation
-        logger.info("Summarizing conversation...")
-        channel_summary = summarizer.summarize_conversation(
-            formatted_conversation, milestones, start_date, end_date
-        )
-
-        return channel_summary
-
-    except Exception as e:
-        logger.error(f"Error parsing sales summary file: {e}")
-        return None, None
-
-
-def get_tasks_from_channel_summary(channel_summary):
-    messages = []
-    try:
-        slack_fetcher = SlackDataFetcher()
-        summarizer = ConversationSummarizer(slack_fetcher.user_map)
-        tasks = summarizer.extract_tasks(channel_summary)
-        logger.info(f"Extracted tasks: {tasks}")
-        return tasks
-        # Initialize list to store extracted messages
-        if not channel_summary:
-            return messages
-
-        # Split into lines and look for task patterns
-        lines = channel_summary.split("\n")
-        in_next_steps = False
-        current_task = {}
-
-        for line in lines:
-            line = line.strip()
-
-            # Look for Next Steps section
-            if line == "Next Steps:":
-                in_next_steps = True
-                continue
-
-            # Only process lines in Next Steps section
-            if not in_next_steps:
-                continue
-
-            # Look for task pattern with dash
-            if line.startswith("- "):
-                # Save previous task if exists
-                if current_task:
-                    messages.append(current_task)
-                    current_task = {}
-
-                # Parse task line
-                # Example: "- Refine Vision Document (Assigned to: @Miles, Description: Incorporate feedback..."
-                task_parts = line[2:].split("(", 1)
-                if len(task_parts) != 2:
-                    continue
-
-                task_name = task_parts[0].strip()
-                details = task_parts[1].rstrip(")")
-
-                # Initialize new task
-                current_task = {
-                    "task": task_name,
-                    "assignee": "",
-                    "description": "",
-                    "milestones": "",
-                    "deadline": "",
-                }
-
-                # Parse details section
-                details_parts = [p.strip() for p in details.split(",")]
-                for part in details_parts:
-                    if part.startswith("Assigned to:"):
-                        current_task["assignee"] = (
-                            part.replace("Assigned to:", "").strip().lstrip("@")
-                        )
-                    elif part.startswith("Description:"):
-                        current_task["description"] = part.replace(
-                            "Description:", ""
-                        ).strip()
-                    elif part.startswith("How does this help reach the milestone:"):
-                        current_task["milestones"] = part.replace(
-                            "How does this help reach the milestone:", ""
-                        ).strip()
-                    elif part.startswith("Deadline:"):
-                        # Extract just the deadline text before any URLs/links
-                        deadline_text = part.replace("Deadline:", "").strip()
-                        if ">" in deadline_text:
-                            deadline_text = deadline_text.split("<")[0].strip()
-                        current_task["deadline"] = deadline_text
-
-        # Add final task if exists
-        if current_task:
-            messages.append(current_task)
-            logger.info(f"Current task: {current_task}")
-
-        logger.info(f"Messages: {messages}")
-        return messages
-    except Exception as e:
-        logger.error(f"Error parsing sales summary file: {e}")
-        return []
-
-
-def map_and_create_subprojects(channel_summary):
-    try:
-        # Initialize components
-        task_mapper = TaskMapper()
-        notion_client = NotionClient()
-
-        # Read messages from sales_summary.txt
-        messages = get_tasks_from_channel_summary(channel_summary)
-        if not messages:
-            logger.error("No messages found in the channel summary")
-            return
-
-        # Extract tasks from messages
-        # logger.info("Extracting tasks from messages...")
-        # tasks = task_mapper.extract_tasks(messages)
-        # logger.info(f"Extracted tasks 🤏: {tasks}")
-        # Map tasks to processes
-        logger.info("Mapping tasks to processes...")
-        mapped_tasks = task_mapper.map_tasks_to_processes(messages)
-        logger.info(f"Mapped tasks 🤏: {mapped_tasks}")
-
-        # Create subprojects in Notion
-        logger.info("Creating subprojects in Notion...")
-        results = notion_client.create_subprojects(mapped_tasks)
-
-        # Pretty print the results
-        logger.info("\n=== Results ===")
-        pprint(results, indent=2, width=100)
-
-        # Save results to file
-        output_file = "mapped_tasks.json"
-        logger.info(f"\nSaving results to {output_file}...")
-        with open(f"outputs/{output_file}", "w") as f:
-            json.dump(results, f, indent=2)
-
-        logger.info("Process completed successfully!")
-    except Exception as e:
-        logger.error(f"Error in map_and_create_subprojects: {e}")
-        raise
-
-
 def main():
-    slack_fetcher = SlackDataFetcher()
+    """Run the application"""
+    # Start Flask server in a separate thread
+    flask_thread = threading.Thread(target=start_flask_server, daemon=True)
+    flask_thread.start()
+    logger.info("Started Flask server thread")
+
+    # Run your main bot logic
     try:
-        slack_fetcher.send_message_to_channel(
-            "bot-spam-channel",
-            [
-                {
-                    "type": "section",
-                    "text": {"type": "mrkdwn", "text": "Now testing daily updates!"},
-                }
-            ],
-        )
-        daily_updates("bot-spam-channel", "sales-team")
-        slack_fetcher.send_message_to_channel(
-            "bot-spam-channel",
-            [
-                {
-                    "type": "section",
-                    "text": {
-                        "type": "mrkdwn",
-                        "text": "Now testing triggered updates!",
-                    },
-                }
-            ],
-        )
-        triggered_updates("bot-spam-channel")
-
+        while True:
+            triggered_updates(config.SLACK_TEST_CHANNEL)
+            time.sleep(300)  # Run every 5 minutes or adjust as needed
+    except KeyboardInterrupt:
+        logger.info("Shutting down...")
     except Exception as e:
-        logger.error(f"Error in main process: {e}")
-        raise
-
+        logger.error(f"Error in main loop: {e}")
 
 if __name__ == "__main__":
-    if "--create-test-event" in sys.argv:
-        logger.info("Creating test event...")
-        try:
-            event_id = create_test_event()
-            print(f"Successfully created event with ID: {event_id}")
-        except Exception as e:
-            print(f"Error creating event: {str(e)}")
-    else:
-        logger.info("Running main process...")
-        main()
+    main()

@@ -209,6 +209,22 @@ class SlackDataFetcher:
                 logger.error(f"Channel {channel_name} not found")
                 return
 
+            # Add the meetings button to the blocks
+            blocks.append({
+                "type": "actions",
+                "elements": [
+                    {
+                        "type": "button",
+                        "text": {
+                            "type": "plain_text",
+                            "text": "Add Meetings",
+                            "emoji": True
+                        },
+                        "action_id": "add_meetings"
+                    }
+                ]
+            })
+
             response = self.client.chat_postMessage(
                 channel=channel_id,
                 blocks=blocks,

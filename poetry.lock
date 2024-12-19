@@ -1034,6 +1034,20 @@ files = [
 ]
 
 [[package]]
+name = "slack-bolt"
+version = "1.22.0"
+description = "The Bolt Framework for Python"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "slack_bolt-1.22.0-py2.py3-none-any.whl", hash = "sha256:349097136a586617e5fb71f40f58a30fa847f664c598577f67a01f99faa1a9eb"},
+    {file = "slack_bolt-1.22.0.tar.gz", hash = "sha256:b9c66d088fe3ec8bdd0494278eb500fe58092c2941de86d6822d00f4b3c7c88b"},
+]
+
+[package.dependencies]
+slack_sdk = ">=3.33.5,<4"
+
+[[package]]
 name = "slack-sdk"
 version = "3.33.5"
 description = "The Slack API Platform SDK for Python"
@@ -1217,4 +1231,4 @@ watchdog = ["watchdog (>=2.3)"]
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.12"
-content-hash = "c7b8a082c068f5fc091a9a85a10400c5768d6aad017aa9f8a6b6d193de71aff8"
+content-hash = "43a02a54dcc36bff47cffad6d8eed5c7361c78b96d88ef967ac265868cf0a7b5"

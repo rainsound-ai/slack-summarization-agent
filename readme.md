@@ -37,6 +37,7 @@ The Slack Summarization Agent is a tool designed to fetch, process, and summariz
    OPENAI_API_KEY=your-openai-api-key
    NOTION_API_KEY=your-notion-api-key
    NOTION_DATABASE_ID=your-notion-database-id
+   NOTION_MEETING_DATABASE_ID=your-notion-meetings-database-id
    BOT_TEST_CHANNEL=your-test-channel-name
    ```
 
