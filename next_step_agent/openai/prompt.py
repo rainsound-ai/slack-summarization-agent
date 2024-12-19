@@ -18,7 +18,7 @@ def get_sales_summary_prompt(conversation, milestones, start_date, end_date):
     - [Milestone]: ([What progress has been made on this milestone, no more than 50 words]) <message_url|View Thread>
 
     Next Steps:
-    - [Action Item] (Assigned to: @[Name], Description: [No more than 20 words], How does this help reach the milestone: [No more than 20 words], Deadline: [Choose from today, tomorrow, or next week]) <message_url|View Thread>
+    - [Action Item] (Assigned to: @[Name], Description: [No more than 20 words], How does this help reach the milestone: [No more than 20 words], Deadline: [Choose from Today, Tomorrow, or Next week]) <message_url|View Thread>
     - [Action Item] (Assigned to: @[Name], Description: [No more than 20 words], How does this help reach the milestone: [No more than 20 words], Deadline: [Choose from today, tomorrow, or next week]) <message_url|View Thread>
 
     Instructions:

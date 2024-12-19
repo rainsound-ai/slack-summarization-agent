@@ -5,6 +5,7 @@ from config import OPENAI_API_KEY, MAX_CHUNK_SIZE, EST
 from next_step_agent.openai.prompt import get_sales_summary_prompt
 from datetime import datetime
 import re
+import json
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
@@ -136,3 +137,48 @@ class ConversationSummarizer:
             chunks.append(current_chunk.strip())
 
         return chunks
+
+    def extract_tasks(self, summary: str) -> List[Dict]:
+        try:
+            prompt = """Extract tasks from this summary. For each task, provide:
+        - Title: The main task description
+        - Assignee: The person who needs to complete the task
+        - Description: Detailed explanation of what needs to be done
+        - Milestones: How this task helps reach project milestones
+        - Deadline: When this needs to be completed
+
+        Return the response as a JSON array with objects containing these fields.
+
+        Summary:
+        {summary}
+
+        Required JSON format:
+        [
+            {{
+                "task": "Task name",
+                "assignee": "Assignee",
+                "description": "Detailed description",
+                "milestones": "How it forwards milestones",
+                "deadline": "Deadline"
+            }}
+            ]"""
+
+            response = client.chat.completions.create(
+                model="gpt-4o",
+                messages=[{"role": "user", "content": prompt.format(summary=summary)}],
+            )
+
+            response_content = response.choices[0].message.content.strip()
+            logger.info(f"OpenAI Response: {response_content}")
+
+            # Clean and parse JSON response
+            clean_content = (
+                response_content.replace("```json", "").replace("```", "").strip()
+            )
+            tasks = json.loads(clean_content)
+
+            return tasks
+
+        except Exception as e:
+            logger.error(f"Error extracting tasks from summary: {e}")
+            return []

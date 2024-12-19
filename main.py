@@ -46,7 +46,15 @@ def daily_updates(target_slack_channel: str, summary_channel: str):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"Highest priority subproject: {highest_priority_subproject['title']}\nStep: {highest_priority_subproject['step']}\nProject: {highest_priority_subproject['parent_project']}",
+                    "text": (
+                        f"*Highest priority subproject:* {highest_priority_subproject['title']}\n\n"
+                        f"*Step:* {highest_priority_subproject['step']}\n"
+                        f"*Project:* {highest_priority_subproject['parent_project']}\n"
+                        f"*Description:*\n{highest_priority_subproject['description']}\n\n"
+                        f"*How it forwards milestones:*\n{highest_priority_subproject['milestones']}\n\n"
+                        f"*Deadline:*\n{highest_priority_subproject['deadline']}\n\n"
+                        f"*Link:* {highest_priority_subproject['self_link']}\n\n"
+                    ),
                 },
             }
         ]
@@ -62,7 +70,7 @@ def daily_updates(target_slack_channel: str, summary_channel: str):
             "type": "section",
             "text": {
                 "type": "mrkdwn",
-                "text": f"Calendar Event: {calendar_event_url}\nSubproject: {highest_priority_subproject['self_link']}",
+                "text": f"Calendar Event: {calendar_event_url}",
             },
         }
     ]
@@ -92,16 +100,26 @@ def triggered_updates(target_slack_channel: str):
     # Get the highest priority subproject
     highest_priority_subproject = get_highest_priority_subproject()
     if highest_priority_subproject:
-        formatted_blocks = [
+        highest_priority_subproject_blocks = [
             {
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"Highest priority subproject: {highest_priority_subproject['title']}\nStep: {highest_priority_subproject['step']}\nProject: {highest_priority_subproject['parent_project']}",
+                    "text": (
+                        f"*Highest priority subproject:* {highest_priority_subproject['title']}\n\n"
+                        f"*Step:* {highest_priority_subproject['step']}\n"
+                        f"*Project:* {highest_priority_subproject['parent_project']}\n"
+                        f"*Description:*\n{highest_priority_subproject['description']}\n\n"
+                        f"*How it forwards milestones:*\n{highest_priority_subproject['milestones']}\n\n"
+                        f"*Deadline:*\n{highest_priority_subproject['deadline']}\n\n"
+                        f"*Link:* {highest_priority_subproject['self_link']}\n\n"
+                    ),
                 },
             }
         ]
-        slack_fetcher.send_message_to_channel(target_slack_channel, formatted_blocks)
+        slack_fetcher.send_message_to_channel(
+            target_slack_channel, highest_priority_subproject_blocks
+        )
 
         # Generate a calendar event for the user
         calendar_event_url = generate_calendar_event_and_return_url(
@@ -114,7 +132,7 @@ def triggered_updates(target_slack_channel: str):
                 "type": "section",
                 "text": {
                     "type": "mrkdwn",
-                    "text": f"Calendar Event: {calendar_event_url}\nSubproject: {highest_priority_subproject['self_link']}",
+                    "text": f"Calendar Event: {calendar_event_url}",
                 },
             }
         ]
@@ -125,9 +143,17 @@ def triggered_updates(target_slack_channel: str):
 
 def generate_calendar_event_and_return_url(subproject: Dict):
     """This creates a calendar event with the highest priority subproject for the user"""
+    description_text = (
+        f"Project: {subproject['parent_project']}\n"
+        f"Step: {subproject['step']}\n"
+        f"Link: {subproject['self_link']}\n"
+        f"Description: {subproject['description']}\n"
+        f"Milestones: {subproject['milestones']}\n"
+        f"Deadline: {subproject['deadline']}"
+    )
     event_data = {
         "summary": subproject["title"],
-        "description": f"Step: {subproject['step']}\nProject: {subproject['parent_project']}\nLink: {subproject['self_link']}",
+        "description": description_text,
     }
     logger.info(f"Creating calendar event: {event_data}")
     calendar_event = create_calendar_event(event_data)
@@ -202,8 +228,6 @@ def summarize_slack_channel(channel_name):
             formatted_conversation, milestones, start_date, end_date
         )
 
-        logger.info("Sending sales summary to Slack...")
-
         return channel_summary
 
     except Exception as e:
@@ -214,6 +238,11 @@ def summarize_slack_channel(channel_name):
 def get_tasks_from_channel_summary(channel_summary):
     messages = []
     try:
+        slack_fetcher = SlackDataFetcher()
+        summarizer = ConversationSummarizer(slack_fetcher.user_map)
+        tasks = summarizer.extract_tasks(channel_summary)
+        logger.info(f"Extracted tasks: {tasks}")
+        return tasks
         # Initialize list to store extracted messages
         if not channel_summary:
             return messages
@@ -256,7 +285,7 @@ def get_tasks_from_channel_summary(channel_summary):
                     "task": task_name,
                     "assignee": "",
                     "description": "",
-                    "helps_milestone": "",
+                    "milestones": "",
                     "deadline": "",
                 }
 
@@ -272,7 +301,7 @@ def get_tasks_from_channel_summary(channel_summary):
                             "Description:", ""
                         ).strip()
                     elif part.startswith("How does this help reach the milestone:"):
-                        current_task["helps_milestone"] = part.replace(
+                        current_task["milestones"] = part.replace(
                             "How does this help reach the milestone:", ""
                         ).strip()
                     elif part.startswith("Deadline:"):

@@ -230,6 +230,8 @@ class TaskMapper:
                 .get("display_name", project),
                 "similarity_score": max(similarities),
                 "description": miles_tasks[i]["description"],
+                "milestones": miles_tasks[i]["milestones"],
+                "deadline": miles_tasks[i]["deadline"],
             }
             mapped_tasks.append(mapped_task)
 

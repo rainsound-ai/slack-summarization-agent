@@ -11,7 +11,6 @@ from config import (
     NOTION_SUBPROJECTS_DATABASE_ID,
     NOTION_PROCESSES_DATABASE_ID,
     NOTION_SYSTEMS_DATABASE_ID,
-    NOTION_SUBPROJECT_TEMPLATE_PAGE_ID,
 )
 
 load_dotenv()
@@ -164,6 +163,27 @@ class NotionClient:
                     },
                     "Status": {"status": {"name": "Potential"}},
                     "Team Comp": {"people": [{"id": user_id}]},
+                    "Short Description": {
+                        "rich_text": [
+                            {"text": {"content": mapped_task.get("description", "")}}
+                        ]
+                        if mapped_task.get("description")
+                        else []
+                    },
+                    "How this forwards milestones": {
+                        "rich_text": [
+                            {"text": {"content": mapped_task.get("milestones", "")}}
+                        ]
+                        if mapped_task.get("milestones")
+                        else []
+                    },
+                    "How soon it needs to be done": {
+                        "rich_text": [
+                            {"text": {"content": mapped_task.get("deadline", "")}}
+                        ]
+                        if mapped_task.get("deadline")
+                        else []
+                    },
                 },
                 "children": [
                     {
@@ -393,6 +413,36 @@ class NotionClient:
                     if project_relations
                     else ""
                 )
+
+                description = (
+                    properties.get("Short Description", {})
+                    .get("rich_text", [])[0]
+                    .get("text", {})
+                    .get("content", "")
+                    if properties.get("Short Description", {}).get("rich_text")
+                    else ""
+                )
+                milestones = (
+                    properties.get("How this forwards milestones", {})
+                    .get("rich_text", [])[0]
+                    .get("text", {})
+                    .get("content", "")
+                    if properties.get("How this forwards milestones", {}).get(
+                        "rich_text"
+                    )
+                    else ""
+                )
+                deadline = (
+                    properties.get("How soon it needs to be done", {})
+                    .get("rich_text", [])[0]
+                    .get("text", {})
+                    .get("content", "")
+                    if properties.get("How soon it needs to be done", {}).get(
+                        "rich_text"
+                    )
+                    else ""
+                )
+
                 logger.info(f"Parent Project: {parent_project}")
 
                 subprojects.append(
@@ -423,6 +473,9 @@ class NotionClient:
                             "project_priority": project_priority_raw,
                             "effort": effort,
                         },
+                        "description": description,
+                        "milestones": milestones,
+                        "deadline": deadline,
                         "self_link": f"https://notion.so/{item['id'].replace('-', '')}",
                     }
                 )
@@ -437,6 +490,9 @@ class NotionClient:
                 - Effort: {effort} -> {self.priority_map.get(effort, 0)}
                 - step: {step}
                 - parent_project: {parent_project}
+                - description: {description}
+                - milestones: {milestones}
+                - deadline: {deadline}
                 """)
 
             return subprojects
