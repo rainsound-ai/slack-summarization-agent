@@ -24,35 +24,23 @@ def handle_add_meetings_button(ack, body, client):
     ack()
     
     try:
-        # Get the Notion link from the message
+        # Get the Notion link from the message text
         blocks = body.get("message", {}).get("blocks", [])
         notion_page_id = None
         
         for block in blocks:
             if block.get("type") == "section":
                 text = block.get("text", {}).get("text", "")
-                if "notion.so/" in text:
-                    # Extract the UUID part of the URL
-                    matches = re.findall(r'([a-f0-9]{32})', text)
-                    if matches:
-                        notion_page_id = matches[0]
-                        break
-                
-                # Also check elements array for links
-                elements = block.get("elements", [])
-                for element in elements:
-                    url = element.get("url", "")
-                    if "notion.so/" in url:
-                        matches = re.findall(r'([a-f0-9]{32})', url)
-                        if matches:
-                            notion_page_id = matches[0]
-                            break
-        
+                # Look specifically for the Link field
+                link_match = re.search(r'\*Link:\* <https://(?:www\.)?notion\.so/(?:[^/]+/)?([a-f0-9]{32})', text)
+                if link_match:
+                    notion_page_id = link_match.group(1)
+                    logger.debug(f"Found Notion page ID: {notion_page_id}")
+                    break
+
         if not notion_page_id:
             logger.error("No valid Notion page ID found in message")
             return
-
-        logger.debug(f"Extracted Notion page ID: {notion_page_id}")
 
         # Store the page ID in private_metadata
         client.views_open(
