@@ -82,23 +82,42 @@ def create_calendar_event(event: Dict):
     """
     Creates a calendar event in multiple Google Calendars at the next available time during working hours
     """
-
     logger.info(f"Creating calendar event with details: {event}")
 
     creds = None
+    # Check if token.pickle exists
     if os.path.exists("token.pickle"):
         logger.debug("Found existing token.pickle file")
         with open("token.pickle", "rb") as token:
             creds = pickle.load(token)
 
+    # If there are no (valid) credentials available, let the user log in.
     if not creds or not creds.valid:
         logger.info("Credentials invalid or missing, attempting refresh/reauth")
         if creds and creds.expired and creds.refresh_token:
             logger.debug("Refreshing expired credentials")
-            creds.refresh(Request())
-        else:
-            logger.error("No valid credentials found and unable to refresh")
-            raise Exception("No valid credentials found")
+            try:
+                creds.refresh(Request())
+            except Exception as e:
+                logger.error(f"Error refreshing credentials: {e}")
+                creds = None
+        
+        if not creds:
+            if not os.path.exists("credentials.json"):
+                logger.error("credentials.json file not found in project root directory")
+                raise Exception(
+                    "credentials.json is missing. Please download it from Google Cloud Console "
+                    "and place it in the project root directory"
+                )
+            
+            logger.info("Getting new credentials")
+            flow = InstalledAppFlow.from_client_secrets_file("credentials.json", SCOPES)
+            creds = flow.run_local_server(port=0)
+            
+            # Save the credentials for the next run
+            with open("token.pickle", "wb") as token:
+                logger.debug("Saving new credentials to token.pickle")
+                pickle.dump(creds, token)
 
     service = build("calendar", "v3", credentials=creds)
     logger.debug("Successfully built calendar service")
